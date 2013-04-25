@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#"><img src="{{ URL::base()}}/images/p2blogo.jpg"></a>
+          <a class="brand" href="#"><img src="{{ URL::base()}}/images/p2blogo.png"></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
 		      <li>{{ HTML::link('mixmatch','General Information')}}</li>
