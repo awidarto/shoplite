@@ -67,29 +67,20 @@ class Shopper_Controller extends Base_Controller {
 	    $rules = array(
 	    	'firstname' => 'required',
 	    	'lastname' => 'required',
-	    	'position' => 'required',
-	        'email' => 'required|email|unique:attendee',
+	        'email' => 'required|email|unique:shopper',
 	        'pass' => 'required|same:repass',
 	        'repass'=> 'required',
-	        'company' => 'required',
-	        'companyphone' => 'required',
 	        'address_1' => 'required',
 	        'city' => 'required',
 	        'zip' => 'required',
-	        'country' => 'required',
-	        'companyInvoice' => 'required',
-	        'companyphoneInvoice' => 'required',
-	        'addressInvoice_1' => 'required',
-	        'cityInvoice' => 'required',
-	        'zipInvoice' => 'required',
-	        'countryInvoice' => 'required'
+	        'country' => 'required'
 	    );
 
 	    $validation = Validator::make($input = Input::all(), $rules);
 
 	    if($validation->fails()){
 
-	    	return Redirect::to('register')->with_errors($validation)->with_input(Input::all());
+	    	return Redirect::to('signup')->with_errors($validation)->with_input(Input::all());
 
 	    }else{
 
@@ -102,61 +93,21 @@ class Shopper_Controller extends Base_Controller {
 			unset($data['csrf_token']);
 			$data['createdDate'] = new MongoDate();
 			$data['lastUpdate'] = new MongoDate();
-			$data['role'] = 'attendee';
-			$data['paymentStatus'] = 'unpaid';
-			$data['conventionPaymentStatus'] = 'unpaid';
-
-			//force to disable golf on student type
-			if(($data['regtype'] == 'SO') || ($data['regtype'] == 'SD')){
-				$data['golf'] == 'No';
-			}
-			if($data['golf'] == 'Yes'){
-				$data['golfPaymentStatus'] = 'unpaid';
-			}else{
-				$data['golfPaymentStatus'] = '-';
-			}
-			$data['confirmation'] = 'none';
-
-
-			$reg_number[0] = 'C';
-			$reg_number[1] = $data['regtype'];
-			$reg_number[2] = ($data['attenddinner'] == 'Yes')?str_pad(Config::get('eventreg.galadinner'), 2,'0',STR_PAD_LEFT):'00';
+			$data['role'] = 'shopper';
 
 			$seq = new Sequence();
 
-			$rseq = $seq->find_and_modify(array('_id'=>'attendee'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
+			$rseq = $seq->find_and_modify(array('_id'=>'shopper'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
 
-			$reg_number[3] = str_pad($rseq['seq'], 6, '0',STR_PAD_LEFT);
+			$regsequence = str_pad($rseq['seq'], 10, '0',STR_PAD_LEFT);
 
-			$regsequence = str_pad($rseq['seq'], 6, '0',STR_PAD_LEFT);
-
-			//$reg_number[] = $regsequence;
-
-			$data['regsequence'] = $regsequence;
-
-			$data['registrationnumber'] = implode('-',$reg_number);
-
-			$data['golfSequence'] = 0;
-
-			if($data['golf'] == 'Yes'){
-				$gseq = $seq->find_and_modify(array('_id'=>'golf'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true,'upsert'=>true));
-				$data['golfSequence'] = $gseq['seq'];
-			}
-
-			//normalize
-			$data['address'] = '';
-			$data['cache_id'] = '';
-			$data['cache_obj'] = '';
-			$data['companys_npwp'] = '';
-			$data['groupId'] = '';
-			$data['groupName'] = '';
-			$data['invoice_address_conv'] = '';
-			$data['addressInvoice'] = '';
+			$data['shopperseq'] = $regsequence;
 
 			$user = new Shopper();
 
 			if($obj = $user->insert($data)){
 
+				/*
 				//log message 
 				$message = new Logmessage();
 
@@ -191,7 +142,7 @@ class Shopper_Controller extends Base_Controller {
 					    ->send();
 
 					//saveto outbox
-					/*$outbox = new Outbox();
+					$outbox = new Outbox();
 
 					$outboxdata['from'] = Config::get('eventreg.reg_admin_email');
 					$outboxdata['to'] = $data['email'];
@@ -204,10 +155,11 @@ class Shopper_Controller extends Base_Controller {
 					$outboxdata['createdDate'] = new MongoDate();
 					$outboxdata['lastUpdate'] = new MongoDate();
 
-					$outbox->insert($outboxdata);*/
+					$outbox->insert($outboxdata);
 					
 				}
 
+			*/
 		    	return Redirect::to('register-success')->with('notify_success',Config::get('site.register_success'));
 			}else{
 		    	return Redirect::to('register')->with('notify_result',Config::get('site.register_failed'));
@@ -685,6 +637,10 @@ class Shopper_Controller extends Base_Controller {
 		$this->crumb->add('register','Register');
 
 		$form = new Formly();
+		$form->set_options(array(
+			'framework'=>'bootstrap',
+			'form_class'=>'form-horizontal'
+			));
 		return View::make('register.login')
 					->with('form',$form)
 					->with('crumb',$this->crumb)

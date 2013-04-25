@@ -58,6 +58,7 @@ return array(
 
 	'model' => 'User',
 	'attendeemodel' => 'Attendee',
+	'shoppermodel' => 'Shopper',
 	'exhibitmodel' => 'Exhibitor',
 
 	/*
