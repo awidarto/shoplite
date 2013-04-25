@@ -81,11 +81,11 @@ img.mixmatch{
 .navmainp2b{
 	float: right;
 	width:663px;
-	margin-top: 20px;
+	margin-top: 26px;
 }
 .navbar-inverse .navmainp2b .nav > li > a{
 	font-size: 12px;
-	padding:5px 10px 5px;
+	padding:5px 10px 0px;
 	color: #1f271a;
 
 }
