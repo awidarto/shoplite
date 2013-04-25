@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shopper','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shopper','product','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -152,7 +152,7 @@ Route::get('bartest/(:any)',function($text){
 
 Route::get('general',array('uses'=>'content@public'));
 
-Route::get('signup',array('uses'=>'shopper@index'));
+Route::get('signup',array('uses'=>'shopper@add'));
 Route::post('register',array('uses'=>'shopper@add'));
 
 Route::get('myprofile/edit',array('uses'=>'shopper@edit'));
@@ -219,7 +219,7 @@ Route::get('pdftest',array('uses'=>'import@pdftest'));
 
 // Auth routes
 
-Route::get('login', function()
+Route::get('commander/login', function()
 {
     return View::make('auth.login');
 });
@@ -240,7 +240,7 @@ Route::post('login', function()
     else
     {
         // auth failure! lets go back to the login
-        return Redirect::to('login')
+        return Redirect::to('commander/login')
             ->with('login_errors', true);
         // pass any error notification you want
         // i like to do it this way  
@@ -248,7 +248,9 @@ Route::post('login', function()
 
 });
 
-Route::post('shopper/login', function()
+Route::get('signin',array('uses'=>'shopper@login'));
+
+Route::post('signin', function()
 {
     // get POST data
     $username = Input::get('username');
@@ -264,7 +266,7 @@ Route::post('shopper/login', function()
     else
     {
         // auth failure! lets go back to the login
-        return Redirect::to('shopper/login')
+        return Redirect::to('signin')
             ->with('login_errors', true);
         // pass any error notification you want
         // i like to do it this way  

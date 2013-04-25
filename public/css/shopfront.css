@@ -84,7 +84,7 @@ img.mixmatch{
 	margin-top: 26px;
 }
 .navbar-inverse .navmainp2b .nav > li > a{
-	font-size: 12px;
+	font-size: 14px;
 	padding:5px 10px 0px;
 	color: #1f271a;
 
@@ -93,5 +93,19 @@ img.mixmatch{
 	border-bottom: 3px solid #c16151;
 }
 
+legend{
+	border: none;
+	padding-left: 30px;
+	margin-left: -10px;
+	background-image: url(../images/legendbullet.png);
+	background-repeat: no-repeat;
+	line-height: 24px;
+	font-size: 18px;
+}
+
+
+body{
+	font-family: calibri,helvetica,sans-serif;
+}
 
 

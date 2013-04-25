@@ -9,7 +9,7 @@
 {{$form->open('shopper/login','POST')}}
 
 <div class="row">
-    <div class="span6">
+    <div class="span12">
 
         <fieldset>
             <legend>Login</legend>
