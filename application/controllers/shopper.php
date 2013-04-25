@@ -908,7 +908,7 @@ class Shopper_Controller extends Base_Controller {
 		return View::make('register.login')
 					->with('form',$form)
 					->with('crumb',$this->crumb)
-					->with('title','Login Form');
+					->with('title','Login');
 
 	}
 
