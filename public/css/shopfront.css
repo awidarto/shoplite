@@ -96,7 +96,6 @@ img.mixmatch{
 legend{
 	border: none;
 	padding-left: 30px;
-	margin-left: -10px;
 	background-image: url(../images/legendbullet.png);
 	background-repeat: no-repeat;
 	line-height: 24px;
@@ -106,6 +105,13 @@ legend{
 
 body{
 	font-family: calibri,helvetica,sans-serif;
+}
+
+#footer .container{
+	padding-top: 10px;
+}
+#footer .container p{
+	text-align: center;
 }
 
 

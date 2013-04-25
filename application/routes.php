@@ -274,6 +274,13 @@ Route::post('signin', function()
 
 });
 
+Route::get('otb',array('uses'=>'shop@otb'));
+Route::get('pow',array('uses'=>'shop@pow'));
+Route::get('kind',array('uses'=>'shop@kind'));
+Route::get('mixmatch',array('uses'=>'shop@mixmatch'));
+
+Route::get('about',array('uses'=>'shop@about'));
+
 Route::post('exhibitor/login', function()
 {
     // get POST data
@@ -420,5 +427,15 @@ Route::filter('csrf', function()
 
 Route::filter('auth', function()
 {
-    if (Auth::guest()) return Redirect::to('login');
+
+    if (Auth::guest()){
+        Session::put('redirect',URL::full());
+        return Redirect::to('login');   
+    }
+    if($redirect = Session::get('redirect')){
+        Session::forget('redirect');
+        return Redirect::to($redirect);
+    }
+
+    //if (Auth::guest()) return Redirect::to('login');
 });

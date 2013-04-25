@@ -52,7 +52,12 @@
 
     <div id="footer">
       <div class="container">
-        <p class="muted credit">Example courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>.</p>
+        <p>
+          <img src="{{URL::base()}}/images/socmedall.png" alt="socmed" />
+        </p>
+        <p>
+          &copy;2013 Peach To Black
+        </p>
       </div>
     </div>
 

@@ -84,6 +84,7 @@
         </fieldset>
 
         <fieldset>
+            <legend>Terms & Conditions</legend>
           {{ $form->checkbox('agreetnc','I Agree to the Peach to Black terms and conditions ',false,false,array('id'=>'agreetnc'))}}
 
           {{ $form->checkbox('saveinfo','Save my payment info and preference for future purchase',false,false,array('id'=>'agreetnc'))}}
