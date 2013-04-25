@@ -16,14 +16,6 @@
 
     {{ HTML::script('js/jquery-1.8.3.min.js') }}
 
-
-    <!-- Le styles -->
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
@@ -53,6 +45,7 @@
       </div>
 
 
+      <div id="push"></div>
 
     </div>
 
