@@ -56,9 +56,9 @@ font-size: 80%;
 .navbar-inverse .navbar-inner {
 	/*background-color: #fedfcd;*/
 	background-color: transparent;
-	background-image: url(../images/p2bheadbg.jpg);
+	background-image: url(../images/p2bheadbg.png);
 	background-repeat: repeat-x;
-	border-bottom-color: white;
+	border-bottom: none;
 	box-shadow:none;
 }
 
