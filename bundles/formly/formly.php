@@ -273,7 +273,9 @@ class Formly
 	 */
 	public function checkbox($name, $label = '', $value = 1, $checked = false, $attributes = array())
 	{
-		$attributes = array_merge($attributes,array('style'=>'display:none'));
+		if($this->framework != 'bootstrap'){
+			$attributes = array_merge($attributes,array('style'=>'display:none'));
+		}
 		$checked = $this->calculate_value($name, $checked);
 		$attributes = $this->set_attributes($name, $attributes);
 		$field = Form::checkbox($name, $value, $checked, $attributes);
@@ -292,7 +294,9 @@ class Formly
 	 */
 	public function radio($name, $label = '', $value = 1, $checked = false, $attributes = array())
 	{
-		$attributes = array_merge($attributes,array('style'=>'display:none'));
+		if($this->framework != 'bootstrap'){
+			$attributes = array_merge($attributes,array('style'=>'display:none'));
+		}
 		$checked = $this->calculate_value($name,$checked);
 		//silly hack, but works		
 		$checked = ($checked == $value)?true:false;
@@ -342,11 +346,12 @@ class Formly
 
 		$id = ($this->name_as_id) ? ' id="control-group-'.$name.'"' : '';
 
-		//$out  = '<div class="'.$class.'"'.$id.'>';
 
-		$out = '<div class="row-fluid">'.PHP_EOL;
+			if($this->framework == 'metro'){
 
-			if($this->framework == 'bootstrap'){
+				//$out  = '<div class="'.$class.'"'.$id.'>';
+
+				$out = '<div class="row-fluid">'.PHP_EOL;
 
 				if($checkbox === true || $radio === true){
 
@@ -386,7 +391,77 @@ class Formly
 					
 				}
 
+				$out .= '</div>'.PHP_EOL;
+
+			}else if($this->framework == 'bootstrap'){
+
+				//$out  = '<div class="'.$class.'"'.$id.'>';
+
+				//$out = '<div class="row-fluid">'.PHP_EOL;
+
+				$out = '';
+
+				if($checkbox === true || $radio === true){
+
+					$out .= '<div class="span12">';
+
+					$checked = (strpos($field, 'checked') > 0)?'checked':'';
+					$disabled = (strpos($field, 'disabled') > 0)?'disabled':'';
+
+					if($checkbox === true && $radio === false ){
+						$out .= '<label class="checkbox">';
+						$out .= $field;
+						$out .= ' '.$label;
+					}else if($checkbox === false && $radio === true ){
+						
+						$out .= '<label class="radio">';
+						$out .= $field;
+						$out .= ' '.$label;
+					}
+
+					$out .= '</label>';
+
+					if ($this->display_inline_errors && ! empty($error))
+					{
+						$out .= '<span class="error">'.$error.'</span>';
+					}
+
+					$out .= '</div>';
+
+				}else{
+					if($this->form_class == 'form-horizontal'){
+						$out .= '<div class="control-group">';
+						$out .= $this->build_label($name, $label);
+						$out .= '<div class="controls">';
+						$out .= $field;
+
+						if ($this->display_inline_errors && ! empty($error))
+						{
+							$out .= '<span class="error">'.$error.'</span>';
+						}
+						$out .= '</div>';
+
+						$out .= '</div>';
+
+					}else{
+						$out .= $this->build_label($name, $label);
+						$out .= $field;
+
+						if ($this->display_inline_errors && ! empty($error))
+						{
+							$out .= '<span class="error">'.$error.'</span>';
+						}
+					}
+					
+				}
+
+				//$out .= '</div>'.PHP_EOL;
+
+				$out .= PHP_EOL;
+
 			}else if($this->framework == 'zurb'){
+
+				$out  = '<div class="'.$class.'"'.$id.'>';
 
 				if($checkbox === true || $radio === true){
 
@@ -411,20 +486,21 @@ class Formly
 					$out .= '</div>';
 
 				}else{
-					$out .= $this->build_label($name, $label);
-					$out .= $field;
+						$out .= $this->build_label($name, $label);
+						$out .= $field;
 
-					if ($this->display_inline_errors && ! empty($error))
-					{
-						$out .= '<span class="error">'.$error.'</span>';
-					}
+						if ($this->display_inline_errors && ! empty($error))
+						{
+							$out .= '<span class="error">'.$error.'</span>';
+						}
 					
 				}
+
+				$out .= '</div>'.PHP_EOL;
 
 			}
 
 
-		$out .= '</div>'.PHP_EOL;
 
 		
 		//control group div
@@ -451,6 +527,10 @@ class Formly
 				$label = $this->required_prefix . str_replace($this->required_label, '', $label) . $this->required_suffix;
 				$class .= ' ' . $this->required_class;
 			}
+			if($this->form_class == 'form-horizontal'){
+				$class .= ' control-label';
+			}
+
 			$out .= Form::label($name, $label, array('class' => $class));
 		}
 		return $out;

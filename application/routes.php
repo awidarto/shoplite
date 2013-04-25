@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shopper','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -42,7 +42,7 @@ Route::get('/',function(){
            return Redirect::to('onsite');
         }
     }else{
-       return Redirect::to('content/public/general');
+       return Redirect::to('shop/home');
     }
 });
 
@@ -152,17 +152,22 @@ Route::get('bartest/(:any)',function($text){
 
 Route::get('general',array('uses'=>'content@public'));
 
-Route::post('register',array('uses'=>'register@add'));
+Route::get('signup',array('uses'=>'shopper@index'));
+Route::post('register',array('uses'=>'shopper@add'));
+
+Route::get('myprofile/edit',array('uses'=>'shopper@edit'));
+Route::post('myprofile/edit',array('uses'=>'shopper@edit'));
+
+Route::get('reset',array('uses'=>'shopper@reset'));
+Route::post('reset',array('uses'=>'shopper@reset'));
 
 Route::get('exhibitor/profile',array('uses'=>'exhibition@profile'));
 Route::get('exhibitor/login',array('uses'=>'exhibition@login'));
 Route::get('exhibitor/profile/edit',array('uses'=>'exhibition@edit'));
 Route::post('exhibitor/profile/edit',array('uses'=>'exhibition@edit'));
 
-Route::get('myprofile/edit',array('uses'=>'register@edit'));
-Route::post('myprofile/edit',array('uses'=>'register@edit'));
 
-Route::get('myprofile',array('uses'=>'register@profile'));
+Route::get('myprofile',array('uses'=>'shopper@profile'));
 
 
 Route::get('payment/checkout',array('before'=>'auth','uses'=>'register@checkout'));
@@ -170,34 +175,9 @@ Route::get('payment/checkout',array('before'=>'auth','uses'=>'register@checkout'
 Route::get('payment/(:any)',array('uses'=>'register@payment'));
 Route::post('payment/(:any)',array('uses'=>'register@payment'));
 
-Route::get('export/report/(:any)',array('uses'=>'export@report'));
-Route::get('exhibitor/printbadgeonsite/(:all)/(:all)/(:all)/(:all)',array('uses'=>'exhibitor@printbadgeonsite'));
-Route::get('exhibitor/newprintbadgeonsite/(:all)/(:all)/(:all)/(:all)',array('uses'=>'exhibitor@newprintbadgeonsite'));
-Route::get('exhibitor/printbadgeonsite2/(:all)/(:all)/(:all)',array('uses'=>'exhibitor@printbadgeonsite2'));
-
-Route::get('exhibitor/generatepdfoperationalform/(:all)/(:all)',array('uses'=>'exhibitor@createpdfoperationalform'));
-Route::get('exhibitor/generatepdfoperationalformbyid/(:all)/(:all)/(:all)',array('uses'=>'exhibitor@createpdfoperationalformbyid'));
-
-
-Route::get('reset',array('uses'=>'register@reset'));
-Route::post('reset',array('uses'=>'register@reset'));
-
-Route::get('exhibitor/reset',array('uses'=>'exhibition@reset'));
-Route::post('exhibitor/reset',array('uses'=>'exhibition@reset'));
-
-Route::get('resetlanding',array('uses'=>'register@resetlanding'));
-Route::get('exhibitor/resetlanding',array('uses'=>'exhibition@resetlanding'));
-
-Route::get('exhibitor/operationalform',array('uses'=>'exhibition@operationalform'));
-Route::post('exhibitor/operationalform',array('uses'=>'exhibition@operationalform'));
-
-Route::get('exhibition/operationalform',array('uses'=>'exhibitor@operationalform'));
-
-
-Route::get('paymentsubmitted',array('as'=>'register/paymentsubmitted','uses'=>'register@paymentsubmitted'));
-Route::get('register-success',array('as'=>'register/success','uses'=>'register@success'));
-Route::get('register-landing',array('as'=>'register/landing','uses'=>'register@landing'));
-Route::get('register-group',array('as'=>'register/group','uses'=>'register@group'));
+Route::get('paymentsubmitted',array('uses'=>'shopper@paymentsubmitted'));
+Route::get('register-success',array('uses'=>'shopper@success'));
+Route::get('register-landing',array('uses'=>'shopper@landing'));
 
 
 /*
@@ -268,13 +248,13 @@ Route::post('login', function()
 
 });
 
-Route::post('attendee/login', function()
+Route::post('shopper/login', function()
 {
     // get POST data
     $username = Input::get('username');
     $password = Input::get('password');
 
-    if ( $userdata = Auth::attendeeattempt(array('username'=>$username, 'password'=>$password)) )
+    if ( $userdata = Auth::shopperattempt(array('username'=>$username, 'password'=>$password)) )
     {
         //print_r($userdata);
         // we are now logged in, go to home
@@ -284,7 +264,7 @@ Route::post('attendee/login', function()
     else
     {
         // auth failure! lets go back to the login
-        return Redirect::to('register/login')
+        return Redirect::to('shopper/login')
             ->with('login_errors', true);
         // pass any error notification you want
         // i like to do it this way  

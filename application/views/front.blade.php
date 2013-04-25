@@ -56,8 +56,7 @@
       <div class="row-fluid">
          <div class="span8">
             <div id="header-container">
-              {{ HTML::image('images/ipa-logo-small.png','ipalogo',array('class'=>'logo-header')) }}
-              <h5>THE 37th IPA CONVENTION and EXHIBITION 2013</h5>
+              <h5><i class="icon-cart logo-type"></i>{{ Config::get('site.admintitle')}}</h5>
               <div class="dropdown">
                 <a class="header-dropdown dropdown-toggle accent-color" data-toggle="dropdown" href="#">
                   Login
