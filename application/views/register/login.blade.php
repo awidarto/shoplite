@@ -1,28 +1,30 @@
 @layout('public')
 @section('content')
 
-<h4 class="headIpaSite">Login Form</h4>
+@if (Session::has('login_errors'))
+    <div class="alert alert-error">
+         {{Session::get('notify_result')}}
+    </div>
+@endif
+{{$form->open('shopper/login','POST')}}
+
 <div class="row">
-    {{ Form::open('attendee/login') }}
-    <!-- check for login errors flash var -->
-    @if (Session::has('login_errors'))
-        <div class="alert alert-error">
-             Email or password incorrect.
+    <div class="span6">
+
+        <fieldset>
+            <legend>Login</legend>
+
+                {{ $form->text('username','Email.req','',array('class'=>'text','id'=>'username')) }}
+
+                {{ $form->password('password','Password.req','',array('class'=>'text')) }}
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Sign In</button>
+          <button type="button" class="btn">Cancel</button>
         </div>
-    @endif
-    <!-- username field -->
-    {{ Form::label('username', 'Email') }}
-    {{ Form::text('username') }}
-    <!-- password field -->
-    {{ Form::label('password', 'Password') }}
-    {{ Form::password('password') }}
-    <!-- submit button -->
-    {{ Form::submit('Login',array('class' => 'button')) }}
-    &nbsp;&nbsp;&nbsp;<img src="http://www.ipaconvex.com/images/arrow1.jpg" border="0" align="absmiddle" style="margin-right:5px ">{{ HTML::link('reset','Forgot your password ? ',array('class'=>'backtohome'))}}
-    {{ Form::close() }}
 
-
-
-    
+    </div>
 </div>
-@endsection
+
+ @endsection
