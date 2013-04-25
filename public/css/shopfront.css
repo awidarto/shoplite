@@ -72,9 +72,26 @@ font-size: 80%;
 .navbar .brand {
 	padding: 0px;
 	margin: 0px;
+	width:267px;
 }
 
 img.mixmatch{
 	margin-bottom: 50px;
 }
+.navmainp2b{
+	float: right;
+	width:663px;
+	margin-top: 20px;
+}
+.navbar-inverse .navmainp2b .nav > li > a{
+	font-size: 12px;
+	padding:5px 10px 5px;
+	color: #1f271a;
+
+}
+.navbar-inverse .navmainp2b .nav > li > a:hover{
+	border-bottom: 3px solid #c16151;
+}
+
+
 

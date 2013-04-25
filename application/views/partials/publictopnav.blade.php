@@ -10,7 +10,7 @@
 
           <a class="brand" href="#"><img src="{{ URL::base()}}/images/p2blogo.png"></a>
 
-          <div class="nav-collapse collapse">
+          <div class="nav-collapse collapse navmainp2b">
             <ul class="nav">
 		      <li>{{ HTML::link('mixmatch','Mix & Match')}}</li>
           <li>{{ HTML::link('pow','Pick of The Week')}}</li>
