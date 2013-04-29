@@ -216,6 +216,72 @@ class Shop_Controller extends Base_Controller {
 
 	}
 
+
+	public function get_pow($category = 'all',$page = 0,$search = null)
+	{
+		$new = array();
+		$featured = array();
+		$mixmatch = array();
+		
+		return View::make('shop.collection')
+			->with('new',$new)
+			->with('featured',$featured)
+			->with('mixmatch',$mixmatch);
+
+	}
+
+	public function get_otb($category = 'all',$page = 0,$search = null)
+	{
+		$new = array();
+		$featured = array();
+		$mixmatch = array();
+		
+		return View::make('shop.collection')
+			->with('new',$new)
+			->with('featured',$featured)
+			->with('mixmatch',$mixmatch);
+
+	}
+
+	public function get_mixmatch($category = 'all',$page = 0,$search = null)
+	{
+		$new = array();
+		$featured = array();
+		$mixmatch = array();
+		
+		return View::make('shop.collection')
+			->with('new',$new)
+			->with('featured',$featured)
+			->with('mixmatch',$mixmatch);
+
+	}
+
+	public function get_kind($category = 'all',$page = 0,$search = null)
+	{
+		$new = array();
+		$featured = array();
+		$mixmatch = array();
+		
+		return View::make('shop.collection')
+			->with('new',$new)
+			->with('featured',$featured)
+			->with('mixmatch',$mixmatch);
+
+	}
+
+	public function get_about()
+	{
+		$new = array();
+		$featured = array();
+		$mixmatch = array();
+		
+		return View::make('shop.collection')
+			->with('new',$new)
+			->with('featured',$featured)
+			->with('mixmatch',$mixmatch);
+
+	}
+
 	public function get_view($id,$slug = null){
 
 		$this->crumb->add('content/view/'.$section,ucfirst($section));

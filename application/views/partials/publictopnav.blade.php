@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
           </button>
 
-          <a class="brand" href="#"><img src="{{ URL::base()}}/images/p2blogo.png"></a>
+          <a class="brand" href="{{ URL::base()}}"><img src="{{ URL::base()}}/images/p2blogo.png"></a>
 
           <div class="nav-collapse collapse navmainp2b">
             <ul class="nav">
@@ -21,7 +21,7 @@
 		      <li>{{ HTML::link('signup','Sign Up')}}</li>
 
 		      <li class="divider"></li>
-          <li>{{ HTML::link('shopper/login','Login')}}</li>
+          <li>{{ HTML::link('signin','Sign In')}}</li>
 
           </div><!--/.nav-collapse -->
         </div>

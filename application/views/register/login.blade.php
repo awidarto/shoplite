@@ -6,10 +6,10 @@
          {{Session::get('notify_result')}}
     </div>
 @endif
-{{$form->open('shopper/login','POST')}}
+{{$form->open('signin','POST')}}
 
 <div class="row">
-    <div class="span6">
+    <div class="span12">
 
         <fieldset>
             <legend>Login</legend>

@@ -36,7 +36,7 @@
                 {{ $form->text('lastname','Last Name.req','',array('class'=>'text','id'=>'lastname')) }}
                 {{ $form->text('email','Email.req','',array('class'=>'text','id'=>'email')) }}
 
-                {{ $form->password('pass','Password (required to access your member profile).req','',array('class'=>'text')) }}
+                {{ $form->password('pass','Password.req','',array('class'=>'text')) }}
                 {{ $form->password('repass','Repeat Password.req','',array('class'=>'text')) }}
 
                 {{ $form->text('address_1','Address.req','',array('class'=>'text','id'=>'address_1','placeholder'=>'Address line 1')) }}
@@ -84,6 +84,7 @@
         </fieldset>
 
         <fieldset>
+            <legend>Terms & Conditions</legend>
           {{ $form->checkbox('agreetnc','I Agree to the Peach to Black terms and conditions ',false,false,array('id'=>'agreetnc'))}}
 
           {{ $form->checkbox('saveinfo','Save my payment info and preference for future purchase',false,false,array('id'=>'agreetnc'))}}

@@ -39,8 +39,272 @@ class Shopper_Controller extends Base_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 	}
 
+	public function get_index()
+	{
 
-	public function get_index(){
+
+		$form = new Formly();
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-horizontal'
+			));
+
+		$select_all = $form->checkbox('select_all','','',false,array('id'=>'select_all'));
+
+		$action_selection = $form->select('action','',Config::get('kickstart.actionselection'));
+
+		$btn_add_to_group = '<span class=" add_to_group" id="add_to_group">'.$action_selection.'</span>';
+
+
+		$heads = array('#',$select_all,'Reg. Number','Registered Date','Email','First Name','Last Name','Company','Reg. Type','Country','Conv. Status','Golf. Status','');
+
+		$searchinput = array(false,false,'Reg Number','Reg. Date','Email','First Name','Last Name','Company',false,'Country',false,false,false);
+
+
+		$colclass = array('','span1','span3','span1','span3','span3','span1','span1','span1','','','','','','','','','');
+
+
+
+		if(Auth::user()->role == 'root' || Auth::user()->role == 'super' || Auth::user()->role == 'onsite'){
+			return View::make('tables.simple')
+				->with('title','Master Data')
+				->with('newbutton','New Visitor')
+				->with('disablesort','0,1,9,12')
+				->with('addurl','product/add')
+				->with('colclass',$colclass)
+				->with('searchinput',$searchinput)
+				->with('ajaxsource',URL::to('product'))
+				->with('ajaxdel',URL::to('product/del'))
+				->with('ajaxpay',URL::to('product/paystatus'))
+				->with('ajaxpaygolf',URL::to('product/paystatusgolf'))
+				->with('ajaxpaygolfconvention',URL::to('product/paystatusgolfconvention'))
+				->with('ajaxresendmail',URL::to('product/resendmail'))
+				->with('printsource',URL::to('product/printbadge'))
+				->with('form',$form)
+				->with('crumb',$this->crumb)
+				->with('heads',$heads)
+				->nest('row','product.rowdetail');
+		}else{
+			return View::make('product.restricted')
+							->with('title','Master Data');
+		}
+	}
+
+
+	public function post_index()
+	{
+
+
+		$fields = array('registrationnumber','createdDate','email','firstname','lastname','company','regtype','country','conventionPaymentStatus','golfPaymentStatus','golfPaymentStatus');
+
+		$rel = array('like','like','like','like','like','like','like','like');
+
+		$cond = array('both','both','both','both','both','both','both','both');
+
+		$pagestart = Input::get('iDisplayStart');
+		$pagelength = Input::get('iDisplayLength');
+
+		$limit = array($pagelength, $pagestart);
+
+		$defsort = 1;
+		$defdir = -1;
+
+		$idx = 1;
+		$q = array();
+
+		$hilite = array();
+		$hilite_replace = array();
+
+		foreach($fields as $field){
+			if(Input::get('sSearch_'.$idx))
+			{
+
+				$hilite_item = Input::get('sSearch_'.$idx);
+				$hilite[] = $hilite_item;
+				$hilite_replace[] = '<span class="hilite">'.$hilite_item.'</span>';
+
+				if($rel[$idx] == 'like'){
+					if($cond[$idx] == 'both'){
+						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
+					}else if($cond[$idx] == 'before'){
+						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
+					}else if($cond[$idx] == 'after'){
+						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
+					}
+				}else if($rel[$idx] == 'equ'){
+					$q[$field] = Input::get('sSearch_'.$idx);
+				}
+			}
+			$idx++;
+		}
+
+		//print_r($q)
+
+		$product = new Product();
+
+		/* first column is always sequence number, so must be omitted */
+		$fidx = Input::get('iSortCol_0');
+		if($fidx == 0){
+			$fidx = $defsort;
+			$sort_col = $fields[$fidx];
+			$sort_dir = $defdir;
+		}else{
+			$fidx = ($fidx > 0)?$fidx - 1:$fidx;
+			$sort_col = $fields[$fidx];
+			$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
+		}
+
+		$count_all = $product->count();
+
+		if(count($q) > 0){
+			$products = $product->find($q,array(),array($sort_col=>$sort_dir),$limit);
+			$count_display_all = $product->count($q);
+		}else{
+			$products = $product->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+			$count_display_all = $product->count();
+		}
+
+		$aadata = array();
+
+		$form = new Formly();
+
+		$messagelog = new Logmessage();
+
+		$counter = 1 + $pagestart;
+		foreach ($products as $doc) {
+
+			$extra = $doc;
+
+			$select = $form->checkbox('sel_'.$doc['_id'],'','',false,array('id'=>$doc['_id'],'class'=>'selector'));
+
+			if(isset($doc['conventionPaymentStatus'])){
+				if($doc['conventionPaymentStatus'] == 'unpaid'){
+					$paymentStatus = '<span class="fontRed fontBold paymentStatusTable">'.$doc['conventionPaymentStatus'].'</span>';
+				}elseif ($doc['conventionPaymentStatus'] == 'pending') {
+					$paymentStatus = '<span class="fontOrange fontBold paymentStatusTable">'.$doc['conventionPaymentStatus'].'</span>';
+				}elseif ($doc['conventionPaymentStatus'] == 'cancel') {
+					$paymentStatus = '<span class="fontGray fontBold paymentStatusTable">'.$doc['conventionPaymentStatus'].'</span>';
+
+				}else{
+					$paymentStatus = '<span class="fontGreen fontBold paymentStatusTable">'.$doc['conventionPaymentStatus'].'</span>';
+				}
+			}else{
+				$paymentStatus = '<span class="fontGreen fontBold paymentStatusTable">-</span>';
+			}
+
+			if(isset($doc['golfPaymentStatus'])){
+				if($doc['golfPaymentStatus'] == 'unpaid' && $doc['golf'] == 'Yes'){
+					$paymentStatusGolf = '<span class="fontRed fontBold paymentStatusTable">'.$doc['golfPaymentStatus'].'</span>';
+				}elseif ($doc['golfPaymentStatus'] == 'pending') {
+					$paymentStatusGolf = '<span class="fontOrange fontBold paymentStatusTable">'.$doc['golfPaymentStatus'].'</span>';
+				}elseif ($doc['golfPaymentStatus'] == 'cancel') {
+					$paymentStatusGolf = '<span class="fontGray fontBold paymentStatusTable">'.$doc['golfPaymentStatus'].'</span>';
+				}elseif ($doc['golf'] == 'No') {
+					$paymentStatusGolf = '<span class="fontGray fontBold paymentStatusTable">'.$doc['golfPaymentStatus'].'</span>';
+				}else{
+					$paymentStatusGolf = '<span class="fontGreen fontBold paymentStatusTable">'.$doc['golfPaymentStatus'].'</span>';
+				}
+			}else{
+				$paymentStatusGolf = '<span class="fontGreen fontBold paymentStatusTable">-</span>';
+			}
+
+			if(isset($doc['golf'])){
+				if($doc['golf'] == 'Yes'){
+					$rowGolfAction = '<a class="icon-"  ><i>&#xe146;</i><span class="paygolf" id="'.$doc['_id'].'" >Golf Status</span>';
+				}else{
+					$rowGolfAction = '';
+				}
+			}else{
+				$rowGolfAction = '';
+			}
+
+			if(isset($doc['golfPaymentStatus']) && isset($doc['conventionPaymentStatus'])){
+
+				if(($doc['golfPaymentStatus'] == 'pending' && $doc['conventionPaymentStatus'] == 'pending') || ($doc['golfPaymentStatus'] == 'unpaid' && $doc['conventionPaymentStatus'] == 'unpaid')){
+					$rowBoothAction = '<a class="icon-"  ><i>&#xe1e9;</i><span class="paygolfconvention" id="'.$doc['_id'].'" >Conv & Golf</span>';
+				}else{
+					$rowBoothAction = '';
+				}
+			}else{
+				$rowGolfAction = '';
+			}
+
+			//find message log
+
+			//$rowResendMessage = '';
+			//$messagelogs = $messagelog->find(array('user'=>$doc['_id']),array(),array(),array());
+			//if(count($messagelogs)>0){
+
+				$rowResendMessage = '<a class="icon-"  ><i>&#xe165;</i><span class="resendmail" id="'.$doc['_id'].'" >Resend Email</span>';
+			//}
+			if(Auth::user()->role == 'root' || Auth::user()->role == 'super'){
+				$aadata[] = array(
+					$counter,
+					$select,
+					(isset($doc['registrationnumber']))?$doc['registrationnumber']:'',
+					date('Y-m-d', $doc['createdDate']->sec),
+					$doc['email'],
+					'<span class="expander" id="'.$doc['_id'].'">'.$doc['firstname'].'</span>',
+					$doc['lastname'],
+					$doc['company'],
+					$doc['regtype'],
+					$doc['country'],
+					$paymentStatus,
+					$paymentStatusGolf,
+					$rowBoothAction.
+					'<a class="icon-"  ><i>&#xe1b0;</i><span class="pay" id="'.$doc['_id'].'" >Convention Status</span>'.
+					$rowGolfAction.
+					
+					'<a class="icon-"  ><i>&#xe14c;</i><span class="pbadge" id="'.$doc['_id'].'" >Print Badge</span>'.
+					'<a class="icon-"  href="'.URL::to('product/edit/'.$doc['_id']).'"><i>&#xe164;</i><span>Update Profile</span>'.
+					
+					$rowResendMessage.
+					'<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$doc['_id'].'" >Delete</span>',
+					
+
+					'extra'=>$extra
+				);
+			}else{
+				$aadata[] = array(
+					$counter,
+					$select,
+					(isset($doc['registrationnumber']))?$doc['registrationnumber']:'',
+					date('Y-m-d', $doc['createdDate']->sec),
+					$doc['email'],
+					'<span class="expander" id="'.$doc['_id'].'">'.$doc['firstname'].'</span>',
+					$doc['lastname'],
+					$doc['company'],
+					$doc['regtype'],
+					$doc['country'],
+					$paymentStatus,
+					$paymentStatusGolf,
+					
+					
+					'<a class="icon-"  ><i>&#xe14c;</i><span class="pbadge" id="'.$doc['_id'].'" >Print Badge</span>'.
+					'<a class="icon-"  href="'.URL::to('product/edit/'.$doc['_id']).'"><i>&#xe164;</i><span>Update Profile</span>',
+					
+
+					'extra'=>$extra
+				);
+			}
+			$counter++;
+		}
+
+
+		$result = array(
+			'sEcho'=> Input::get('sEcho'),
+			'iTotalRecords'=>$count_all,
+			'iTotalDisplayRecords'=> $count_display_all,
+			'aaData'=>$aadata,
+			'qrs'=>$q
+		);
+
+		return Response::json($result);
+	}
+
+
+
+	public function get_add(){
 
 		$this->crumb->add('register','Member Registration');
 
@@ -634,7 +898,7 @@ class Shopper_Controller extends Base_Controller {
 
 	public function get_login(){
 
-		$this->crumb->add('register','Register');
+		$this->crumb->add('register','Sign In');
 
 		$form = new Formly();
 		$form->set_options(array(
@@ -644,7 +908,7 @@ class Shopper_Controller extends Base_Controller {
 		return View::make('register.login')
 					->with('form',$form)
 					->with('crumb',$this->crumb)
-					->with('title','Login Form');
+					->with('title','Login');
 
 	}
 
