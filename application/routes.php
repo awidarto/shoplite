@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shopper','product','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shopper','product','report','import','export','dashboard','user','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -40,6 +40,8 @@ Route::get('/',function(){
            return Redirect::to('dashboard');
         }else if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier'){
            return Redirect::to('onsite');
+        }else{
+            return Redirect::to('shop/home');
         }
     }else{
        return Redirect::to('shop/home');
@@ -260,7 +262,7 @@ Route::post('signin', function()
     {
         //print_r($userdata);
         // we are now logged in, go to home
-        return Redirect::to('myprofile');
+        return Redirect::to('/');
 
     }
     else

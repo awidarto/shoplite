@@ -25,69 +25,73 @@
           <table class="table table-condensed dataTable attendeeTable">
 
 			    <thead>
+
 			        <tr>
-			        	<?php
-				        	if(!isset($colclass)){
-				        		$colclass = array();
-				        	}
-			        		$hid = 0;
-			        	?>
 			        	@foreach($heads as $head)
-			        		<th 
-			        			@if(isset($colclass[$hid]))
-			        				class="{{$colclass[$hid]}}"
-			        			@endif
-			        			<?php $hid++ ?>
-			        		>
+			        		@if(is_array($head))
+			        			<th 
+			        				@foreach($head[1] as $key=>$val)
+			        					{{ $key }}="{{ $val }}"
+			        				@endforeach
+			        			>
+			        			{{ $head[0] }}
+			        			</th>
+			        		@else
+			        		<th>
 			        			{{ $head }}
 			        		</th>
+			        		@endif
 			        	@endforeach
 			        </tr>
-
-
+			        @if(isset($secondheads) && !is_null($secondheads))
+			        	<tr>
+			        	@foreach($secondheads as $head)
+			        		@if(is_array($head))
+			        			<th 
+			        				@foreach($head[1] as $key=>$val)
+			        					@if($key != 'search')
+				        					{{ $key }}="{{ $val }}"
+			        					@endif
+			        				@endforeach
+			        			>
+			        			{{ $head[0] }}
+			        			</th>
+			        		@else
+			        		<th>
+			        			{{ $head }}
+			        		</th>
+			        		@endif
+			        	@endforeach
+			        	</tr>
+			        @endif
 			    </thead>
 
 				<?php
 					$form = new Formly();
 				?>
 
-		    	@if($searchinput)
-				    <thead id="searchinput">
-					    <tr>
-				    	@foreach($searchinput as $in)
-				    		@if($in)
-				    			@if($in == 'select_all')
-				    				<td>{{ $form->checkbox('select_all','','',false,array('id'=>'select_all')) }}</td>
-				    			@else
-					        		<td><input type="text" name="search_{{$in}}" id="search_{{$in}}" value="Search {{$in}}" class="search_init" /></td>
-				    			@endif
-				    		@else
+			    <thead id="searchinput">
+				    <tr>
+			    	@foreach($heads as $in)
+			    		@if( $in[0] != 'select_all' && $in[0] != '')
+				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
+				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" value="Search {{$in[0]}}" class="search_init" /></td>
+			    			@else
 				        		<td>&nbsp;</td>
-				    		@endif
-				    	@endforeach
-					    </tr>
-				    </thead>
-			    @endif
+			    			@endif
+			    		@elseif($in[0] == 'select_all')
+		    				<td>{{ $form->checkbox('select_all','','',false,array('id'=>'select_all')) }}</td>				    		
+			    		@elseif($in[0] == '')
+			        		<td>&nbsp;</td>
+			    		@endif
+			    	@endforeach
+				    </tr>
+			    </thead>
 
              <tbody>
              	<!-- will be replaced by ajax content -->
              </tbody>
 
-             <!--
-		    	@if($searchinput)
-				    <tfoot>
-					    <tr>
-				    	@foreach($searchinput as $in)
-				    		@if($in)
-				        		<td><input type="text" name="search_{{$in}}" id="search_{{$in}}" value="Search {{$in}}" class="search_init" /></td>
-				    		@else
-				        		<td>&nbsp;</td>
-				    		@endif
-				    	@endforeach
-					    </tr>
-				    </tfoot>
-			    @endif
-			-->
           </table>
 
        </div>
@@ -532,6 +536,8 @@
 
 		$('thead input').keyup( function () {
 			/* Filter on the column (the index) of this element */
+			console.log($('thead input').index(this));
+
 			oTable.fnFilter( this.value, $('thead input').index(this) );
 		} );
 
@@ -564,6 +570,7 @@
 
 		$('.filter input').keyup( function () {
 			/* Filter on the column (the index) of this element */
+
 			oTable.fnFilter( this.value, $('.filter input').index(this) );
 		} );
 
