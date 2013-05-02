@@ -10,7 +10,12 @@ return array(
 			'EURO'=>'EURO',
 			'GBP'=>'GBP'
 		),
-	
+	'sections'=>array(
+			'mixmatch'=>'Mix n Match',
+			'pow'=> 'Pick of The Week',
+			'otb'=> 'Out of The Box',
+			'kind'=> 'One of A Kind'
+		),
 
 
 );

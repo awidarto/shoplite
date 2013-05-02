@@ -67,6 +67,7 @@ class Product_Controller extends Base_Controller {
 			array('Product Code',array('search'=>true,'sort'=>true)),
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
+			array('Section',array('search'=>true,'sort'=>true)),
 			array('Category',array('search'=>true,'sort'=>true)),
 			array('Tags',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
@@ -116,12 +117,12 @@ class Product_Controller extends Base_Controller {
 
 	public function post_index()
 	{
-
 		$fields = array(
-			array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
 			array('productcode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('permalink',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('currency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -202,31 +203,6 @@ class Product_Controller extends Base_Controller {
 
 		}
 
-		/*
-		foreach($fields as $field){
-			if(Input::get('sSearch_'.$idx))
-			{
-				
-				$hilite_item = Input::get('sSearch_'.$idx);
-				$hilite[] = $hilite_item;
-				$hilite_replace[] = '<span class="hilite">'.$hilite_item.'</span>';
-				
-
-				if($rel[$idx] == 'like'){
-					if($cond[$idx] == 'both'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
-					}else if($cond[$idx] == 'before'){
-						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
-					}else if($cond[$idx] == 'after'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
-					}
-				}else if($rel[$idx] == 'equ'){
-					$q[$field] = Input::get('sSearch_'.$idx);
-				}
-			}
-			$idx++;
-		}
-		*/
 		//print_r($q);
 
 		$product = new Product();
@@ -289,12 +265,23 @@ class Product_Controller extends Base_Controller {
 				if($field[1]['show'] == true){
 					if(isset($doc[$field[0]])){
 						if($field[1]['kind'] == 'date'){
-							$row[] = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
+							$rowitem = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
 						}elseif($field[1]['kind'] == 'currency'){
-							$row[] = number_format($doc[$field[0]],2,',','.');
+							$rowitem = number_format($doc[$field[0]],2,',','.');
 						}else{
-							$row[] = $doc[$field[0]];
+							$rowitem = $doc[$field[0]];
 						}
+
+						if(isset($field[1]['attr'])){
+							$attr = '';
+							foreach ($field[1]['attr'] as $key => $value) {
+								$attr .= '"'.$key.'"="'.$value.'" ';
+							}
+							$row[] = '<span '.$attr.' >'.$rowitem.'</span>';
+						}else{
+							$row[] = $rowitem;
+						}
+
 					}else{
 						$row[] = '';
 					}
@@ -860,20 +847,41 @@ class Product_Controller extends Base_Controller {
 
 			if($obj = $product->insert($data)){
 
+				$newid = $obj['_id']->__toString();
+
+				$newdir = realpath(Config::get('kickstart.storage')).'/products/'.$newid;
+
+				if(!file_exists($newdir)){
+					mkdir($newdir,0777);
+				}
+
 				foreach($files as $key=>$val){
 
 					if($val['name'] != ''){
-						$newid = $obj['_id']->__toString();
-
-						$newdir = realpath(Config::get('kickstart.storage')).'/products/'.$newid;
 
 						Input::upload($key,$newdir,$val['name']);
+
+						$thumbpath = Config::get('kickstart.storage').'/products/'.$newid;
+
+						print_r($val);
+
+						//$smsuccess = Resizer::open( $val )
+			        	//	->resize( 200 , 200 , 'fit' );
+			        		//->save( Config::get('kickstart.storage').'/products/'.$newid.'/sm_'.$key.'.jpg' , 90 );
+
+			        	/*
+
+
+						$mdsuccess = Resizer::open( $pfile )
+			        		->resize( 400 , 400 , 'fit' )
+			        		->save( $thumbpath.'/med_'.$key.'.jpg' , 90 );
+						*/
 
 					}				
 				}
 
 				//Event::fire('product.createformadmin',array($obj['_id'],$passwordRandom,$obj['conventionPaymentStatus']));
-				return Redirect::to('product')->with('notify_success',Config::get('site.register_success'));
+				//return Redirect::to('product')->with('notify_success',Config::get('site.register_success'));
 		    	
 			}else{
 		    	return Redirect::to('product')->with('notify_success',Config::get('site.register_failed'));

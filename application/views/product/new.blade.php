@@ -20,6 +20,15 @@
                 {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
 
         </fieldset>
+        <fieldset>
+            <legend>Publishing</legend>
+
+                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
+
+                {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
+                {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
+
+        </fieldset>
         
     </div>
 
@@ -27,9 +36,13 @@
 
         <fieldset>
             <legend>Product Details</legend>
+                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
+
                 {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
 
                 {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
+
+
 
                 {{ Form::label('price','Default Price Set *')}}
                 <div class="row-fluid inputInline">
@@ -44,21 +57,22 @@
         </fieldset>
 
         <fieldset>
-            <legend>Product Pictures</legend>
-                {{ $form->radio('defaultpic','Set As Default','1',true)}}
-                {{ $form->file('pic01','Picture #1')}}
+            <legend>Product Main Pictures</legend>
 
-                {{ $form->radio('defaultpic','Set As Default','2',null)}}
-                {{ $form->file('pic02','Picture #2')}}
-
-                {{ $form->radio('defaultpic','Set As Default','3',null)}}
-                {{ $form->file('pic03','Picture #3')}}
-
-                {{ $form->radio('defaultpic','Set As Default','4',null)}}
-                {{ $form->file('pic04','Picture #4')}}
-
-                {{ $form->radio('defaultpic','Set As Default','5',null)}}
-                {{ $form->file('pic05','Picture #5')}}
+              @for($i=1;$i<6;$i++)
+                  <div class="row-fluid">
+                    <div class="span8">
+                      {{ $form->file('pic0'.$i,'Picture #'.$i)}}
+                   </div>
+                    <div class="span4">
+                      @if($i == 1)
+                        {{ $form->radio('defaultpic','Set As Default',$i,true)}}
+                      @else
+                        {{ $form->radio('defaultpic','Set As Default',$i)}}
+                      @endif
+                    </div>
+                  </div>
+              @endfor
 
         </fieldset>
 
