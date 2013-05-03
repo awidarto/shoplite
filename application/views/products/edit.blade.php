@@ -64,15 +64,16 @@
 
               @for($i=1;$i<6;$i++)
                   <div class="row-fluid">
-                    <div class="span8">
+
+                    <div  class="span2">
+                      {{ HTML::image(URL::base().'/storage/products/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
+                    </div>
+
+                    <div class="span7">
                       {{ $form->file('pic0'.$i,'Picture #'.$i)}}
                    </div>
-                    <div class="span4">
-                      @if($i == 1)
-                        {{ $form->radio('defaultpic','Set As Default',$i,true)}}
-                      @else
-                        {{ $form->radio('defaultpic','Set As Default',$i)}}
-                      @endif
+                    <div class="span3">
+                      {{ $form->radio('defaultpic','Default',$i)}}
                     </div>
                   </div>
               @endfor
@@ -98,6 +99,12 @@ $(document).ready(function() {
     width : 'resolve'
   });
 
+  $(":file").filestyle({
+    //buttonText: 'Select file',
+    //textField: true,
+    classButton: 'uploader',
+    //icon: false
+  });
   
 });
 

@@ -24,16 +24,16 @@ class Products_Controller extends Admin_Controller {
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
 			array('Section',array('search'=>true,'sort'=>true)),
-			array('Category',array('search'=>true,'sort'=>true)),
-			array('Tags',array('search'=>true,'sort'=>true)),
+			//array('Category',array('search'=>true,'sort'=>true)),
+			//array('Tags',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
 			array('Retail Price',array('search'=>true,'sort'=>true)),
 			array('Sale Price',array('search'=>true,'sort'=>true)),
-			array('Effective From',array('search'=>true,'sort'=>true)),
-			array('Effective Until',array('search'=>true,'sort'=>true)),
+			//array('Effective From',array('search'=>true,'sort'=>true)),
+			//array('Effective Until',array('search'=>true,'sort'=>true)),
 			array('Created',array('search'=>true,'sort'=>true)),
 			array('Last Update',array('search'=>true,'sort'=>true)),
-			array('Productsequence',array('search'=>true,'sort'=>true))
+			//array('Productsequence',array('search'=>true,'sort'=>true))
 		);
 
 		return parent::get_index();
@@ -43,21 +43,21 @@ class Products_Controller extends Admin_Controller {
 	public function post_index()
 	{
 		$this->fields = array(
-			array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
+			array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'namePic','attr'=>array('class'=>'expander'))),
 			array('productcode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('permalink',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			//array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			//array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('currency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('retailPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
 			array('salePrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
-			array('effectiveFrom',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('effectiveUntil',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			//array('effectiveFrom',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			//array('effectiveUntil',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('createdDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
 			array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
-			array('productsequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true))
+			//array('productsequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true))
 		);
 
 		return parent::post_index();
@@ -119,14 +119,17 @@ class Products_Controller extends Admin_Controller {
 		return parent::post_add($data);
 	}
 
-	public function makeEdit($data){
+	public function makeActions($data){
+		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
 		$edit =	'<a class="icon-"  href="'.URL::to('products/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Product</span>';
-		return $edit;
+
+		$actions = $edit.$delete;
+		return $actions;
 	}
 
-	public function makeDelete($data){
-		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
-		return $delete;
+	public function namePic($data){
+		$display = HTML::image(URL::base().'/storage/products/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
+		return $display;
 	}
 
 	public function afterUpdate($id)
@@ -158,17 +161,10 @@ class Products_Controller extends Admin_Controller {
 		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
 				}
 
-
-	        	/*
-
-
-				$mdsuccess = Resizer::open( $pfile )
-	        		->resize( 400 , 400 , 'fit' )
-	        		->save( $thumbpath.'/med_'.$key.'.jpg' , 90 );
-				*/
-
 			}				
 		}
+
+		return $id;
 
 	}
 
@@ -189,23 +185,17 @@ class Products_Controller extends Admin_Controller {
 
 			if($val['name'] != ''){
 
+				$val['name'] = fixfilename($val['name']);
+
 				Input::upload($key,$newdir,$val['name']);
 
-				$thumbpath = Config::get('kickstart.storage').'/products/'.$newid;
+				$path = $newdir.'/'.$val['name'];
 
-				print_r($val);
-
-				$smsuccess = Resizer::open( $val )
-	        		->resize( 200 , 200 , 'fit' )
-	        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/sm_'.$key.'.jpg' , 90 );
-
-	        	/*
-
-
-				$mdsuccess = Resizer::open( $pfile )
-	        		->resize( 400 , 400 , 'fit' )
-	        		->save( $thumbpath.'/med_'.$key.'.jpg' , 90 );
-				*/
+				foreach(Config::get('shoplite.picsizes') as $s){
+					$smsuccess = Resizer::open( $path )
+		        		->resize( $s['w'] , $s['h'] , $s['opt'] )
+		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
+				}
 
 			}				
 		}

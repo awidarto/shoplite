@@ -227,7 +227,7 @@ class Admin_Controller extends Base_Controller {
 
 			$select = $form->checkbox('sel_'.$doc['_id'],'','',false,array('id'=>$doc['_id'],'class'=>'selector'));
 
-			$actions = $this->makeEdit($doc).$this->makeDelete($doc).$this->actions;
+			$actions = $this->makeActions($doc);
 
 
 			$row = array();
@@ -238,23 +238,30 @@ class Admin_Controller extends Base_Controller {
 			foreach($fields as $field){
 				if($field[1]['show'] == true){
 					if(isset($doc[$field[0]])){
-						if($field[1]['kind'] == 'date'){
-							$rowitem = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
-						}elseif($field[1]['kind'] == 'currency'){
-							$rowitem = number_format($doc[$field[0]],2,',','.');
+						if( isset($field[1]['callback']) && $field[1]['callback'] != ''){
+							$callback = $field[1]['callback'];
+							$row[] = $this->$callback($doc);
 						}else{
-							$rowitem = $doc[$field[0]];
+							if($field[1]['kind'] == 'date'){
+								$rowitem = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
+							}elseif($field[1]['kind'] == 'currency'){
+								$rowitem = number_format($doc[$field[0]],2,',','.');
+							}else{
+								$rowitem = $doc[$field[0]];
+							}
+
+							if(isset($field[1]['attr'])){
+								$attr = '';
+								foreach ($field[1]['attr'] as $key => $value) {
+									$attr .= '"'.$key.'"="'.$value.'" ';
+								}
+								$row[] = '<span '.$attr.' >'.$rowitem.'</span>';
+							}else{
+								$row[] = $rowitem;
+							}
+
 						}
 
-						if(isset($field[1]['attr'])){
-							$attr = '';
-							foreach ($field[1]['attr'] as $key => $value) {
-								$attr .= '"'.$key.'"="'.$value.'" ';
-							}
-							$row[] = '<span '.$attr.' >'.$rowitem.'</span>';
-						}else{
-							$row[] = $rowitem;
-						}
 
 					}else{
 						$row[] = '';
@@ -442,11 +449,7 @@ class Admin_Controller extends Base_Controller {
 		return $data;
 	}
 
-	public function makeEdit($data){
-		return '';
-	}
-
-	public function makeDelete($data){
+	public function makeActions($data){
 		return '';
 	}
 

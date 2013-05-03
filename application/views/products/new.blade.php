@@ -66,9 +66,9 @@
                    </div>
                     <div class="span4">
                       @if($i == 1)
-                        {{ $form->radio('defaultpic','Set As Default',$i,true)}}
+                        {{ $form->radio('defaultpic','Default',$i,true)}}
                       @else
-                        {{ $form->radio('defaultpic','Set As Default',$i)}}
+                        {{ $form->radio('defaultpic','Default',$i)}}
                       @endif
                     </div>
                   </div>
@@ -91,6 +91,8 @@
   $('select').select2({
     width : 'resolve'
   });
+
+  $(":file").filestyle();
 
   $('#field_role').change(function(){
       //alert($('#field_role').val());
