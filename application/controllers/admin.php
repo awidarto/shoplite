@@ -1,0 +1,472 @@
+<?php
+
+class Admin_Controller extends Base_Controller {
+
+	/*
+	|--------------------------------------------------------------------------
+	| The Default Controller
+	|--------------------------------------------------------------------------
+	|
+	| Instead of using RESTful routes and anonymous functions, you might wish
+	| to use controllers to organize your application API. You'll love them.
+	|
+	| This controller responds to URIs beginning with "home", and it also
+	| serves as the default controller for the application, meaning it
+	| handles requests to the root of the application.
+	|
+	| You can respond to GET requests to "/home/profile" like so:
+	|
+	|		public function action_profile()
+	|		{
+	|			return "This is your profile!";
+	|		}
+	|
+	| Any extra segments are passed to the method as parameters:
+	|
+	|		public function action_profile($id)
+	|		{
+	|			return "This is the profile for user {$id}.";
+	|		}
+	|
+	*/
+
+	public $restful = true;
+
+	public $crumb;
+
+	public $model;
+
+	public $heads;
+
+	public $fields;
+
+	public $collection;
+
+	public $controller_name;
+
+	public $form;
+
+	public $form_framework = 'metro';
+
+	public $form_class = 'form-horizontal';
+
+	public $validator = array();
+
+	public $actions = '';
+
+
+	public function __construct(){
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$form_options = array(
+				'framework'=>$this->form_framework,
+				'form_class'=>$this->form_class
+			);
+
+		$this->form = new Formly();		
+		$this->form->set_options($form_options);
+	}
+
+	public function get_index()
+	{
+
+
+		$form = $this->form;
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-horizontal'
+			));
+
+		$action_selection = $form->select('action','',Config::get('kickstart.actionselection'));
+
+		$heads = $this->heads;
+
+		$select_all = $this->form->checkbox('select_all','','',false,array('id'=>'select_all'));
+
+		// add selector and sequence columns
+		array_unshift($heads, array('#',array('search'=>false,'sort'=>false)));
+		array_unshift($heads, array($select_all,array('search'=>false,'sort'=>false)));
+
+		// add action column
+		array_push($heads,
+			array('Actions',array('search'=>false,'sort'=>false))
+		);
+
+		$disablesort = array();
+
+		for($s = 0; $s < count($heads);$s++){
+			if($heads[$s][1]['sort'] == false){
+				$disablesort[] = $s;
+			}
+		}
+
+		$disablesort = implode(',',$disablesort);
+
+		return View::make('tables.simple')
+			->with('title',$this->title)
+			->with('newbutton', Str::singular($this->controller_name))
+			->with('disablesort',$disablesort)
+			->with('addurl',strtolower($this->controller_name).'/add')
+			->with('ajaxsource',URL::to(strtolower($this->controller_name)))
+			->with('ajaxdel',URL::to(strtolower($this->controller_name).'/del'))
+			->with('form',$form)
+			->with('crumb',$this->crumb)
+			->with('heads',$heads)
+			->nest('row',strtolower($this->controller_name).'.rowdetail');
+	}
+
+	public function post_index()
+	{
+
+		$fields = $this->fields;
+
+		$pagestart = Input::get('iDisplayStart');
+		$pagelength = Input::get('iDisplayLength');
+
+		$limit = array($pagelength, $pagestart);
+
+		$defsort = 1;
+		$defdir = -1;
+
+		$idx = 0;
+		$q = array();
+
+		$hilite = array();
+		$hilite_replace = array();
+
+		for($i = 1;$i < count($fields);$i++){
+			$idx = $i;
+			//print_r($fields[$i]);
+			$field = $fields[$i-1][0];
+			$type = $fields[$i-1][1]['kind'];
+
+			if(Input::get('sSearch_'.$i))
+			{
+				if( $type == 'text'){
+					if($fields[$i][1]['query'] == 'like'){
+						$pos = $fields[$i][1]['pos'];
+						if($pos == 'both'){
+							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
+						}else if($pos == 'before'){
+							$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
+						}else if($pos == 'after'){
+							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
+						}
+					}else{
+						$q[$field] = Input::get('sSearch_'.$idx);
+					}
+				}elseif($type == 'numeric' || $type == 'currency'){
+					$str = Input::get('sSearch_'.$idx);
+
+					$sign = null;
+
+					if(strpos($str, "<=") !== false){
+						$sign = '$lte';
+					}elseif(strpos($str, ">=") !== false){
+						$sign = '$gte';
+					}elseif(strpos($str, ">") !== false){
+						$sign = '$gt';
+					}elseif(stripos($str, "<") !== false){
+						$sign = '$lt';
+					}
+
+					//print $sign;
+
+					$str = trim(str_replace(array('<','>','='), '', $str));
+
+					if(is_null($sign)){
+						$q[$field] = new MongoInt32($str);
+					}else{
+						$str = new MongoInt32($str);
+						$q[$field] = array($sign=>$str);
+					}
+				}elseif($type == 'date'){
+					$q[$field] = Input::get('sSearch_'.$idx);
+				}
+
+			}
+
+		}
+
+		//print_r($q);
+
+		$model = $this->model;
+
+		/* first column is always sequence number, so must be omitted */
+		$fidx = Input::get('iSortCol_0');
+		if($fidx == 0){
+			$fidx = $defsort;
+			$sort_col = $fields[$fidx][0];
+			$sort_dir = $defdir;
+		}else{
+			$fidx = ($fidx > 0)?$fidx - 1:$fidx;
+			$sort_col = $fields[$fidx][0];
+			$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
+		}
+
+		$count_all = $model->count();
+
+		if(count($q) > 0){
+			$results = $model->find($q,array(),array($sort_col=>$sort_dir),$limit);
+			$count_display_all = $model->count($q);
+		}else{
+			$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+			$count_display_all = $model->count();
+		}
+
+		$aadata = array();
+
+		$form = $this->form;
+
+		$counter = 1 + $pagestart;
+
+		foreach ($results as $doc) {
+
+			$extra = $doc;
+
+			$select = $form->checkbox('sel_'.$doc['_id'],'','',false,array('id'=>$doc['_id'],'class'=>'selector'));
+
+			$actions = $this->makeEdit($doc).$this->makeDelete($doc).$this->actions;
+
+
+			$row = array();
+
+			$row[] = $counter;
+			$row[] = $select;
+
+			foreach($fields as $field){
+				if($field[1]['show'] == true){
+					if(isset($doc[$field[0]])){
+						if($field[1]['kind'] == 'date'){
+							$rowitem = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
+						}elseif($field[1]['kind'] == 'currency'){
+							$rowitem = number_format($doc[$field[0]],2,',','.');
+						}else{
+							$rowitem = $doc[$field[0]];
+						}
+
+						if(isset($field[1]['attr'])){
+							$attr = '';
+							foreach ($field[1]['attr'] as $key => $value) {
+								$attr .= '"'.$key.'"="'.$value.'" ';
+							}
+							$row[] = '<span '.$attr.' >'.$rowitem.'</span>';
+						}else{
+							$row[] = $rowitem;
+						}
+
+					}else{
+						$row[] = '';
+					}
+				}
+			}
+
+			$row[] = $actions;
+			$row['extra'] = $extra;
+
+			$aadata[] = $row;
+
+			$counter++;
+		}
+
+
+		$result = array(
+			'sEcho'=> Input::get('sEcho'),
+			'iTotalRecords'=>$count_all,
+			'iTotalDisplayRecords'=> $count_display_all,
+			'aaData'=>$aadata,
+			'qrs'=>$q
+		);
+
+		return Response::json($result);
+	}
+
+	public function post_del(){
+		$id = Input::get('id');
+
+		$controller_name = strtolower($this->controller_name);
+
+		$model = $this->model;
+
+		if(is_null($id)){
+			$result = array('status'=>'ERR','data'=>'NOID');
+		}else{
+
+			$id = new MongoId($id);
+
+			if($model->delete(array('_id'=>$id))){
+				Event::fire($controller_name.'.delete',array('id'=>$id,'result'=>'OK'));
+				$result = array('status'=>'OK','data'=>'CONTENTDELETED');
+			}else{
+				Event::fire($controller_name.'.delete',array('id'=>$id,'result'=>'FAILED'));
+				$result = array('status'=>'ERR','data'=>'DELETEFAILED');
+			}
+		}
+
+		return Response::json($result);
+	}
+
+	public function get_add(){
+		
+		$controller_name = strtolower($this->controller_name);
+
+		$this->crumb->add($controller_name.'/add','New '.Str::singular($this->controller_name));
+
+		$model = $this->model;
+
+		$form = $this->form;
+
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-vertical'
+			));
+
+		return View::make($controller_name.'.new')
+					->with('form',$form)
+					->with('submit',$controller_name.'/add')
+					->with('crumb',$this->crumb)
+					->with('title','New '.Str::singular($this->controller_name));
+
+	}
+
+	public function post_add($data = null){
+
+		//print_r(Session::get('permission'));
+		if(is_null($data)){
+			$data = Input::get();
+		}
+
+		$controller_name = strtolower($this->controller_name);
+
+	    $validation = Validator::make($input = Input::all(), $this->validator);
+
+	    if($validation->fails()){
+
+	    	return Redirect::to($controller_name.'/add')->with_errors($validation)->with_input(Input::all());
+
+	    }else{
+
+			unset($data['csrf_token']);
+
+			$data['createdDate'] = new MongoDate();
+			$data['lastUpdate'] = new MongoDate();
+
+			
+			$model = $this->model;
+
+			if($obj = $model->insert($data)){
+
+				$obj = $this->afterSave($obj);
+
+				//Event::fire('product.createformadmin',array($obj['_id'],$passwordRandom,$obj['conventionPaymentStatus']));
+		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
+			}else{
+		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
+			}
+
+
+	    }
+
+	}
+
+	public function get_edit($id){
+
+		$this->crumb->add(strtolower($this->controller_name).'/edit','Edit',false);
+
+		$model = $this->model;
+
+		$_id = new MongoId($id);
+
+		$population = $model->get(array('_id'=>$_id));
+
+		$form = $this->form->make($population);
+
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-vertical'
+			));
+
+		$this->crumb->add(strtolower($this->controller_name).'/edit/'.$id,$id,false);
+
+		return View::make(strtolower($this->controller_name).'.edit')
+					->with('formdata',$population)
+					->with('submit',strtolower($this->controller_name).'/edit/'.$id)
+					->with('form',$form)
+					->with('crumb',$this->crumb)
+					->with('title','Edit Product');
+
+	}
+
+
+	public function post_edit($id,$data = null){
+
+		$controller_name = strtolower($this->controller_name);
+		//print_r(Session::get('permission'));
+
+	    $validation = Validator::make($input = Input::all(), $this->validator);
+
+	    if($validation->fails()){
+
+	    	return Redirect::to($controller_name.'/edit')->with_errors($validation)->with_input(Input::all());
+
+	    }else{
+
+	    	if(is_null($data)){
+				$data = Input::get();
+	    	}
+
+			$id = new MongoId($data['id']);
+			$data['lastUpdate'] = new MongoDate();
+
+			unset($data['csrf_token']);
+			unset($data['id']);
+
+			$model = $this->model;
+
+			if($obj = $model->update(array('_id'=>$id),array('$set'=>$data))){
+
+				$obj = $this->afterUpdate($id);
+
+		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
+			}else{
+		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
+			}
+
+	    }
+
+	}
+
+	public function afterSave($data)
+	{
+		return $data;
+	}
+
+	public function makeEdit($data){
+		return '';
+	}
+
+	public function makeDelete($data){
+		return '';
+	}
+
+	public function afterUpdate($id)
+	{
+		return $id;
+	}
+
+	public function get_view($id){
+		$id = new MongoId($id);
+
+		$product = new Document();
+
+		$doc = $product->get(array('_id'=>$id));
+
+		return View::make('pop.docview')->with('profile',$doc);
+	}
+
+	public function get_action_sample(){
+		\Laravel\CLI\Command::run(array('notify'));
+	}
+
+}

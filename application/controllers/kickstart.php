@@ -1,6 +1,6 @@
 <?php
 
-class Product_Controller extends Base_Controller {
+class Kickstart_Controller extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -34,24 +34,43 @@ class Product_Controller extends Base_Controller {
 
 	public $crumb;
 
+	public $model;
+
+	public $heads;
+
+	public $collection;
+
+	public $controller_name;
+
+	public $form;
+
+	public $form_framework = 'metro';
+
+	public $form_class = 'form-horizontal';
+
+
 
 	public function __construct(){
-		$this->crumb = new Breadcrumb();
-		$this->crumb->add('product','Products');
-
+		/*
+			$this->crumb = new Breadcrumb();
+			$this->crumb->add($this->controller_name,ucfirst($this->controller_name));
+		*/
 		date_default_timezone_set('Asia/Jakarta');
-		$this->filter('before','auth');
+
+		$this->form = new Formly()->set_options(
+			array(
+				'framework'=>$this->form_framework,
+				'form_class'=>$this->form_class;
+			)
+		);
+
 	}
 
 	public function get_index()
 	{
 
 
-		$form = new Formly();
-		$form->set_options(array(
-			'framework'=>'metro',
-			'form_class'=>'form-horizontal'
-			));
+		$form = $this->form;
 
 		$select_all = $form->checkbox('select_all','','',false,array('id'=>'select_all'));
 
@@ -91,28 +110,24 @@ class Product_Controller extends Base_Controller {
 
 		$disablesort = implode(',',$disablesort);
 
-		if(Auth::user()->role == 'root' || Auth::user()->role == 'super' || Auth::user()->role == 'onsite'){
-			return View::make('tables.simple')
-				->with('title','Master Data')
-				->with('newbutton','New Visitor')
-				->with('disablesort',$disablesort)
-				->with('addurl','product/add')
-				->with('ajaxsource',URL::to('product'))
-				->with('ajaxdel',URL::to('product/del'))
-				->with('ajaxpay',URL::to('product/paystatus'))
-				->with('ajaxpaygolf',URL::to('product/paystatusgolf'))
-				->with('ajaxpaygolfconvention',URL::to('product/paystatusgolfconvention'))
-				->with('ajaxresendmail',URL::to('product/resendmail'))
-				->with('printsource',URL::to('product/printbadge'))
-				->with('form',$form)
-				->with('crumb',$this->crumb)
-				->with('heads',$heads)
-				->nest('row','product.rowdetail');
-		}else{
-			return View::make('product.restricted')
-							->with('title','Master Data');
-		}
+		return View::make('tables.simple')
+			->with('title','Master Data')
+			->with('newbutton','New Visitor')
+			->with('disablesort',$disablesort)
+			->with('addurl','product/add')
+			->with('ajaxsource',URL::to('product'))
+			->with('ajaxdel',URL::to('product/del'))
+			->with('ajaxpay',URL::to('product/paystatus'))
+			->with('ajaxpaygolf',URL::to('product/paystatusgolf'))
+			->with('ajaxpaygolfconvention',URL::to('product/paystatusgolfconvention'))
+			->with('ajaxresendmail',URL::to('product/resendmail'))
+			->with('printsource',URL::to('product/printbadge'))
+			->with('form',$form)
+			->with('crumb',$this->crumb)
+			->with('heads',$heads)
+			->nest('row','product.rowdetail');
 	}
+
 
 	public function post_index()
 	{
@@ -337,166 +352,6 @@ class Product_Controller extends Base_Controller {
 		return Response::json($result);
 	}
 
-	public function get_groups()
-	{
-		$this->crumb->add('product','Groups');
-
-		//print_r(Auth::user());
-
-		$form = new Formly();
-
-		$select_all = $form->checkbox('select_all','','',false,array('id'=>'select_all'));
-
-		$action_selection = $form->select('action','',Config::get('kickstart.actionselection'));
-
-		$btn_add_to_group = '<span class=" add_to_group" id="add_to_group">'.$action_selection.'</span>';
-
-		$heads = array('#','','Import Date','Email','First Name','Last Name','Company','Country','Total Att.');
-
-		$searchinput = array(false,false,'Import Date','Email','First Name','Last Name','Company','Country',false,false);
-
-		$colclass = array('','span1','span3','span1','span3','span3','span1','span1');
-
-
-		if(Auth::user()->role == 'root' || Auth::user()->role == 'super'){
-			return View::make('tables.simple')
-				->with('title','Master Data')
-				->with('newbutton','New Visitor')
-				->with('disablesort','0,1')
-				->with('addurl','import')
-				->with('colclass',$colclass)
-				->with('searchinput',$searchinput)
-				->with('ajaxsource',URL::to('product/groups'))
-				->with('ajaxdel',URL::to('product/del'))
-				->with('ajaxpay',URL::to('product/paystatus'))
-				->with('ajaxpaygolf',URL::to('product/paystatusgolf'))
-				->with('ajaxpaygolfconvention',URL::to('product/paystatusgolfconvention'))
-				->with('printsource',URL::to('product/printbadge'))
-				->with('form',$form)
-				->with('crumb',$this->crumb)
-				->with('heads',$heads)
-				->nest('row','product.rowdetailgroups');
-		}else{
-			return View::make('product.restricted')
-							->with('title',$title);
-		}
-	}
-
-	public function post_groups()
-	{
-
-
-		//$fields = array('email','firstname','lastname','company','country',);
-		$fields = array('createdDate','email','firstname','lastname','company','country','');
-
-		$rel = array('like','like','like','like','like','like','like','like');
-
-		$cond = array('both','both','both','both','both','both','both','both','both');
-
-		$pagestart = Input::get('iDisplayStart');
-		$pagelength = Input::get('iDisplayLength');
-
-		$limit = array($pagelength, $pagestart);
-
-		$defsort = 1;
-		$defdir = -1;
-
-		$idx = 1;
-		$q = array();
-
-		$hilite = array();
-		$hilite_replace = array();
-
-		foreach($fields as $field){
-			if(Input::get('sSearch_'.$idx))
-			{
-
-				$hilite_item = Input::get('sSearch_'.$idx);
-				$hilite[] = $hilite_item;
-				$hilite_replace[] = '<span class="hilite">'.$hilite_item.'</span>';
-
-				if($rel[$idx] == 'like'){
-					if($cond[$idx] == 'both'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
-					}else if($cond[$idx] == 'before'){
-						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
-					}else if($cond[$idx] == 'after'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
-					}
-				}else if($rel[$idx] == 'equ'){
-					$q[$field] = Input::get('sSearch_'.$idx);
-				}
-			}
-			$idx++;
-		}
-
-		//print_r($q)
-
-		$pic = new Import();
-		$product = new Product();
-
-		/* first column is always sequence number, so must be omitted */
-		$fidx = Input::get('iSortCol_0');
-		if($fidx == 0){
-			$fidx = $defsort;
-			$sort_col = $fields[$fidx];
-			$sort_dir = $defdir;
-		}else{
-			$fidx = ($fidx > 0)?$fidx - 1:$fidx;
-			$sort_col = $fields[$fidx];
-			$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
-		}
-
-		$count_all = $pic->count();
-
-		if(count($q) > 0){
-			$pics = $pic->find($q,array(),array($sort_col=>$sort_dir),$limit);
-			$count_display_all = $pic->count($q);
-		}else{
-			$pics = $pic->find(array(),array(),array($sort_col=>$sort_dir),$limit);
-			$count_display_all = $pic->count();
-		}
-
-		$aadata = array();
-
-		$form = new Formly();
-
-		$counter = 1 + $pagestart;
-		foreach ($pics as $doc) {
-
-			$id = $doc['_id']->__toString();
-			$condition  = array('cache_id'=>$id);
-			$peoples = $product->find($condition, array(), array(),array());
-			$extra = $peoples;
-
-			$select = $form->checkbox('sel_'.$doc['_id'],'','',false,array('id'=>$doc['_id'],'class'=>'selectorAll'));
-
-			$aadata[] = array(
-				$counter,
-				$select,
-				date('Y-m-d', $doc['createdDate']->sec),
-				$doc['email'],
-				'<span class="expander" id="'.$doc['_id'].'">'.$doc['firstname'].'</span>',
-				$doc['lastname'],
-				$doc['company'],
-				$doc['country'],
-				count($peoples),
-				'extra'=>$extra
-			);
-			$counter++;
-		}
-
-
-		$result = array(
-			'sEcho'=> Input::get('sEcho'),
-			'iTotalRecords'=>$count_all,
-			'iTotalDisplayRecords'=> $count_display_all,
-			'aaData'=>$aadata,
-			'qrs'=>$q
-		);
-
-		return Response::json($result);
-	}
 
 	public function post_del(){
 		$id = Input::get('id');
@@ -522,69 +377,15 @@ class Product_Controller extends Base_Controller {
 		print json_encode($result);
 	}
 
-	public function post_resendmail(){
-		$id = Input::get('id');
-		$mailtype = Input::get('type');
 
-		$user = new Product();
-		$log = new Logmessage();
+	public function get_add(){
 
-		if(is_null($id)){
-			$result = array('status'=>'ERR','data'=>'NOID');
-		}else{
-
-			$_id = new MongoId($id);
-
-			//find user first
-			$data = $user->get(array('_id'=>$_id));
-			$logs = $log->get(array('user'=>$_id));
-			if($logs!=null){
-				if($mailtype == 'email.regsuccess'){
-					$body = View::make($mailtype)
-						->with('data',$data)
-						->with('fromadmin','yes')
-						->with('passwordRandom',$logs['passwordRandom'])
-						->render();
-
-					Message::to($logs['emailto'])
-					    ->from($logs['emailfrom'], $logs['emailfromname'])
-					    ->cc($logs['emailcc1'], $logs['emailcc1name'])
-					    ->subject($logs['emailsubject'])
-					    ->body( $body )
-					    ->html(true)
-					    ->send();
-					$result = array('status'=>'OK','data'=>'CONTENTDELETED','message'=>'Successfully resend email');
-				}
-			}else{
-				$result = array('status'=>'NOTFOUND','data'=>'CONTENTDELETED','message'=>'Not Found Email to resend');
-			}
-		}
-
-		print json_encode($result);
-	}
-
-	public function get_add($type = null){
-
-		if(is_null($type)){
-			$this->crumb->add('product/add','New Product');
-		}else{
-			$this->crumb = new Breadcrumb();
-			$this->crumb->add('product/type/'.$type,'Product');
-
-			$this->crumb->add('product/type/'.$type,depttitle($type));
-			$this->crumb->add('product/add','New Product');
-		}
+		$this->crumb->add('product/add','New Product');
 
 		$product = new Product();
 
-		$form = new Formly();
-		$form->set_options(array(
-			'framework'=>'metro',
-			'form_class'=>'form-vertical'
-			));
-
 		return View::make('product.new')
-					->with('form',$form)
+					->with('form',$this->form)
 					->with('type',$type)
 					->with('crumb',$this->crumb)
 					->with('title','New Product');
@@ -713,7 +514,9 @@ class Product_Controller extends Base_Controller {
 
 	    }
 
+
 	}
+
 
 	public function get_edit($id){
 
@@ -985,6 +788,7 @@ class Product_Controller extends Base_Controller {
 
 	    }
 
+
 	}
 
 
@@ -996,217 +800,6 @@ class Product_Controller extends Base_Controller {
 		$doc = $product->get(array('_id'=>$id));
 
 		return View::make('pop.docview')->with('profile',$doc);
-	}
-
-
-
-	public function get_addSequencetoCollection(){
-		$product = new Product();
-		$countSeq = 0;
-		$products = $product->find();
-		foreach($products as $att){
-			$_id = $att['_id'];
-			$reg_number = explode('-',$att['registrationnumber']);
-			$reg_seq = $reg_number[3];
-			$product->update(array('_id'=>$_id),array('$set'=>array('regsequence'=>$reg_seq)));
-			$countSeq ++;
-		}
-		return View::make('product.updateField')
-				->with('countSeq',$countSeq)
-				->with('title','Update Field');
-
-	}
-
-	public function get_updateField(){
-		$product = new Product();
-
-		$products = $product->find();
-		$updateCount = 0;
-		$caheIDCount = 0;
-		$caheOBJCount = 0;
-		$companyNPWPCount = 0;
-		$groupIDCount = 0;
-		$groupNameCount = 0;
-		$invLetterCount = 0;
-		$invCompanyAddCount = 0;
-		$paymentStatCount = 0;
-		$AddCount = 0;
-		$AddCountInvoice = 0;
-		$ConfCount = 0;
-		$normalRate =0;
-
-		foreach($products as $att){
-
-			if(!isset($att['totalIDR'])){
-				$_id = $att['_id'];
-				//check type and golf status
-				$regtype = $att['regtype'];
-				$golf = $att['golf'];
-
-				if($regtype == 'PD' && $golf == 'No'){
-					$totalIDR = '4500000';
-					$totalUSD = '';
-				}elseif ($regtype == 'PD' && $golf == 'Yes'){
-					$totalIDR = '7000000';
-					$totalUSD = '';
-				}elseif ($regtype == 'PO' && $golf == 'No'){
-					$totalIDR = '';
-					$totalUSD = '500';
-				}elseif ($regtype == 'PO' && $golf == 'Yes'){
-					$totalIDR = '2500000';
-					$totalUSD = '500';
-				}elseif ($regtype == 'SD'){
-					$totalIDR = '400000';
-					$totalUSD = '';
-				}elseif ($regtype == 'SO'){
-					$totalIDR = '';
-					$totalUSD = '120';
-				}
-
-				if($product->update(array('_id'=>$_id),array('$set'=>array('totalIDR'=>$totalIDR,'totalUSD'=>$totalUSD)))){
-					$updateCount++;
-				}
-
-			}
-
-			if(!isset($att['cache_id'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('cache_id'=>'')))){
-					$caheIDCount++;
-				}
-			}
-
-			if(!isset($att['cache_obj'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('cache_obj'=>'')))){
-					$caheOBJCount++;
-				}
-
-			}
-
-			if(!isset($att['companys_npwp'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('companys_npwp'=>'')))){
-					$companyNPWPCount++;
-				}
-
-			}
-
-			if(!isset($att['groupId'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('groupId'=>'')))){
-					$groupIDCount++;
-				}
-
-			}
-			if(!isset($att['groupName'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('groupName'=>'')))){
-					$groupNameCount++;
-				}
-
-			}
-
-			if(!isset($att['inv_letter'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('inv_letter'=>'')))){
-					$invLetterCount++;
-				}
-
-			}
-
-			if(!isset($att['invoice_address_conv'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('invoice_address_conv'=>'')))){
-					$invCompanyAddCount++;
-				}
-
-			}
-			if(!isset($att['paymentStatus'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('paymentStatus'=>'')))){
-					$paymentStatCount++;
-				}
-
-			}
-
-
-			if(!isset($att['address'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('address'=>'')))){
-					$AddCount++;
-				}
-
-			}
-
-			if(!isset($att['addressInvoice'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('addressInvoice'=>'')))){
-					$AddCountInvoice++;
-				}
-
-			}
-
-			if(!isset($att['confirmation'])){
-				$_id = $att['_id'];
-				if($product->update(array('_id'=>$_id),array('$set'=>array('confirmation'=>'none')))){
-					$ConfCount++;
-				}
-
-			}
-
-			if($att['totalIDR']=='-' || $att['totalUSD']=='-'){
-				$_id = $att['_id'];
-				//check type and golf status
-				$regtype = $att['regtype'];
-				$golf = $att['golf'];
-
-				if($regtype == 'PD' && $golf == 'No'){
-					$totalIDR = '4500000';
-					$totalUSD = '';
-				}elseif ($regtype == 'PD' && $golf == 'Yes'){
-					$totalIDR = '7000000';
-					$totalUSD = '';
-				}elseif ($regtype == 'PO' && $golf == 'No'){
-					$totalIDR = '';
-					$totalUSD = '500';
-				}elseif ($regtype == 'PO' && $golf == 'Yes'){
-					$totalIDR = '2500000';
-					$totalUSD = '500';
-				}elseif ($regtype == 'SD'){
-					$totalIDR = '400000';
-					$totalUSD = '';
-				}elseif ($regtype == 'SO'){
-					$totalIDR = '';
-					$totalUSD = '120';
-				}
-
-				if($product->update(array('_id'=>$_id),array('$set'=>array('totalIDR'=>$totalIDR,'totalUSD'=>$totalUSD)))){
-					$normalRate++;
-				}
-
-			}
-
-
-
-
-		}
-
-		return View::make('product.updateField')
-				->with('updateCount',$updateCount)
-				->with('caheIDCount',$caheIDCount)
-				->with('caheOBJCount',$caheOBJCount)
-				->with('companyNPWPCount',$companyNPWPCount)
-				->with('groupIDCount',$groupIDCount)
-				->with('groupNameCount',$groupNameCount)
-				->with('invLetterCount',$invLetterCount)
-				->with('invCompanyAddCount',$invCompanyAddCount)
-				->with('paymentStatCount',$paymentStatCount)
-				->with('AddCount',$AddCount)
-				->with('AddCountInvoice',$AddCountInvoice)
-				->with('ConfCount',$ConfCount)
-				->with('normalRate',$normalRate)
-				->with('title','Update Field');
 	}
 
 	public function get_action_sample(){
