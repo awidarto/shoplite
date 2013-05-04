@@ -88,16 +88,24 @@
 {{$form->close()}}
 
 <script type="text/javascript">
-  $('select').select2({
-    width : 'resolve'
-  });
 
-  $(":file").filestyle();
+$(document).ready(function() {
+    $('select').select2({
+      width : 'resolve'
+    });
 
-  $('#field_role').change(function(){
-      //alert($('#field_role').val());
-      // load default permission here
-  });
+    $(":file").filestyle({
+      classButton: 'uploader',
+    });
+
+    $('#field_role').change(function(){
+        //alert($('#field_role').val());
+        // load default permission here
+    });
+
+});
+
+
 
   $("#s2id_field_countryInvoice").select2("val", "ID");
   $("#s2id_field_country").select2("val", "ID");
