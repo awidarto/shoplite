@@ -54,6 +54,9 @@ class Admin_Controller extends Base_Controller {
 
 	public $actions = '';
 
+	public $form_add = 'new';
+
+	public $form_edit = 'edit';
 
 	public function __construct(){
 
@@ -329,7 +332,7 @@ class Admin_Controller extends Base_Controller {
 			'form_class'=>'form-vertical'
 			));
 
-		return View::make($controller_name.'.new')
+		return View::make($controller_name.'.'.$this->form_add)
 					->with('form',$form)
 					->with('submit',$controller_name.'/add')
 					->with('crumb',$this->crumb)
@@ -396,7 +399,7 @@ class Admin_Controller extends Base_Controller {
 
 		$this->crumb->add(strtolower($this->controller_name).'/edit/'.$id,$id,false);
 
-		return View::make(strtolower($this->controller_name).'.edit')
+		return View::make(strtolower($this->controller_name).'.'.$this->form_edit)
 					->with('formdata',$population)
 					->with('submit',strtolower($this->controller_name).'/edit/'.$id)
 					->with('form',$form)

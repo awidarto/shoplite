@@ -30,7 +30,9 @@
 
         @if(Auth::user()->role == 'root' || Auth::user()->role == 'super' )
             <li>{{ HTML::link('products','Products')}}</li>
-            <li>{{ HTML::link('shopper','Shoppers')}}</li>
+            <li>{{ HTML::link('shoppers','Shoppers')}}</li>
+            <li>{{ HTML::link('promotions','Promotions')}}</li>
+            <li>{{ HTML::link('auctions','Auctions')}}</li>
             
             <li>{{ HTML::link('official','Officials')}}</li>
             <li>{{ HTML::link('exhibitor','Exhibitors')}}</li>

@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shopper','product','products','report','import','export','dashboard','user','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shoppers','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -346,9 +346,9 @@ Route::get('requests',array('before'=>'auth','uses'=>'requests@incoming'));
 
 Route::get('user/profile',array('before'=>'auth','uses'=>'user@profile'));
 
-Route::get('users',array('before'=>'auth','uses'=>'user@users'));
+//Route::get('users',array('before'=>'auth','uses'=>'user@users'));
 
-Route::post('users',array('before'=>'auth','uses'=>'user@users'));
+//Route::post('users',array('before'=>'auth','uses'=>'user@users'));
 
 Route::get('hr',array('before'=>'auth','uses'=>'hr@users'));
 

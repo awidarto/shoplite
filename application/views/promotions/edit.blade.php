@@ -51,10 +51,10 @@
                 <div class="row-fluid inputInline">
                   
                     {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
-                    {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
-                    {{ $form->text('salePrice','Sale Price','',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}<br />
-                    {{ $form->text('effectiveFrom','From','',array('class'=>'text  input-medium date','id'=>'effectiveFrom','placeholder'=>'From')) }}
-                    {{ $form->text('effectiveUntil','Until','',array('class'=>'text  input-medium date','id'=>'effectiveUntil','placeholder'=>'To')) }}
+                    {{ $form->text('retailPrice','','',array('class'=>'text codePhone','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
+                    {{ $form->text('salePrice','','',array('class'=>'text codePhone','id'=>'salePrice','placeholder'=>'Sale Price')) }}
+                    {{ $form->text('effectiveFrom','','',array('class'=>'text codePhone date','id'=>'effectiveFrom','placeholder'=>'From')) }}
+                    {{ $form->text('effectiveUntil','','',array('class'=>'text codePhone date','id'=>'effectiveUntil','placeholder'=>'To')) }}
                   
                 </div>
         </fieldset>
