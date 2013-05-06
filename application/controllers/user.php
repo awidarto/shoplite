@@ -35,7 +35,7 @@ class User_Controller extends Base_Controller {
 	public function __construct(){
 
 		$this->crumb = new Breadcrumb();
-		$this->crumb->add('user/users','Users');
+		$this->crumb->add('users','Users');
 
 		date_default_timezone_set('Asia/Jakarta');
 		$this->filter('before','auth');
@@ -361,9 +361,9 @@ class User_Controller extends Base_Controller {
 	public function post_pass($id = null){
 
 		//if(is_null($id)){
-			$back = '/';
+		//	$back = '/';
 		//}else{
-		//	$back = 'users';
+			$back = 'users';
 		//}
 
 	    $rules = array(

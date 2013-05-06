@@ -359,6 +359,9 @@ class Shopper_Controller extends Base_Controller {
 			$data['lastUpdate'] = new MongoDate();
 			$data['role'] = 'shopper';
 
+			$data['agreetnc'] = (isset($data['agreetnc']) && $data['agreetnc'] == 'Yes')?'Yes':'No';
+			$data['saveinfo'] = (isset($data['saveinfo']) && $data['saveinfo'] == 'Yes')?'Yes':'No';
+
 			$seq = new Sequence();
 
 			$rseq = $seq->find_and_modify(array('_id'=>'shopper'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
@@ -630,6 +633,47 @@ class Shopper_Controller extends Base_Controller {
 	    	}
 	    }
 
+	}
+
+	public function post_newcart()
+	{
+		$thecart = array();
+		$thecart['shopper_id'] = Auth::shopper()->id;
+		$thecart['items'] = array();
+		$thecart['createdDate'] = new MongoDate();
+		$thecart['lastUpdate'] = new MongoDate();
+		$thecart['cartStatus'] = 'open';
+
+		$cart = new Cart();
+
+		if($newcart = $cart->insert($thecart,array('upsert'=>true))){
+
+			$shopper = new Shopper();
+
+			$_id = new MongoId(Auth::shopper()->id);
+
+			$shopper->update(array('_id'=>$_id),
+				array('$set'=>array('activeCart'=>$newcart['_id'])),
+				array('upsert'=>true)
+				);
+
+			return Response::json(array('result'=>'OK','message'=>'cart created'));
+		}else{
+			return Response::json(array('result'=>'ERR','message'=>'failed to create cart'));
+		}
+
+	}
+
+	public function get_cart()
+	{
+
+		$form = new Formly();
+
+		return View::make('tables.simple')
+					->with('form',$form)
+					->with('user',Auth::shopper())
+					//->with('crumb',$this->crumb)
+					->with('title','My Shopping Cart');
 	}
 
 	public function get_pg(){

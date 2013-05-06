@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shopper','product','exhibition','report','booth','boothassistant','import','export','dashboard','onsite','attendee','exhibitor','official','visitor','user','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shoppers','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -40,6 +40,8 @@ Route::get('/',function(){
            return Redirect::to('dashboard');
         }else if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier'){
            return Redirect::to('onsite');
+        }else{
+            return Redirect::to('shop/home');
         }
     }else{
        return Redirect::to('shop/home');
@@ -260,7 +262,7 @@ Route::post('signin', function()
     {
         //print_r($userdata);
         // we are now logged in, go to home
-        return Redirect::to('myprofile');
+        return Redirect::to('/');
 
     }
     else
@@ -344,9 +346,9 @@ Route::get('requests',array('before'=>'auth','uses'=>'requests@incoming'));
 
 Route::get('user/profile',array('before'=>'auth','uses'=>'user@profile'));
 
-Route::get('users',array('before'=>'auth','uses'=>'user@users'));
+//Route::get('users',array('before'=>'auth','uses'=>'user@users'));
 
-Route::post('users',array('before'=>'auth','uses'=>'user@users'));
+//Route::post('users',array('before'=>'auth','uses'=>'user@users'));
 
 Route::get('hr',array('before'=>'auth','uses'=>'hr@users'));
 
@@ -430,7 +432,7 @@ Route::filter('auth', function()
 
     if (Auth::guest()){
         Session::put('redirect',URL::full());
-        return Redirect::to('login');   
+        return Redirect::to('signin');   
     }
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');

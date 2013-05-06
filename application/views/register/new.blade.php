@@ -51,17 +51,17 @@
                 {{ $form->text('mobile','Mobile Number','',array('class'=>'text','id'=>'mobile')) }}
 
         </fieldset>
+    </div>
+
+    <div class="span6">
+
         <fieldset>
-            <legend>Billing & Shipping Information</legend>
+            <legend>Transfer Payment Information</legend>
                 {{ $form->text('fullname','Full Name','',array('class'=>'text','id'=>'fullname')) }}
                 {{ $form->text('bankname','Bank Name','',array('class'=>'text','id'=>'bankname')) }}
                 {{ $form->text('branch','Branch','',array('class'=>'text','id'=>'branch')) }}
                 {{ $form->text('cardnumber','Card Number','',array('class'=>'text','id'=>'cardnumber')) }}
         </fieldset>
-
-    </div>
-
-    <div class="span6">
 
         <fieldset>
             <legend>Credit Card</legend>
@@ -85,9 +85,9 @@
 
         <fieldset>
             <legend>Terms & Conditions</legend>
-          {{ $form->checkbox('agreetnc','I Agree to the Peach to Black terms and conditions ',false,false,array('id'=>'agreetnc'))}}
+          {{ $form->checkbox('agreetnc','I Agree to the '.Config::get('site.title').' terms and conditions ','Yes',false,array('id'=>'agreetnc'))}}
 
-          {{ $form->checkbox('saveinfo','Save my payment info and preference for future purchase',false,false,array('id'=>'agreetnc'))}}
+          {{ $form->checkbox('saveinfo','Save my payment info and preference for future purchase','Yes',false,array('id'=>'agreetnc'))}}
 
 
         </fieldset>

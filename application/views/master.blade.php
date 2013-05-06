@@ -56,6 +56,7 @@
     {{ HTML::script('js/jquery.jeditable.mini.js') }}
 
     {{ HTML::script('js/select2.min.js') }}   
+    {{ HTML::script('js/bootstrap-filestyle.min.js') }}   
 </head>
 
 <body>

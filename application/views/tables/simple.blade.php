@@ -25,69 +25,73 @@
           <table class="table table-condensed dataTable attendeeTable">
 
 			    <thead>
+
 			        <tr>
-			        	<?php
-				        	if(!isset($colclass)){
-				        		$colclass = array();
-				        	}
-			        		$hid = 0;
-			        	?>
 			        	@foreach($heads as $head)
-			        		<th 
-			        			@if(isset($colclass[$hid]))
-			        				class="{{$colclass[$hid]}}"
-			        			@endif
-			        			<?php $hid++ ?>
-			        		>
+			        		@if(is_array($head))
+			        			<th 
+			        				@foreach($head[1] as $key=>$val)
+			        					{{ $key }}="{{ $val }}"
+			        				@endforeach
+			        			>
+			        			{{ $head[0] }}
+			        			</th>
+			        		@else
+			        		<th>
 			        			{{ $head }}
 			        		</th>
+			        		@endif
 			        	@endforeach
 			        </tr>
-
-
+			        @if(isset($secondheads) && !is_null($secondheads))
+			        	<tr>
+			        	@foreach($secondheads as $head)
+			        		@if(is_array($head))
+			        			<th 
+			        				@foreach($head[1] as $key=>$val)
+			        					@if($key != 'search')
+				        					{{ $key }}="{{ $val }}"
+			        					@endif
+			        				@endforeach
+			        			>
+			        			{{ $head[0] }}
+			        			</th>
+			        		@else
+			        		<th>
+			        			{{ $head }}
+			        		</th>
+			        		@endif
+			        	@endforeach
+			        	</tr>
+			        @endif
 			    </thead>
 
 				<?php
 					$form = new Formly();
 				?>
 
-		    	@if($searchinput)
-				    <thead id="searchinput">
-					    <tr>
-				    	@foreach($searchinput as $in)
-				    		@if($in)
-				    			@if($in == 'select_all')
-				    				<td>{{ $form->checkbox('select_all','','',false,array('id'=>'select_all')) }}</td>
-				    			@else
-					        		<td><input type="text" name="search_{{$in}}" id="search_{{$in}}" value="Search {{$in}}" class="search_init" /></td>
-				    			@endif
-				    		@else
+			    <thead id="searchinput">
+				    <tr>
+			    	@foreach($heads as $in)
+			    		@if( $in[0] != 'select_all' && $in[0] != '')
+				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
+				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" value="Search {{$in[0]}}" class="search_init" /></td>
+			    			@else
 				        		<td>&nbsp;</td>
-				    		@endif
-				    	@endforeach
-					    </tr>
-				    </thead>
-			    @endif
+			    			@endif
+			    		@elseif($in[0] == 'select_all')
+		    				<td>{{ $form->checkbox('select_all','','',false,array('id'=>'select_all')) }}</td>				    		
+			    		@elseif($in[0] == '')
+			        		<td>&nbsp;</td>
+			    		@endif
+			    	@endforeach
+				    </tr>
+			    </thead>
 
              <tbody>
              	<!-- will be replaced by ajax content -->
              </tbody>
 
-             <!--
-		    	@if($searchinput)
-				    <tfoot>
-					    <tr>
-				    	@foreach($searchinput as $in)
-				    		@if($in)
-				        		<td><input type="text" name="search_{{$in}}" id="search_{{$in}}" value="Search {{$in}}" class="search_init" /></td>
-				    		@else
-				        		<td>&nbsp;</td>
-				    		@endif
-				    	@endforeach
-					    </tr>
-				    </tfoot>
-			    @endif
-			-->
           </table>
 
        </div>
@@ -532,6 +536,8 @@
 
 		$('thead input').keyup( function () {
 			/* Filter on the column (the index) of this element */
+			console.log($('thead input').index(this));
+
 			oTable.fnFilter( this.value, $('thead input').index(this) );
 		} );
 
@@ -560,10 +566,9 @@
 		} );
 
 
-
-
 		$('.filter input').keyup( function () {
 			/* Filter on the column (the index) of this element */
+
 			oTable.fnFilter( this.value, $('.filter input').index(this) );
 		} );
 
@@ -591,59 +596,7 @@
 			}
 		} );
 
-		
-		$('#do_action').click( function(){
-			var idtoprocess = [];
-			var totalSelected = 0;
-			var totalSuccess = 0;	
-			var dothat = 0;
-			var totalFailure = 0;
-			var value = $("#field_action").val();
 
-			$('.selector:checked').each(function() {
-				var idRecord = $(this).attr('id');
-				idtoprocess.push(idRecord);
-				totalSelected++;
-			});
-
-			if(value == 'exhibitor.regsuccess'){
-
-				<?php
-
-					$ajaxsendmailexhibitor = (isset($ajaxexhibitorsendmail))?$ajaxexhibitorsendmail:'/';
-				?>
-
-				for (var i = 0; i < totalSelected; i++) {
-				  	element = idtoprocess[i];
-				  	// Do something with element i.
-				  	dothat++;
-				  	
-					$.post('{{ URL::to($ajaxsendmailexhibitor) }}',{'id':element,'type': value}, function(data) {
-						if(data.status == 'OK'){
-
-						}else if(data.status == 'NOTFOUND'){
-							totalFailure++;
-						}else{
-							totalFailure++;
-						}
-					},'json');
-				}
-
-				var totalSuccess = totalSelected-totalFailure;
-				console.log(totalFailure);
-
-				var datainfo ='Successfully sent mail to '+totalSuccess+' from '+totalSelected+' selected data';
-				alert(datainfo);
-				oTable.fnStandingRedraw();
-				$("#field_action").val('none');
-			
-			}else{
-				alert(value);
-			}
-			
-			
-
-		});
 
 		$('#select_all').click(function(){
 			if($('#select_all').is(':checked')){
@@ -662,269 +615,6 @@
 			}
 		});
 		
-
-		
-
-		$('#savepaystatus').click(function(){
-			var paystat = $('#paystatusselect').val();
-			var taxdisplaystatus = $('#taxdisplaystatusConv').val();
-			$('#savepaystatus').text('Processing..');
-			$('#savepaystatus').attr("disabled", true);	
-
-			<?php
-
-				$ajaxpay = (isset($ajaxpay))?$ajaxpay:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxpay) }}',{'id':current_pay_id,'paystatus': paystat,'taxdisplaystatus':taxdisplaystatus}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-					oTable.fnStandingRedraw();
-					
-					$('#paystatusindicator').html('Payment status updated');
-					$('#savepaystatus').text('Save');
-					$('#savepaystatus').attr("disabled", false);	
-					
-					$('#paystatusselect').val('unpaid');
-					$('.taxdisplaystatus').hide();
-					$('.taxdisplaystatus').val('dontprinttax');
-
-					$('#updatePayment').modal('toggle');
-
-				}
-			},'json');
-		});
-
-
-		$('#saveformstatus').click(function(){
-			var paystat = $('#formstatusselect').val();
-			$('#saveformstatus').text('Processing..');
-			$('#saveformstatus').attr("disabled", true);	
-
-			<?php
-
-				$ajaxformstatus = (isset($ajaxformstatus))?$ajaxformstatus:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxformstatus) }}',{'id':current_pay_id,'formstatus': paystat}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-					oTable.fnStandingRedraw();
-					
-					//$('#paystatusindicator').html('Payment status updated');
-					$('#saveformstatus').text('Save');
-					$('#saveformstatus').attr("disabled", false);	
-					
-					$('#formstatusselect').val('revision');
-
-					$('#updateFormStatus').modal('toggle');
-
-				}
-			},'json');
-		});
-
-		
-
-		$('#saveformstatusindividual').click(function(){
-			
-			var status = $('#formindividualstatusselect').val();
-			var formno = $('#formnoindividual').val();
-
-
-			
-
-			<?php
-
-				$ajaxformstatusindividual = (isset($ajaxformstatusindividual))?$ajaxformstatusindividual:'/';
-			?>
-
-			if( status!='-' && formno!='-'){
-				$('#saveformstatusindividual').text('Processing..');
-				$('#saveformstatusindividual').attr("disabled", true);	
-				$.post('{{ URL::to($ajaxformstatusindividual) }}',{'id':current_pay_id,'formstatus': status,'formno':formno}, function(data) {
-					if(data.status == 'OK'){
-						//redraw table
-						oTable.fnStandingRedraw();
-						
-						//$('#paystatusindicator').html('Payment status updated');
-						$('#saveformstatusindividual').text('Submit');
-						$('#saveformstatusindividual').attr("disabled", false);	
-						
-						$('#formindividualstatusselect').val('-');
-						$('#formnoindividual').val('-');
-
-						$('#updateFormStatusindividual').modal('toggle');
-
-					}else if(data.status == 'NODATA'){
-						alert(data.data);
-						$('#saveformstatusindividual').text('Submit');
-						$('#saveformstatusindividual').attr("disabled", false);	
-						
-						$('#formindividualstatusselect').val('-');
-						$('#formnoindividual').val('-');
-					}else{
-						alert('Error, please try again');
-						$('#saveformstatusindividual').text('Submit');
-						$('#saveformstatusindividual').attr("disabled", false);	
-						
-						$('#formindividualstatusselect').val('-');
-						$('#formnoindividual').val('-');
-					}
-				},'json');
-			}else{
-				alert('Please select form number and status');
-			}
-		});
-
-		$('#savepaystatusGolf').click(function(){
-			var paystat = $('#paystatusselectgolf').val();
-			var taxdisplaystatus = $('#taxdisplaystatusGolf').val();
-			$('#savepaystatusGolf').text('Processing..');
-			$('#savepaystatusGolf').attr("disabled", true);	
-
-			<?php
-
-				$ajaxpay = (isset($ajaxpay))?$ajaxpay:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxpaygolf) }}',{'id':current_pay_id,'paystatusgolf': paystat,'taxdisplaystatus':taxdisplaystatus}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-
-					oTable.fnStandingRedraw();
-					$('#paystatusindicator').html('Payment status updated');
-					$('#savepaystatusGolf').text('Save');
-					$('#savepaystatusGolf').attr("disabled", false);	
-
-					$('#paystatusselectgolf').val('unpaid');
-					$('.taxdisplaystatus').hide();
-					$('.taxdisplaystatus').val('dontprinttax');
-					$('#updatePaymentGolf').modal('toggle');
-
-				}
-			},'json');
-		});
-
-
-		$('#savepaystatusGolfConvention').click(function(){
-			var paystat = $('#paystatusselectgolfconvention').val();
-			var taxdisplaystatus = $('#taxdisplaystatusAll').val();
-			$('#savepaystatusGolfConvention').text('Processing..');
-			$('#savepaystatusGolfConvention').attr("disabled", true);	
-
-			<?php
-
-				$ajaxpay = (isset($ajaxpay))?$ajaxpay:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxpaygolfconvention) }}',{'id':current_pay_id,'paystatusgolfconvention': paystat,'taxdisplaystatus':taxdisplaystatus}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-
-					oTable.fnStandingRedraw();
-					$('#paystatusindicator').html('Payment status updated');
-					$('#savepaystatusGolfConvention').text('Save');
-					$('#savepaystatusGolfConvention').attr("disabled", false);	
-
-					$('#paystatusselectgolfconvention').val('unpaid');
-					$('.taxdisplaystatus').hide();
-					$('.taxdisplaystatus').val('dontprinttax');
-
-					$('#updatePaymentGolfConvention').modal('toggle');
-
-				}
-			},'json');
-		});
-
-
-		$('#submitresend').click(function(){
-			var emailtype = $('#resendemailtype').val();
-			$('#submitresend').text('Processing..');
-			$('#submitresend').attr("disabled", true);	
-
-			<?php
-
-				$ajaxresendmail = (isset($ajaxresendmail))?$ajaxresendmail:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxresendmail) }}',{'id':current_pay_id,'type': emailtype}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-
-					
-					oTable.fnStandingRedraw();
-
-					//$('#paystatusindicator').html('Payment status updated');
-					$('#submitresend').text('Sumbit');
-					$('#submitresend').attr("disabled", false);	
-
-					$('#resendemailtype').val('email.regsuccess');
-					$('#errormessagemodal').text('');
-					$('#successmessagemodal').text(data.message);
-					
-					setTimeout(function() {
-					      $('#updateResendmail').modal('toggle');
-					}, 2000);
-					
-
-				}else if(data.status == 'NOTFOUND'){
-
-					//$('#paystatusindicator').html('Payment status updated');
-					$('#submitresend').text('Sumbit');
-					$('#submitresend').attr("disabled", false);	
-					$('#errormessagemodal').text(data.message);
-					$('#resendemailtype').val('email.regsuccess');
-
-					
-				}
-			},'json');
-		});
-
-
-		$('#submitemailexhibitor').click(function(){
-			var emailtype = $('#sendemailtypeexhibitor').val();
-			$('#submitemailexhibitor').text('Processing..');
-			$('#submitemailexhibitor').attr("disabled", true);	
-
-			<?php
-
-				$ajaxsendmailexhibitor = (isset($ajaxexhibitorsendmail))?$ajaxexhibitorsendmail:'/';
-			?>
-
-			$.post('{{ URL::to($ajaxsendmailexhibitor) }}',{'id':current_pay_id,'type': emailtype}, function(data) {
-				if(data.status == 'OK'){
-					//redraw table
-					
-					oTable.fnStandingRedraw();
-
-					//$('#paystatusindicator').html('Payment status updated');
-					$('#submitemailexhibitor').text('Success');
-					
-
-					$('#sendemailtypeexhibitor').val('exhibitor.regsuccess');
-					$('#exhbitor_errormessagemodal').text('');
-					$('#exhbitor_successmessagemodal').text(data.message);
-					
-					setTimeout(function() {
-					    $('#exhibitorResendmail').modal('toggle');
-					    $('#submitemailexhibitor').text('Sumbit');
-						$('#submitemailexhibitor').attr("disabled", false);	
-					}, 2000);
-					
-
-				}else if(data.status == 'NOTFOUND'){
-
-					//$('#paystatusindicator').html('Payment status updated');
-					$('#submitemailexhibitor').text('Sumbit');
-					$('#submitemailexhibitor').attr("disabled", false);	
-					$('#exhbitor_errormessagemodal').text(data.message);
-					$('#sendemailtypeexhibitor').val('exhibitor.regsuccess');
-
-					
-				}
-			},'json');
-		});
-
 
 		$('#confirmdelete').click(function(){
 
@@ -948,12 +638,6 @@
 			var pframe = document.getElementById('print_frame');
 			var pframeWindow = pframe.contentWindow;
 			pframeWindow.print();
-
-		});
-
-		$('#add_to_group').click(function(){
-
-				$('#addToGroup').modal();
 
 		});
 

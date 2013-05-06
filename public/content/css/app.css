@@ -1050,3 +1050,25 @@ table.onsite {
 #ajax-modal2 .modal-header{
 	padding: 2px 15px;
 }
+
+.input-append{
+	height:28px;
+}
+
+a.btn.uploader {
+	font-size: 12px;
+	line-height: 10px;
+	font-weight: 100;
+	height:30px;
+	margin-top: 4px;
+	display: inline;
+	vertical-align: middle;
+}
+
+.tableHeader h3{
+	margin-bottom: 10px;
+}
+
+form h4{
+	margin-bottom: 8px;	
+}

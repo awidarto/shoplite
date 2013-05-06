@@ -81,7 +81,7 @@ img.mixmatch{
 .navmainp2b{
 	float: right;
 	width:663px;
-	margin-top: 26px;
+	margin-top: 1px;
 }
 .navbar-inverse .navmainp2b .nav > li > a{
 	font-size: 14px;
@@ -104,7 +104,7 @@ legend{
 
 
 body{
-	font-family: calibri,helvetica,sans-serif;
+	font-family: RobotoRegular,calibri,helvetica,sans-serif;
 }
 
 #footer .container{
@@ -113,6 +113,7 @@ body{
 #footer .container p{
 	text-align: center;
 }
+<<<<<<< HEAD
 .articlesetionhome{
 	margin-top: 20px;
 	float: left;
@@ -124,4 +125,18 @@ body{
 	font-size: 13px;
 	font-weight: bold;
 	line-height: 20px;
+=======
+
+#logged-in{
+	position:relative;
+	text-align: right;
+	height: 24px;
+}
+
+#createcart{
+	text-decoration: none;
+	color: blue;
+	cursor: pointer;
+
+>>>>>>> 9641808dfa68a545280570918ca46bf078d3b455
 }

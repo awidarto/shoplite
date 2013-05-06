@@ -6,258 +6,75 @@
 <h3 class="formHead">{{$title}}</h3>
 </div>
 
-{{$form->open('attendee/add','POST',array('class'=>'custom addAttendeeForm'))}}
-
-@if(Auth::user()->role == 'root' || Auth::user()->role == 'super' )
+{{$form->open_for_files('product/add','POST',array('class'=>'custom addAttendeeForm'))}}
 
 <div class="row-fluid formNewAttendee">
     <div class="span6">
         <fieldset>
-            <legend>Personal Information</legend>
-
-                {{ Form::label('salutation','Salutation')}}
-
-                <div class="row-fluid radioInput">
-                    <div class="span2">
-                      {{ $form->radio('salutation','Mr','Mr',true)}} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('salutation','Mrs','Mrs')}} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('salutation','Ms','Ms')}} 
-                    </div>
-                    <div class="span6"></div>
-                </div>
-
+            <legend>Product Information</legend>
                 
-                {{ $form->text('firstname','First Name.req','',array('class'=>'text span8','id'=>'firstname')) }}
+                {{ $form->text('name','Product Name.req','',array('class'=>'text span8','id'=>'name')) }}
                 
-                {{ $form->text('lastname','Last Name.req','',array('class'=>'text span8','id'=>'lastname')) }}
-                {{ $form->text('position','Position / Division.req','',array('class'=>'text span8','id'=>'positionname')) }}
-                {{ $form->text('email','Email.req','',array('class'=>'text span8','id'=>'email')) }}
-
-                {{ $form->text('mobile','Mobile Phone Number','',array('class'=>'text span8','id'=>'mobile')) }}
+                {{ $form->text('productcode','Product Code / SKU.req','',array('class'=>'text span8','id'=>'productcode')) }}
+                {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
+                {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
 
         </fieldset>
-
         <fieldset>
-            <legend>Registration Type</legend>
-                <small>Normal rate</small>
-                <div class="row-fluid">
-                    <div class="span6">
-                        Professional / Delegate Domestic
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','IDR 5.000.000','PD',true,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
+            <legend>Publishing</legend>
 
-                <div class="row-fluid">
-                    <div class="span6">
-                        Professional / Delegate Overseas
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','USD 550','PO',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
+                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
 
-                <div class="row-fluid">
-                    <div class="span6">
-                        Student Domestic
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','IDR 400.000','SD',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
+                {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
+                {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
 
-                <div class="row-fluid">
-                    <div class="span6">
-                        Student Overseas
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','USD 120','SO',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
         </fieldset>
         
-        <fieldset>
-            <legend>Need Invitation Letter from IPA Committee for Visa arrangement<br/>(for international participants only)</legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('inv_letter','Yes','Yes') }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('inv_letter','No','No',true) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-
-
-
-        <fieldset>
-            <legend>Will attend the Industrial Dinner on 16 May 2013</legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('attenddinner','Yes','Yes',true) }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('attenddinner','No','No') }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-
-        @if($golfcount < Config::get('eventreg.golfquota'))
-        <fieldset>
-            <legend>Golf Tournament on 12 May 2013</legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('golf','Yes','Yes',false,array('class'=>'paymentSettle field_golfType')) }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('golf','No','No',true,array('class'=>'paymentSettle field_golfType')) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-        @else
-            {{ $form->hidden('golf','No')}}
-        @endif
-        
-        <fieldset>
-            <legend>FOC (Free Of Charge)</legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('foc','Yes','Yes') }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('foc','No','No',true) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-        <fieldset>
-            <legend><strong>Use Early Bird Rates</strong></legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('overrideratenormal','Yes','yes') }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('overrideratenormal','No','no',true) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-
-        
-
     </div>
 
     <div class="span6">
 
         <fieldset>
-            <legend>Company Information</legend>
-            {{ $form->text('company','Company / Institution.req','',array('class'=>'text span6','id'=>'companyName')) }}
-                {{ $form->text('npwp','Company NPWP ( only for Indonesian company ).req','',array('class'=>'text span6','id'=>'companyNPWP')) }}
+            <legend>Product Details</legend>
+                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
 
-                {{ Form::label('companyphone','Phone Number *')}}
+                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
+
+                {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
+
+
+
+                {{ Form::label('price','Default Price Set *')}}
                 <div class="row-fluid inputInline">
                   
-                    {{ $form->text('companyphonecountry','','',array('class'=>'text countrycodePhone','id'=>'companyPhoneCountry','placeholder'=>'Country Code')) }}
-                  
-                    {{ $form->text('companyphonearea','','',array('class'=>'text areacodePhone','id'=>'companyPhoneArea','placeholder'=>'Area Code')) }}
-                  
-                  
-                    {{ $form->text('companyphone','','',array('class'=>'text codePhone','id'=>'companyPhone','placeholder'=>'Phone Number')) }}
-                  
-                </div>
-
-                {{ Form::label('companyphone','Fax Number *')}}
-
-                <div class="row-fluid inputInline">
-                  
-                    {{ $form->text('companyfaxcountry','','',array('class'=>'text countrycodePhone','id'=>'companyFaxCountry','placeholder'=>'Country Code')) }}
-                  
-                    {{ $form->text('companyfaxarea','','',array('class'=>'text areacodePhone','id'=>'companyFaxArea','placeholder'=>'Area Code')) }}
-                  
-                  
-                    {{ $form->text('companyfax','','',array('class'=>'text codePhone','id'=>'companyFax','placeholder'=>'Phone Number')) }}
+                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
+                    {{ $form->text('retailPrice','','',array('class'=>'text codePhone','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
+                    {{ $form->text('salePrice','','',array('class'=>'text codePhone','id'=>'salePrice','placeholder'=>'Sale Price')) }}
+                    {{ $form->text('effectiveFrom','','',array('class'=>'text codePhone date','id'=>'effectiveFrom','placeholder'=>'From')) }}
+                    {{ $form->text('effectiveUntil','','',array('class'=>'text codePhone date','id'=>'effectiveUntil','placeholder'=>'To')) }}
                   
                 </div>
-
-                {{ $form->text('address_1','Address.req','',array('class'=>'text span9','id'=>'address_1','placeholder'=>'Company Address')) }}
-                {{ $form->text('address_2','','',array('class'=>'text span9','id'=>'address_2')) }}
-                
-                <div class="row-fluid inputInline">
-                    
-                        {{ $form->text('city','','',array('class'=>'text span12','id'=>'city','placeholder'=>'City')) }}
-                    
-                    
-                        {{ $form->text('zip','','',array('class'=>'text span3','id'=>'zip','placeholder'=>'ZIP Code')) }}
-                    
-                </div>
-
-                {{$form->select('country','Country of Origin',Config::get('country.countries'),array('class'=>'span12'))}}
-                <br/>
-                <div class="row-fluid">
-                    <label class="checkbox">
-                     <input type="checkbox" id="invoiceSameCheckbox"><span id="invoiceSame" class="metro-checkbox">Invoice address same with Company Address</span>
-                   </label>
-                </div>
-
         </fieldset>
-        <br/>
+
         <fieldset>
-            <legend>Invoice Address</legend>
-               {{ $form->text('companyInvoice','Company / Institution.req','',array('class'=>'text span6 invAdress','id'=>'companyNameInv')) }}
-                {{ $form->text('npwpInvoice','Company NPWP ( only for Indonesian company ).req','',array('class'=>'text span6 invAdress','id'=>'companyNPWPInv')) }}
-                
-                {{ Form::label('companyphone','Phone Number *')}}
-                <div class="row-fluid inputInline">
-                  {{ $form->text('companyphoneInvoiceCountry','','',array('class'=>'text countrycodePhone invAdress','id'=>'companyPhoneInvCountry','placeholder'=>'Country Code')) }}
-                
-                  {{ $form->text('companyphoneInvoiceArea','','',array('class'=>'text areacodePhone invAdress','id'=>'companyPhoneInvArea','placeholder'=>'Area Code')) }}
-                
-                  {{ $form->text('companyphoneInvoice','','',array('class'=>'text invAdress codePhone invAdress','id'=>'companyPhoneInv','placeholder'=>'Phone Number')) }}
-                </div>
+            <legend>Product Main Pictures</legend>
 
-                {{ Form::label('companyphone','Fax Number *')}}
-
-                <div class="row-fluid inputInline">
-                    {{ $form->text('companyfaxInvoiceCountry','','',array('class'=>'text countrycodePhone invAdress','id'=>'companyFaxInvCountry','placeholder'=>'Country Code')) }}
-                    {{ $form->text('companyfaxInvoiceArea','','',array('class'=>'text areacodePhone invAdress','id'=>'companyFaxInvArea','placeholder'=>'Area Code')) }}
-                    {{ $form->text('companyfaxInvoice','','',array('class'=>'text codePhone invAdress','id'=>'companyFaxInv','placeholder'=>'Phone Number')) }}
-                  
-                </div>
-
-                {{ $form->text('addressInvoice_1','Address.req','',array('class'=>'text invAdress span9','id'=>'addressInv_1','placeholder'=>'Company Address')) }}
-                {{ $form->text('addressInvoice_2','','',array('class'=>'text invAdress span9','id'=>'addressInv_2')) }}
-
-
-                <div class="row-fluid inputInline">
-                      {{ $form->text('cityInvoice','','',array('class'=>'text span12 invAdress','id'=>'cityInv','placeholder'=>'City')) }}
-                      {{ $form->text('zipInvoice','','',array('class'=>'text span3 invAdress','id'=>'zipInv','placeholder'=>'ZIP Code')) }}
-              
-                </div>
-
-                
-                {{$form->select('countryInvoice','Country of Origin',Config::get('country.countries'),null)}}
+              @for($i=1;$i<6;$i++)
+                  <div class="row-fluid">
+                    <div class="span8">
+                      {{ $form->file('pic0'.$i,'Picture #'.$i)}}
+                   </div>
+                    <div class="span4">
+                      @if($i == 1)
+                        {{ $form->radio('defaultpic','Set As Default',$i,true)}}
+                      @else
+                        {{ $form->radio('defaultpic','Set As Default',$i)}}
+                      @endif
+                    </div>
+                  </div>
+              @endfor
 
         </fieldset>
-
-        
 
     </div>
 </div>
@@ -269,196 +86,6 @@
 {{ Form::reset('Reset',array('class'=>'button'))}}
 </div>
 {{$form->close()}}
-
-@else
-
-<div class="row-fluid formNewAttendee">
-    <div class="span6">
-        <fieldset>
-            @if(Auth::user()->role == 'onsite')
-              {{ $form->hidden('registonsite','true')}}
-              {{ $form->hidden('mobile','-')}}
-              {{ $form->hidden('address','-')}}
-              {{ $form->hidden('address_1','-')}}
-              {{ $form->hidden('address_2','-')}}
-              {{ $form->hidden('addressInvoice','-')}}
-              {{ $form->hidden('addressInvoice_2','-')}}
-              {{ $form->hidden('invoice_address_conv','-')}}
-              {{ $form->hidden('city','-')}}
-              {{ $form->hidden('cityInvoice','-')}}
-              {{ $form->hidden('companyInvoice','-')}}
-              {{ $form->hidden('companyfaxcountry','-')}}
-              {{ $form->hidden('companyfaxarea','-')}}
-              {{ $form->hidden('companyfax','-')}}
-              {{ $form->hidden('companyphonecountry','-')}}
-              {{ $form->hidden('companyphonearea','-')}}
-              {{ $form->hidden('companyphone','-')}}
-              {{ $form->hidden('companyphoneInvoiceCountry','-')}}
-              {{ $form->hidden('companyphoneInvoiceArea','-')}}
-              {{ $form->hidden('companyphoneInvoice','-')}}
-            {{ $form->hidden('companyfaxInvoiceCountry','-')}}
-            {{ $form->hidden('companyfaxInvoiceArea','-')}}
-            {{ $form->hidden('companyfaxInvoice','-')}}
-            {{ $form->hidden('confirmation','none')}}
-            {{ $form->hidden('country','none')}}
-            {{ $form->hidden('countryInvoice','none')}}
-            {{ $form->hidden('countryInvoice','none')}}
-            {{ $form->hidden('npwp','none')}}
-            {{ $form->hidden('npwpInvoice','none')}}
-            {{ $form->hidden('golfPaymentStatus','unpaid')}}
-            {{ $form->hidden('conventionPaymentStatus','unpaid')}}
-            {{ $form->hidden('paymentStatus','-')}}
-            {{ $form->hidden('position','-')}}
-            {{ $form->hidden('role','attendee')}}
-            {{ $form->hidden('zip','-')}}
-            {{ $form->hidden('zipInvoice','-')}}
-
-
-           
-            @endif
-            <legend>Personal Information</legend>
-
-                {{ Form::label('salutation','Salutation')}}
-
-                <div class="row-fluid radioInput">
-                    <div class="span2">
-                      {{ $form->radio('salutation','Mr','Mr',true)}} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('salutation','Mrs','Mrs')}} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('salutation','Ms','Ms')}} 
-                    </div>
-                    <div class="span6"></div>
-                </div>
-
-                
-                {{ $form->text('firstname','First Name.req','',array('class'=>'text span8','id'=>'firstname')) }}
-                
-                {{ $form->text('lastname','Last Name.req','',array('class'=>'text span8','id'=>'lastname')) }}
-                {{ $form->text('email','Email.req','',array('class'=>'text span8','id'=>'email')) }}
-                {{ $form->text('company','Company / Institution.req','',array('class'=>'text span6','id'=>'companyName')) }}
-
-
-                <fieldset>
-                <legend>Will attend the Industrial Dinner on 16 May 2013</legend>
-
-                    <div class="row-fluid">
-                        <div class="span2">
-                          {{ $form->radio('attenddinner','Yes','Yes',true) }} 
-                        </div>   
-                        <div class="span2">
-                          {{ $form->radio('attenddinner','No','No') }} 
-                        </div>   
-                        <div class="span8"></div>
-                    </div>
-
-            </fieldset>
-
-            <fieldset>
-                <legend>Golf Tournament on 12 May 2013</legend>
-
-                    <div class="row-fluid">
-                        <div class="span2">
-                          {{ $form->radio('golf','Yes','Yes',false,array('class'=>'paymentSettle field_golfType')) }} 
-                        </div>   
-                        <div class="span2">
-                          {{ $form->radio('golf','No','No',true,array('class'=>'paymentSettle field_golfType')) }} 
-                        </div>   
-                        <div class="span8"></div>
-                    </div>
-
-            </fieldset>
-        </fieldset>
-    </div>
-    <div class="span6">
-        <fieldset>
-            <legend>Registration Type</legend>
-                <small>Normal rate</small>
-                <div class="row-fluid">
-                    <div class="span6">
-                        Professional / Delegate Domestic
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','IDR 5.000.000','PD',true,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span6">
-                        Professional / Delegate Overseas
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','USD 550','PO',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span6">
-                        Student Domestic
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','IDR 400.000','SD',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span6">
-                        Student Overseas
-                    </div>   
-                    <div class="span6">
-                      {{ $form->radio('regtype','USD 120','SO',false,array('class'=>'paymentSettle regType')) }} 
-                    </div>   
-                </div>
-        </fieldset>
-        
-        <fieldset>
-            <legend>FOC (Free Of Charge)</legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('foc','Yes','Yes') }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('foc','No','No',true) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-        <fieldset>
-            <legend><strong>Use Early Bird Rates</strong></legend>
-
-                <div class="row-fluid">
-                    <div class="span2">
-                      {{ $form->radio('overrideratenormal','Yes','yes') }} 
-                    </div>   
-                    <div class="span2">
-                      {{ $form->radio('overrideratenormal','No','no',true) }} 
-                    </div>   
-                    <div class="span8"></div>
-                </div>
-
-        </fieldset>
-
-        
-
-    </div>
-
-  
-</div>
-
-<hr />
-
-<div class="row right">
-{{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
-{{ Form::reset('Reset',array('class'=>'button'))}}
-</div>
-{{$form->close()}}
-
-
-@endif
 
 <script type="text/javascript">
   $('select').select2({

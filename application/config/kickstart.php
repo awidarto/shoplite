@@ -114,6 +114,12 @@ return array(
       'request.approval'=>'Approval Requested'
     ),
 
+  'publishstatus'=>array(
+      'online'=>'Online',
+      'offline'=>'Offline',
+      'scheduled'=>'Scheduled'
+    ),
+
   'contentsection'=>array(
       'general'=>'General Information',
       'registration'=>'Registration Information',
