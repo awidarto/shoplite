@@ -113,5 +113,15 @@ body{
 #footer .container p{
 	text-align: center;
 }
-
-
+.articlesetionhome{
+	margin-top: 20px;
+	float: left;
+}
+.articlesetionhome .titlehome{
+	background-color: #c36353;
+	color: #fff;
+	padding:2px 6px;
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 20px;
+}
