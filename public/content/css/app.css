@@ -1064,3 +1064,11 @@ a.btn.uploader {
 	display: inline;
 	vertical-align: middle;
 }
+
+.tableHeader h3{
+	margin-bottom: 10px;
+}
+
+form h4{
+	margin-bottom: 8px;	
+}

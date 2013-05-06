@@ -198,45 +198,39 @@ class Users_Controller extends Admin_Controller {
 	}
 
 
-	public function get_picture($id = null){
+	public function get_picture($id){
 
-		if(is_null($id)){
-			$this->crumb = new Breadcrumb();
-			$this->crumb->add('user/profile','Profile');
-		}
+		$controller_name = strtolower($this->controller_name);
 
-		$this->crumb->add('user/picture','Change Picture',false);
+		$this->crumb->add($controller_name.'/picture','Change Picture',false);
 
-		$_id = (is_null($id))?Auth::user()->id:$id;
+		$_id = new MongoId($id);
 
-		$_id = new MongoId($_id);
+		$model = $this->model;
 
-		$emp = new User();
+		$formdata = $model->get(array('_id'=>$_id));
 
-		$employee = $emp->get(array('_id'=>$_id));
+		$this->crumb->add($controller_name.'/picture',$formdata['fullname'],false);
 
-		$this->crumb->add('user/picture',$employee['fullname'],false);
+		$form = $this->form;
 
-		$form = Formly::make();
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-vertical'
+			));
 
-		return View::make('user.pic')
+		return View::make($controller_name.'.pic')
+					->with('submit',$controller_name.'/picture/'.$id)
 					->with('form',$form)
 					->with('id',$id)
-					->with('doc',$employee)
+					->with('doc',$formdata)
 					->with('crumb',$this->crumb)
 					->with('title','Change Photo');
 	}
 
-	public function post_picture($id = null){
+	public function post_picture($id){
 
-		if(is_null($id)){
-			$back = 'user/profile';
-		}else{
-			$back = 'users';
-		}
-
-		//$id = (is_null($id))?Auth::user()->id:$id;
-		$id = (is_null($id))?Auth::user()->id:$id;
+		$controller_name = strtolower($this->controller_name);
 
 		$picupload = Input::file('picupload');
 
@@ -259,7 +253,7 @@ class Users_Controller extends Admin_Controller {
 			
 		}
 
-		$user = new User();
+		$model = $this->model;
 
 		$_id = new MongoId($data['id']);
 		$data['lastUpdate'] = new MongoDate();
@@ -268,10 +262,10 @@ class Users_Controller extends Admin_Controller {
 		unset($data['id']);		
 
 		
-		if($user->update(array('_id'=>$_id),array('$set'=>$data))){
-	    	return Redirect::to($back)->with('notify_success','Picture saved successfully');
+		if($model->update(array('_id'=>$_id),array('$set'=>$data))){
+	    	return Redirect::to($controller_name)->with('notify_success','Picture saved successfully');
 		}else{
-	    	return Redirect::to($back)->with('notify_success','Picture saving failed');
+	    	return Redirect::to($controller_name)->with('notify_success','Picture saving failed');
 		}
 
 	}
@@ -280,21 +274,29 @@ class Users_Controller extends Admin_Controller {
 
 		$this->crumb->add(strtolower($this->controller_name).'/pass','Change Password',false);
 
+		$controller_name = strtolower($this->controller_name);
+
 		$doc['_id'] = $id;
 
-		$form = Formly::make();
+		$form = $this->form;
+
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-vertical'
+			));
 
 		$_id = new MongoId($id);
 
-		$user = new User();
+		$model = $this->model;
 
-		$user_profile = $user->get(array('_id'=>$_id));
+		$formdata = $model->get(array('_id'=>$_id));
 
-		$this->crumb->add(strtolower($this->controller_name).'/pass',$user_profile['fullname'],false);
+		$this->crumb->add($controller_name.'/pass',$formdata['fullname'],false);
 
-		return View::make(strtolower($this->controller_name).'.pass')
+		return View::make($controller_name.'.pass')
+					->with('submit',$controller_name.'/add')
 					->with('form',$form)
-					->with('doc',$doc)
+					->with('doc',$formdata)
 					->with('crumb',$this->crumb)
 					->with('title','Change Password');
 
@@ -302,10 +304,10 @@ class Users_Controller extends Admin_Controller {
 
 	public function post_pass($id = null){
 
-		$back = $this->controller_name;
+		$controller_name = strtolower($this->controller_name);
 
 	    $rules = array(
-	        'pass' => 'same:repass',
+	        'pass' => 'required|same:repass',
 	        'repass'=> 'required'
 	    );
 
@@ -313,7 +315,7 @@ class Users_Controller extends Admin_Controller {
 
 	    if($validation->fails()){
 
-	    	return Redirect::to('users/pass/'.$id)->with_errors($validation)->with_input(Input::all());
+	    	return Redirect::to($controller_name.'/pass/'.$id)->with_errors($validation)->with_input(Input::all());
 
 	    }else{
 
@@ -328,12 +330,12 @@ class Users_Controller extends Admin_Controller {
 			$_id = new MongoId($data['id']);
 			$data['lastUpdate'] = new MongoDate();
 
-			$user = new User();
+			$user = $this->model;
 
 			if($user->update(array('_id'=>$_id),array('$set'=>$data))){
-		    	return Redirect::to($back)->with('notify_success','Password changed successfully');
+		    	return Redirect::to($controller_name)->with('notify_success','Password changed successfully');
 			}else{
-		    	return Redirect::to($back)->with('notify_success','Password change failed');
+		    	return Redirect::to($controller_name)->with('notify_success','Password change failed');
 			}
 			
 

@@ -3,108 +3,106 @@
 
 @section('content')
 <div class="tableHeader">
-<h3 class="formHead">{{$title}}</h3>
+<h3>{{$title}}</h3>
 </div>
 
 {{$form->open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+{{ $form->hidden('id',$formdata['_id'])}}
 
-    {{ $form->hidden('id',$formdata['_id'])}}
+<div class="row-fluid">
+  <div class="span6 left">
 
+            <h4>Billing & Shipping Information</h4>
 
-<div class="row-fluid formNewAttendee">
-    <div class="span6">
-        <fieldset>
-            <legend>Product Information</legend>
-                
-                {{ $form->text('name','Product Name.req','',array('class'=>'text span8','id'=>'name')) }}
-                
-                {{ $form->text('productcode','Product Code / SKU.req','',array('class'=>'text span8','id'=>'productcode')) }}
-                {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
-                {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
-
-        </fieldset>
-        <fieldset>
-            <legend>Publishing</legend>
-
-                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
-
-                {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
-                {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
-
-        </fieldset>
-        
-    </div>
-
-    <div class="span6">
-
-        <fieldset>
-            <legend>Product Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
-
-                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
-
-                {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
-
-
-
-                {{ Form::label('price','Default Price Set *')}}
-                <div class="row-fluid inputInline">
-                  
-                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
-                    {{ $form->text('retailPrice','','',array('class'=>'text codePhone','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
-                    {{ $form->text('salePrice','','',array('class'=>'text codePhone','id'=>'salePrice','placeholder'=>'Sale Price')) }}
-                    {{ $form->text('effectiveFrom','','',array('class'=>'text codePhone date','id'=>'effectiveFrom','placeholder'=>'From')) }}
-                    {{ $form->text('effectiveUntil','','',array('class'=>'text codePhone date','id'=>'effectiveUntil','placeholder'=>'To')) }}
-                  
+                <div class="row-fluid">
+                    <div class="span2">
+                      Salutation
+                    </div>
+                    <div class="span2">
+                      {{ $form->radio('salutation','Mr','Mr')}}
+                    </div>
+                    <div class="span2">
+                      {{ $form->radio('salutation','Mrs','Mrs')}}
+                    </div>
+                    <div class="span6">
+                      {{ $form->radio('salutation','Ms','Ms')}}
+                    </div>
                 </div>
+
+
+                {{ $form->text('firstname','First Name.req','',array('class'=>'text span8','id'=>'firstname')) }}
+                {{ $form->text('lastname','Last Name.req','',array('class'=>'text span8','id'=>'lastname')) }}
+                {{ $form->text('email','Email.req','',array('class'=>'text span8','id'=>'email')) }}
+
+                {{ $form->text('address_1','Address.req','',array('class'=>'text span8','id'=>'address_1','placeholder'=>'Address line 1')) }}
+                {{ $form->text('address_2','','',array('class'=>'text span8','id'=>'address_2','placeholder'=>'Address line 2')) }}
+                {{ $form->text('city','City','',array('class'=>'text span8','id'=>'city')) }}
+                {{ $form->text('zip','ZIP','',array('class'=>'text span8','id'=>'zip')) }}
+
+                {{$form->select('country','Country',Config::get('country.countries'),array('class'=>'four'))}}
+
+                {{ $form->text('shippingphone','Phone Number','',array('class'=>'text span8','id'=>'mobile')) }}
+
+                {{ $form->text('mobile','Mobile Number','',array('class'=>'text span8','id'=>'mobile')) }}
+
+  </div>
+  <div class="span5 right">
+
+        <fieldset>
+            <legend>Transfer Payment Information</legend>
+                {{ $form->text('fullname','Full Name','',array('class'=>'text span8','id'=>'fullname')) }}
+                {{ $form->text('bankname','Bank Name','',array('class'=>'text span8','id'=>'bankname')) }}
+                {{ $form->text('branch','Branch','',array('class'=>'text span8','id'=>'branch')) }}
+                {{ $form->text('cardnumber','Card Number','',array('class'=>'text span8','id'=>'cardnumber')) }}
         </fieldset>
 
         <fieldset>
-            <legend>Product Main Pictures</legend>
+            <legend>Credit Card</legend>
 
-              @for($i=1;$i<6;$i++)
-                  <div class="row-fluid">
-
-                    <div  class="span2">
-                      {{ HTML::image(URL::base().'/storage/products/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
-                    </div>
-
-                    <div class="span7">
-                      {{ $form->file('pic0'.$i,'Picture #'.$i)}}
-                   </div>
-                    <div class="span3">
-                      {{ $form->radio('defaultpic','Default',$i)}}
-                    </div>
+                {{ $form->text('ccname','Name on Card','',array('class'=>'text span8','id'=>'ccname')) }}
+                {{ $form->text('cardnumber','Card Number','',array('class'=>'text input-xlarge','id'=>'cardnumber')) }}
+                {{ $form->text('branch','CVS / CVC','',array('class'=>'text input-small','id'=>'branch')) }}
+                <div class="row-fluid">
+                  <div class="span3">
+                    {{ $form->text('expiremonth','Expiration Month','',array('class'=>'text input-small','id'=>'cardnumber','placeholder'=>'mm')) }}
                   </div>
-              @endfor
+                  <div class="span3">
+                    {{ $form->text('expireyear','Year','',array('class'=>'text input-small','id'=>'cardnumber','placeholder'=>'yyyy')) }}
+                  </div>
+                </div>
+
 
         </fieldset>
 
-    </div>
+        <fieldset>
+            <legend>Paypal</legend>
+
+
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Terms & Conditions</legend>
+          {{ $form->checkbox('agreetnc','I Agree to the '.Config::get('site.title').' terms and conditions ',null,null,array('id'=>'agreetnc'))}}
+
+          {{ $form->checkbox('saveinfo','Save my payment info and preference for future purchase',null,null,array('id'=>'agreetnc'))}}
+
+
+
+  </div>
 </div>
-
-<hr />
-
 <div class="row right">
 {{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
 {{ Form::reset('Reset',array('class'=>'button'))}}
 </div>
 {{$form->close()}}
-
-
 <script type="text/javascript">
-$(document).ready(function() {
+  $('select').select2();
 
-  $('select').select2({
-    width : 'resolve'
+  $('#field_role').change(function(){
+      //alert($('#field_role').val());
+      // load default permission here
   });
-
-  $(":file").filestyle({
-    classButton: 'uploader',
-  });
-  
-});
-
 </script>
 
 @endsection

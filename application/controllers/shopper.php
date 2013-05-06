@@ -359,6 +359,9 @@ class Shopper_Controller extends Base_Controller {
 			$data['lastUpdate'] = new MongoDate();
 			$data['role'] = 'shopper';
 
+			$data['agreetnc'] = (isset($data['agreetnc']) && $data['agreetnc'] == 'Yes')?'Yes':'No';
+			$data['saveinfo'] = (isset($data['saveinfo']) && $data['saveinfo'] == 'Yes')?'Yes':'No';
+
 			$seq = new Sequence();
 
 			$rseq = $seq->find_and_modify(array('_id'=>'shopper'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
