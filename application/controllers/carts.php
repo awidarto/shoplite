@@ -1,6 +1,6 @@
 <?php
 
-class Promotions_Controller extends Admin_Controller {
+class Carts_Controller extends Admin_Controller {
 
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class Promotions_Controller extends Admin_Controller {
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add(strtolower($this->controller_name),ucfirst($this->controller_name));
 
-		$this->model = new Promotion();
+		$this->model = new Cart();
 
 	}
 
@@ -19,21 +19,15 @@ class Promotions_Controller extends Admin_Controller {
 	{
 
 		$this->heads = array(
-			array('Name',array('search'=>true,'sort'=>true)),
-			array('Product Code',array('search'=>true,'sort'=>true)),
-			array('Permalink',array('search'=>true,'sort'=>true)),
-			array('Description',array('search'=>true,'sort'=>true)),
-			array('Section',array('search'=>true,'sort'=>true)),
-			//array('Category',array('search'=>true,'sort'=>true)),
-			//array('Tags',array('search'=>true,'sort'=>true)),
+			array('Shopper',array('search'=>true,'sort'=>true)),
+			array('Items',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
-			array('Retail Price',array('search'=>true,'sort'=>true)),
-			array('Sale Price',array('search'=>true,'sort'=>true)),
+			array('Total Price',array('search'=>true,'sort'=>true)),
+			array('Cart Status',array('search'=>true,'sort'=>true)),
 			//array('Effective From',array('search'=>true,'sort'=>true)),
 			//array('Effective Until',array('search'=>true,'sort'=>true)),
 			array('Created',array('search'=>true,'sort'=>true)),
 			array('Last Update',array('search'=>true,'sort'=>true)),
-			//array('Productsequence',array('search'=>true,'sort'=>true))
 		);
 
 		return parent::get_index();
@@ -43,18 +37,11 @@ class Promotions_Controller extends Admin_Controller {
 	public function post_index()
 	{
 		$this->fields = array(
-			array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'namePic','attr'=>array('class'=>'expander'))),
-			array('productcode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('permalink',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			//array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			//array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('shopper_id',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'namePic','attr'=>array('class'=>'expander'))),
+			array('items',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('currency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('retailPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
-			array('salePrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
-			//array('effectiveFrom',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			//array('effectiveUntil',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('totalPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('cartStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('createdDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
 			array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
 			//array('productsequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true))
@@ -127,8 +114,14 @@ class Promotions_Controller extends Admin_Controller {
 		return $actions;
 	}
 
+	public function calcTotal()
+	{
+		return '';
+
+	}
+
 	public function namePic($data){
-		$display = HTML::image(URL::base().'/storage/products/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
+		$display = $data['buyerDetail']['firstname'];
 		return $display;
 	}
 

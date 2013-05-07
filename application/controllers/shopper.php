@@ -643,6 +643,7 @@ class Shopper_Controller extends Base_Controller {
 		$thecart['createdDate'] = new MongoDate();
 		$thecart['lastUpdate'] = new MongoDate();
 		$thecart['cartStatus'] = 'open';
+		$thecart['buyerDetail'] = Auth::shopper();
 
 		$cart = new Cart();
 

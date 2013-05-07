@@ -292,7 +292,9 @@ class Shoppers_Controller extends Admin_Controller {
 
 		if($picupload['name'] != ''){
 
-			$newdir = realpath(Config::get('kickstart.avatarstorage')).'/'.$id;
+			$newdir = realpath(Config::get('kickstart.storage')).'/'.$controller_name.'/'.$id;
+
+			print($newdir);
 
 			if(!file_exists($newdir)){
 				mkdir($newdir,0777);
@@ -300,7 +302,7 @@ class Shoppers_Controller extends Admin_Controller {
 
 			$success = Resizer::open( $picupload )
         		->resize( 200 , 200 , 'crop' )
-        		->save( Config::get('kickstart.avatarstorage').$id.'/avatar.jpg' , 90 );
+        		->save( Config::get('kickstart.storage').'/'.$controller_name.'/'.$id.'/avatar.jpg' , 90 );
 
 			Input::upload('picupload',$newdir,$picupload['name']);
 
