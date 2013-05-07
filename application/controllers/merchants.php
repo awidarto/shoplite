@@ -1,6 +1,6 @@
 <?php
 
-class Shoppers_Controller extends Admin_Controller {
+class Merchants_Controller extends Admin_Controller {
 
 	public function __construct()
 	{
@@ -11,41 +11,12 @@ class Shoppers_Controller extends Admin_Controller {
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add(strtolower($this->controller_name),ucfirst($this->controller_name));
 
-		$this->model = new Shopper();
+		$this->model = new Merchant();
 
 	}
 
 	public function get_index()
 	{
-
-/*
-	"activeCart": ObjectId("517aba4eccae5b8e05000000"),
-   "address_1": "Komp DKI Joglo Blok D No 3 RT 01\/04 Joglo Kembangan",
-   "address_2": "",
-   "agreetnc": "",
-   "bankname": "",
-   "branch": "",
-   "cardnumber": "",
-   "ccname": "",
-   "city": "Jakarta",
-   "country": "Indonesia",
-   "createdDate": ISODate("2013-04-26T11:09:10.574Z"),
-   "email": "andy.awidarto@gmail.com",
-   "expiremonth": "",
-   "expireyear": "",
-   "firstname": "Andi",
-   "fullname": "Andi Karsono",
-   "lastUpdate": ISODate("2013-04-26T11:09:10.574Z"),
-   "lastname": "Karsono",
-   "mobile": "",
-   "pass": "$2a$08$Q7UxB8TpjY4ZsQ33Dw3nReuTT\/2eG6bn7UY\/LezTUenQeX\/CQaJei",
-   "role": "shopper",
-   "salutation": "Mr",
-   "saveinfo": "",
-   "shippingphone": "",
-   "shopperseq": "0000000002",
-   "zip": "11640" 
-*/
 
 		$this->heads = array(
 			array('First Name',array('search'=>true,'sort'=>true)),
@@ -101,12 +72,15 @@ class Shoppers_Controller extends Admin_Controller {
 	        'country' => 'required'
 	    );
 
+		//transform data before actually save it
+
 		if(is_null($data)){
 			$data = Input::get();
 		}
 
 		$data['agreetnc'] = (isset($data['agreetnc']) && $data['agreetnc'] == 'on')?true:false;
 		$data['saveinfo'] = (isset($data['saveinfo']) && $data['saveinfo'] == 'on')?true:false;
+
 
 		return parent::post_add($data);
 	}
@@ -139,11 +113,12 @@ class Shoppers_Controller extends Admin_Controller {
 		$controller_name = strtolower($this->controller_name);
 
 		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
-		$edit =	'<a class="icon-"  href="'.URL::to($controller_name.'/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Shopper</span>';
+		$products =	'<a class="icon-"  href="'.URL::to($controller_name.'/products/'.$data['_id']).'"><i>&#xe164;</i><span>View Products</span>';
+		$edit =	'<a class="icon-"  href="'.URL::to($controller_name.'/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Merchant</span>';
 		$pic =	'<a class="icon-"  href="'.URL::to($controller_name.'/picture/'.$data['_id']).'"><i>&#x0062;</i><span>Update Picture</span>';
 		$pass =	'<a class="icon-"  href="'.URL::to($controller_name.'/pass/'.$data['_id']).'"><i>&#x006a;</i><span>Change Password</span>';
 
-		$actions = $edit.$delete.$pic.$pass;
+		$actions = $edit.$products.$delete.$pic.$pass;
 		return $actions;
 	}
 

@@ -144,20 +144,22 @@ class Admin_Controller extends Base_Controller {
 			$field = $fields[$i-1][0];
 			$type = $fields[$i-1][1]['kind'];
 
+			$qval = '';
+
 			if(Input::get('sSearch_'.$i))
 			{
 				if( $type == 'text'){
 					if($fields[$i][1]['query'] == 'like'){
 						$pos = $fields[$i][1]['pos'];
 						if($pos == 'both'){
-							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
+							$qval = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
 						}else if($pos == 'before'){
-							$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
+							$qval = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
 						}else if($pos == 'after'){
-							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
+							$qval = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
 						}
 					}else{
-						$q[$field] = Input::get('sSearch_'.$idx);
+						$qval = Input::get('sSearch_'.$idx);
 					}
 				}elseif($type == 'numeric' || $type == 'currency'){
 					$str = Input::get('sSearch_'.$idx);
@@ -179,14 +181,28 @@ class Admin_Controller extends Base_Controller {
 					$str = trim(str_replace(array('<','>','='), '', $str));
 
 					if(is_null($sign)){
-						$q[$field] = new MongoInt32($str);
+						$qval = new MongoInt32($str);
 					}else{
 						$str = new MongoInt32($str);
-						$q[$field] = array($sign=>$str);
+						$qval = array($sign=>$str);
 					}
 				}elseif($type == 'date'){
-					$q[$field] = Input::get('sSearch_'.$idx);
+					$qval = Input::get('sSearch_'.$idx);
 				}
+
+				/*
+				$fieldarray = explode('.',$field);
+				if(is_array($fieldarray) && count($fieldarray) > 1){
+					$fieldarray = implode('\'][\'',$fieldarray);
+					$cstring = '$q[\''.$fieldarray.'\'] = $qval;';
+					eval($cstring);
+				}else{
+				*/
+					$q[$field] = $qval;
+				/*
+				}
+				*/
+
 
 			}
 
@@ -218,6 +234,8 @@ class Admin_Controller extends Base_Controller {
 			$count_display_all = $model->count();
 		}
 
+		//print_r($results);
+
 		$aadata = array();
 
 		$form = $this->form;
@@ -240,7 +258,19 @@ class Admin_Controller extends Base_Controller {
 
 			foreach($fields as $field){
 				if($field[1]['show'] == true){
-					if(isset($doc[$field[0]])){
+
+					$fieldarray = explode('.',$field[0]);
+					if(is_array($fieldarray) && count($fieldarray) > 1){
+						$fieldarray = implode('\'][\'',$fieldarray);
+						$cstring = '$label = (isset($doc[\''.$fieldarray.'\']))?true:false;';
+						eval($cstring);
+					}else{
+						$label = (isset($doc[$field[0]]))?true:false;
+					}
+
+
+					if($label){
+
 						if( isset($field[1]['callback']) && $field[1]['callback'] != ''){
 							$callback = $field[1]['callback'];
 							$row[] = $this->$callback($doc);
