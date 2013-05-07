@@ -75,7 +75,7 @@
 			    	@foreach($heads as $in)
 			    		@if( $in[0] != 'select_all' && $in[0] != '')
 				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
-				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" value="Search {{$in[0]}}" class="search_init" /></td>
+				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" value="Search {{$in[0]}}" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:''}}" /></td>
 			    			@else
 				        		<td>&nbsp;</td>
 			    			@endif
@@ -535,6 +535,13 @@
 		//header search
 
 		$('thead input').keyup( function () {
+			/* Filter on the column (the index) of this element */
+			console.log($('thead input').index(this));
+
+			oTable.fnFilter( this.value, $('thead input').index(this) );
+		} );
+
+		$('thead input.date').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
 

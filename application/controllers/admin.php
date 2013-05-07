@@ -138,7 +138,7 @@ class Admin_Controller extends Base_Controller {
 		$hilite = array();
 		$hilite_replace = array();
 
-		for($i = 1;$i < count($fields);$i++){
+		for($i = 1;$i < count($fields) + 1;$i++){
 			$idx = $i;
 			//print_r($fields[$i]);
 			$field = $fields[$i-1][0];
@@ -187,7 +187,18 @@ class Admin_Controller extends Base_Controller {
 						$qval = array($sign=>$str);
 					}
 				}elseif($type == 'date'){
-					$qval = Input::get('sSearch_'.$idx);
+					$datestring = Input::get('sSearch_'.$idx);
+
+					if (($timestamp = strtotime($datestring)) === false) {
+					} else {
+						$daystart = new MongoDate(strtotime($datestring.' 00:00:00'));
+						$dayend = new MongoDate(strtotime($datestring.' 23:59:59'));
+
+						$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
+					    //echo "$str == " . date('l dS \o\f F Y h:i:s A', $timestamp);
+					}
+					$qval = array('$gte'=>$daystart,'$lte'=>$dayend);
+					//$qval = Input::get('sSearch_'.$idx);
 				}
 
 				/*
@@ -276,7 +287,7 @@ class Admin_Controller extends Base_Controller {
 							$row[] = $this->$callback($doc);
 						}else{
 							if($field[1]['kind'] == 'date'){
-								$rowitem = date('Y-m-d H:i:s',$doc[$field[0]]->sec);
+								$rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
 							}elseif($field[1]['kind'] == 'currency'){
 								$rowitem = number_format($doc[$field[0]],2,',','.');
 							}else{

@@ -58,8 +58,8 @@ class Shoppers_Controller extends Admin_Controller {
 			array('Country',array('search'=>true,'sort'=>true)),
 			array('Mobile',array('search'=>true,'sort'=>true)),
 			array('Phone',array('search'=>true,'sort'=>true)),
-			array('Created',array('search'=>true,'sort'=>true)),
-			array('Last Update',array('search'=>true,'sort'=>true)),
+			array('Created',array('search'=>true,'sort'=>true,'class'=>'date')),
+			array('Last Update',array('search'=>true,'sort'=>true,'class'=>'date')),
 		);
 
 		return parent::get_index();
