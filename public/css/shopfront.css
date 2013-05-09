@@ -282,7 +282,7 @@ table.shoppingcart td,table.shoppingcart th{
 	text-align: left;
 }
 
-table.shoppingcart .select2-container{
+.select2-container{
 	margin-left: 0;
 }
 table.shoppingcart tr.headshoppingcart{
