@@ -11,6 +11,7 @@ return array(
 			'GBP'=>'GBP'
 		),
 	'sections'=>array(
+			''=>'All',
 			'mixmatch'=>'Mix n Match',
 			'pow'=> 'Pick of The Week',
 			'otb'=> 'Out of The Box',

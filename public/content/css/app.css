@@ -387,14 +387,20 @@ table.table thead .sorting_desc_disabled {
 	background-color: #f7f7f7;
 }
 .search_init {
-	width: 100px;
-	
+	width: 100px;	
 }
+
+.search_init:focus {
+	width: 150px;	
+}
+
+
 thead #searchinput td{
 	padding: 7px 5px;
 	min-height: 0;
 	
 }
+
 .icon- .pay,.icon- .del,.icon- .pbadge{
 	cursor: pointer;
 }
@@ -1071,4 +1077,13 @@ a.btn.uploader {
 
 form h4{
 	margin-bottom: 8px;	
+}
+
+select.selector{
+	font-size: 11px;
+	border: thin solid #ddd;
+	border-radius: 0px;
+	height:2em;
+	margin-top: 1em;
+	width:100%;
 }

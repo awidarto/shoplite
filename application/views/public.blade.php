@@ -63,6 +63,8 @@
     </div>
 
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js') }}
+  
+    {{ HTML::script('js/jquery.dataTables.min.js') }}
 
     {{ HTML::script('bootstrap/js/bootstrap.js') }}
 

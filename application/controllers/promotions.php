@@ -11,7 +11,7 @@ class Promotions_Controller extends Admin_Controller {
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add(strtolower($this->controller_name),ucfirst($this->controller_name));
 
-		$this->model = new Product();
+		$this->model = new Promotion();
 
 	}
 

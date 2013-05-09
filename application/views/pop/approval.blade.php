@@ -21,7 +21,7 @@
 		<div class="three columns">
 			{{ $form->text('pass','Password.req','',array('class'=>'text')) }}
 			{{ Form::button('OK',array('class'=>'button'))}}&nbsp;&nbsp;
-			{{ Form::reset('Reset',array('class'=>'button'))}}
+			{{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 		</div>
 	</div>    
 {{$form->close()}}

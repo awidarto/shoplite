@@ -20,23 +20,18 @@
         @elseif(Auth::user()->role == 'cashier')
 
         @else
-            <li class="has-dropdown">{{ HTML::link('attendee','Attendees')}}
-                <ul class="dropdown">
-                    <li>{{ HTML::link('attendee/groups', 'Groups' ) }}</li>
-                  </ul>
-            </li>
+
         @endif        
 
 
         @if(Auth::user()->role == 'root' || Auth::user()->role == 'super' )
-            <li>{{ HTML::link('products','Products')}}</li>
             <li>{{ HTML::link('shoppers','Shoppers')}}</li>
+            <li>{{ HTML::link('carts','Carts')}}</li>
+            <li>{{ HTML::link('merchants','Merchants')}}</li>
+            <li>{{ HTML::link('products','Products')}}</li>
             <li>{{ HTML::link('promotions','Promotions')}}</li>
             <li>{{ HTML::link('auctions','Auctions')}}</li>
-            
-            <li>{{ HTML::link('official','Officials')}}</li>
-            <li>{{ HTML::link('exhibitor','Exhibitors')}}</li>
-            <li>{{ HTML::link('booth','Booth')}}</li>
+            <li>{{ HTML::link('sponsors','Sponsors')}}</li>
         @elseif(Auth::user()->role == 'onsite')
             <li>{{ HTML::link('onsite/report','Onsite Report')}}</li>
             
@@ -58,7 +53,8 @@
             <li class="has-dropdown">
               <a href="#">Sys Admin</a>
               <ul class="dropdown">
-                <li>{{ HTML::link('content', 'Article Manager' ) }}</li>
+                <li>{{ HTML::link('articles', 'Article Manager' ) }}</li>
+                <li>{{ HTML::link('news', 'News Room' ) }}</li>
                 <li>{{ HTML::link('users', 'User Manager' ) }}</li>
               </ul>
             </li>

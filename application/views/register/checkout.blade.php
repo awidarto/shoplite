@@ -80,7 +80,7 @@
 
       <div class="row right">
       {{ Form::submit('Submit Payment',array('class'=>'button','id'=>'doaction'))}}&nbsp;&nbsp;
-      {{ Form::reset('Reset',array('class'=>'button'))}}
+      {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
       </div>
 
     </div>

@@ -62,7 +62,7 @@
 
 <div class="row right">
 {{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
-{{ Form::reset('Reset',array('class'=>'button'))}}
+{{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 </div>
 {{$form->close()}}
 

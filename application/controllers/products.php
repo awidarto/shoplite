@@ -23,7 +23,9 @@ class Products_Controller extends Admin_Controller {
 			array('Product Code',array('search'=>true,'sort'=>true)),
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
-			array('Section',array('search'=>true,'sort'=>true)),
+			array('Section',array('search'=>true,'sort'=>true,
+				'select'=>Config::get('shoplite.sections')
+				)),
 			//array('Category',array('search'=>true,'sort'=>true)),
 			//array('Tags',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
@@ -31,8 +33,8 @@ class Products_Controller extends Admin_Controller {
 			array('Sale Price',array('search'=>true,'sort'=>true)),
 			//array('Effective From',array('search'=>true,'sort'=>true)),
 			//array('Effective Until',array('search'=>true,'sort'=>true)),
-			array('Created',array('search'=>true,'sort'=>true)),
-			array('Last Update',array('search'=>true,'sort'=>true)),
+			array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+			array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
 			//array('Productsequence',array('search'=>true,'sort'=>true))
 		);
 
@@ -50,7 +52,7 @@ class Products_Controller extends Admin_Controller {
 			array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			//array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			//array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('currency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('priceCurrency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('retailPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
 			array('salePrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
 			//array('effectiveFrom',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -85,6 +87,9 @@ class Products_Controller extends Admin_Controller {
 
 		// access posted object array
 		$files = Input::file();
+
+		$data['publishFrom'] = new MongoDate(strtotime($data['publishFrom']));
+		$data['publishUntil'] = new MongoDate(strtotime($data['publishUntil']));
 
 		$data['retailPrice'] = new MongoInt64($data['retailPrice']);
 		$data['salePrice'] = new MongoInt64($data['salePrice']);

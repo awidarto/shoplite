@@ -58,8 +58,8 @@ class Shoppers_Controller extends Admin_Controller {
 			array('Country',array('search'=>true,'sort'=>true)),
 			array('Mobile',array('search'=>true,'sort'=>true)),
 			array('Phone',array('search'=>true,'sort'=>true)),
-			array('Created',array('search'=>true,'sort'=>true)),
-			array('Last Update',array('search'=>true,'sort'=>true)),
+			array('Created',array('search'=>true,'sort'=>true,'class'=>'date')),
+			array('Last Update',array('search'=>true,'sort'=>true,'class'=>'date')),
 		);
 
 		return parent::get_index();
@@ -101,42 +101,12 @@ class Shoppers_Controller extends Admin_Controller {
 	        'country' => 'required'
 	    );
 
-		//transform data before actually save it
-
-		$data = Input::get();
-
-		// access posted object array
-		$files = Input::file();
-
-		$data['retailPrice'] = new MongoInt64($data['retailPrice']);
-		$data['salePrice'] = new MongoInt64($data['salePrice']);
-
-		$seq = new Sequence();
-
-		$rseq = $seq->find_and_modify(array('_id'=>'product'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
-
-		$regsequence = str_pad($rseq['seq'], 6, '0',STR_PAD_LEFT);
-
-		//$reg_number[] = $regsequence;
-
-		$data['productsequence'] = $regsequence;
-
-		//normalize
-		$data['cache_id'] = '';
-		$data['cache_obj'] = '';
-		$data['groupId'] = '';
-		$data['groupName'] = '';
-
-		$productpic = array();
-
-		foreach($files as $key=>$val){
-			if($val['name'] != ''){
-				$productpic[$key] = $val;
-			}				
+		if(is_null($data)){
+			$data = Input::get();
 		}
 
-		$data['productpic'] = $productpic;
-
+		$data['agreetnc'] = (isset($data['agreetnc']) && $data['agreetnc'] == 'on')?true:false;
+		$data['saveinfo'] = (isset($data['saveinfo']) && $data['saveinfo'] == 'on')?true:false;
 
 		return parent::post_add($data);
 	}
@@ -166,10 +136,12 @@ class Shoppers_Controller extends Admin_Controller {
 	}
 
 	public function makeActions($data){
+		$controller_name = strtolower($this->controller_name);
+
 		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
-		$edit =	'<a class="icon-"  href="'.URL::to('shoppers/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Shopper</span>';
-		$pic =	'<a class="icon-"  href="'.URL::to('shoppers/picture/'.$data['_id']).'"><i>&#x0062;</i><span>Update Picture</span>';
-		$pass =	'<a class="icon-"  href="'.URL::to('shoppers/pass/'.$data['_id']).'"><i>&#x006a;</i><span>Change Password</span>';
+		$edit =	'<a class="icon-"  href="'.URL::to($controller_name.'/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Shopper</span>';
+		$pic =	'<a class="icon-"  href="'.URL::to($controller_name.'/picture/'.$data['_id']).'"><i>&#x0062;</i><span>Update Picture</span>';
+		$pass =	'<a class="icon-"  href="'.URL::to($controller_name.'/pass/'.$data['_id']).'"><i>&#x006a;</i><span>Change Password</span>';
 
 		$actions = $edit.$delete.$pic.$pass;
 		return $actions;
@@ -292,7 +264,9 @@ class Shoppers_Controller extends Admin_Controller {
 
 		if($picupload['name'] != ''){
 
-			$newdir = realpath(Config::get('kickstart.avatarstorage')).'/'.$id;
+			$newdir = realpath(Config::get('kickstart.storage')).'/'.$controller_name.'/'.$id;
+
+			print($newdir);
 
 			if(!file_exists($newdir)){
 				mkdir($newdir,0777);
@@ -300,7 +274,7 @@ class Shoppers_Controller extends Admin_Controller {
 
 			$success = Resizer::open( $picupload )
         		->resize( 200 , 200 , 'crop' )
-        		->save( Config::get('kickstart.avatarstorage').$id.'/avatar.jpg' , 90 );
+        		->save( Config::get('kickstart.storage').'/'.$controller_name.'/'.$id.'/avatar.jpg' , 90 );
 
 			Input::upload('picupload',$newdir,$picupload['name']);
 
