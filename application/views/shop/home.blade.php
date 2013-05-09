@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
 	<div class="span4">
-		<img src="{{ URL::base() }}/images/mm/mm01.jpg" alt="mm01" class="mixmatch"  />
+		<a href="{{ URL::base() }}/shop/detail"><img src="{{ URL::base() }}/images/mm/mm01.jpg" alt="mm01" class="mixmatch"  /></a>
 		<br />
 		<img src="{{ URL::base() }}/images/pow/pow01.jpg" alt="mm01" />
 	</div>

@@ -328,5 +328,15 @@ class Shop_Controller extends Base_Controller {
 
 	}
 
+	public function get_detail(){
+		return View::make('shop.detail');
+	}
+
+	public function get_cart(){
+		$form = new Formly();
+		return View::make('shop.cart')
+		->with('form',$form);
+	}
+
 
 }
