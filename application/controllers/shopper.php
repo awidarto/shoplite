@@ -670,11 +670,65 @@ class Shopper_Controller extends Base_Controller {
 
 		$form = new Formly();
 
-		return View::make('tables.simple')
-					->with('form',$form)
-					->with('user',Auth::shopper())
-					//->with('crumb',$this->crumb)
-					->with('title','My Shopping Cart');
+		$form->set_options(array(
+			'framework'=>'metro',
+			'form_class'=>'form-horizontal'
+			));
+
+		$heads = array(
+			array('',array('search'=>false,'sort'=>true)),
+			array('Item Description',array('search'=>false,'sort'=>true)),
+			array('Size',array('search'=>false,'sort'=>true)),
+			array('Quantity',array('search'=>false,'sort'=>true)),
+			array('Unit Price',array('search'=>false,'sort'=>true)),
+			array('Total',array('search'=>false,'sort'=>true)),
+			//array('Effective From',array('search'=>true,'sort'=>true)),
+			//array('Effective Until',array('search'=>true,'sort'=>true)),
+			//array('Created',array('search'=>true,'sort'=>true)),
+			//array('Last Update',array('search'=>true,'sort'=>true)),
+		);
+
+
+		$action_selection = $form->select('action','',Config::get('kickstart.actionselection'));
+
+		$select_all = $form->checkbox('select_all','','',false,array('id'=>'select_all'));
+
+		// add selector and sequence columns
+		array_unshift($heads, array('#',array('search'=>false,'sort'=>false)));
+		array_unshift($heads, array($select_all,array('search'=>false,'sort'=>false)));
+
+		// add action column
+		array_push($heads,
+			array('Actions',array('search'=>false,'sort'=>false))
+		);
+
+		$disablesort = array();
+
+		for($s = 0; $s < count($heads);$s++){
+			if($heads[$s][1]['sort'] == false){
+				$disablesort[] = $s;
+			}
+		}
+
+		$disablesort = implode(',',$disablesort);
+
+		return View::make('tables.frontcart')
+			->with('title','Shopping Cart')
+			->with('newbutton', '')
+			->with('disablesort',$disablesort)
+			->with('addurl','')
+			->with('ajaxsource','cart')
+			->with('ajaxdel','shopper/cartdel')
+			->with('form',$form)
+			->with('crumb',$this->crumb)
+			->with('heads',$heads);
+	}
+
+	public function post_cart()
+	{
+		
+		$form = new Formly();
+
 	}
 
 	public function get_pg(){

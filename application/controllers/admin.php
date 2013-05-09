@@ -88,8 +88,8 @@ class Admin_Controller extends Base_Controller {
 		$select_all = $this->form->checkbox('select_all','','',false,array('id'=>'select_all'));
 
 		// add selector and sequence columns
-		array_unshift($heads, array('#',array('search'=>false,'sort'=>false)));
 		array_unshift($heads, array($select_all,array('search'=>false,'sort'=>false)));
+		array_unshift($heads, array('#',array('search'=>false,'sort'=>false)));
 
 		// add action column
 		array_push($heads,
@@ -124,6 +124,9 @@ class Admin_Controller extends Base_Controller {
 
 		$fields = $this->fields;
 
+		array_unshift($fields, array('select',array('kind'=>false)));
+		//array_unshift($fields, array('seq',array('kind'=>false)));
+
 		$pagestart = Input::get('iDisplayStart');
 		$pagelength = Input::get('iDisplayLength');
 
@@ -138,11 +141,11 @@ class Admin_Controller extends Base_Controller {
 		$hilite = array();
 		$hilite_replace = array();
 
-		for($i = 1;$i < count($fields) + 1;$i++){
+		for($i = 0;$i < count($fields);$i++){
 			$idx = $i;
 			//print_r($fields[$i]);
-			$field = $fields[$i-1][0];
-			$type = $fields[$i-1][1]['kind'];
+			$field = $fields[$i][0];
+			$type = $fields[$i][1]['kind'];
 
 			$qval = '';
 
@@ -201,18 +204,7 @@ class Admin_Controller extends Base_Controller {
 					//$qval = Input::get('sSearch_'.$idx);
 				}
 
-				/*
-				$fieldarray = explode('.',$field);
-				if(is_array($fieldarray) && count($fieldarray) > 1){
-					$fieldarray = implode('\'][\'',$fieldarray);
-					$cstring = '$q[\''.$fieldarray.'\'] = $qval;';
-					eval($cstring);
-				}else{
-				*/
-					$q[$field] = $qval;
-				/*
-				}
-				*/
+				$q[$field] = $qval;
 
 
 			}
@@ -225,15 +217,9 @@ class Admin_Controller extends Base_Controller {
 
 		/* first column is always sequence number, so must be omitted */
 		$fidx = Input::get('iSortCol_0');
-		if($fidx == 0){
-			$fidx = $defsort;
-			$sort_col = $fields[$fidx][0];
-			$sort_dir = $defdir;
-		}else{
-			$fidx = ($fidx > 0)?$fidx - 1:$fidx;
-			$sort_col = $fields[$fidx][0];
-			$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
-		}
+
+		$sort_col = $fields[$fidx][0];
+		$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
 
 		$count_all = $model->count();
 
@@ -268,7 +254,7 @@ class Admin_Controller extends Base_Controller {
 			$row[] = $select;
 
 			foreach($fields as $field){
-				if($field[1]['show'] == true){
+				if($field[1]['kind'] != false && $field[1]['show'] == true){
 
 					$fieldarray = explode('.',$field[0]);
 					if(is_array($fieldarray) && count($fieldarray) > 1){
@@ -289,7 +275,8 @@ class Admin_Controller extends Base_Controller {
 							if($field[1]['kind'] == 'date'){
 								$rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
 							}elseif($field[1]['kind'] == 'currency'){
-								$rowitem = number_format($doc[$field[0]],2,',','.');
+								$num = (double) $doc[$field[0]];
+								$rowitem = number_format($num,2,',','.');
 							}else{
 								$rowitem = $doc[$field[0]];
 							}
@@ -327,7 +314,8 @@ class Admin_Controller extends Base_Controller {
 			'iTotalRecords'=>$count_all,
 			'iTotalDisplayRecords'=> $count_display_all,
 			'aaData'=>$aadata,
-			'qrs'=>$q
+			'qrs'=>$q,
+			'sort'=>array($sort_col=>$sort_dir)
 		);
 
 		return Response::json($result);
@@ -374,6 +362,7 @@ class Admin_Controller extends Base_Controller {
 			));
 
 		return View::make($controller_name.'.'.$this->form_add)
+					->with('back',$controller_name)
 					->with('form',$form)
 					->with('submit',$controller_name.'/add')
 					->with('crumb',$this->crumb)
@@ -423,6 +412,8 @@ class Admin_Controller extends Base_Controller {
 
 	public function get_edit($id){
 
+		$controller_name = strtolower($this->controller_name);
+
 		$this->crumb->add(strtolower($this->controller_name).'/edit','Edit',false);
 
 		$model = $this->model;
@@ -430,6 +421,13 @@ class Admin_Controller extends Base_Controller {
 		$_id = new MongoId($id);
 
 		$population = $model->get(array('_id'=>$_id));
+
+		foreach ($population as $key=>$val) {
+			if($val instanceof MongoDate){
+				$population[$key] = date('d-m-Y H:i:s',$val->sec);
+			}
+		}
+
 
 		$form = $this->form->make($population);
 
@@ -441,11 +439,12 @@ class Admin_Controller extends Base_Controller {
 		$this->crumb->add(strtolower($this->controller_name).'/edit/'.$id,$id,false);
 
 		return View::make(strtolower($this->controller_name).'.'.$this->form_edit)
+					->with('back',$controller_name)
 					->with('formdata',$population)
 					->with('submit',strtolower($this->controller_name).'/edit/'.$id)
 					->with('form',$form)
 					->with('crumb',$this->crumb)
-					->with('title','Edit Product');
+					->with('title','Edit '.Str::singular($this->controller_name));
 
 	}
 

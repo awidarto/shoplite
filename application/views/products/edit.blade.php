@@ -39,7 +39,7 @@
 
         <fieldset>
             <legend>Product Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
+                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
 
                 {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
 
@@ -50,7 +50,7 @@
                 {{ Form::label('price','Default Price Set *')}}
                 <div class="row-fluid inputInline">
                   
-                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
+                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('id'=>'priceCurrency'))}}<br />
                     {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
                     {{ $form->text('salePrice','Sale Price','',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}<br />
                     {{ $form->text('effectiveFrom','From','',array('class'=>'text  input-medium date','id'=>'effectiveFrom','placeholder'=>'From')) }}
@@ -86,8 +86,8 @@
 <hr />
 
 <div class="row right">
-{{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
-{{ Form::reset('Reset',array('class'=>'button'))}}
+{{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+{{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 </div>
 {{$form->close()}}
 
@@ -101,6 +101,12 @@ $(document).ready(function() {
 
   $(":file").filestyle({
     classButton: 'uploader',
+  });
+
+  $('#name').keyup(function(){
+      var title = $('#name').val();
+      var slug = string_to_slug(title);
+      $('#permalink').val(slug);
   });
   
 });

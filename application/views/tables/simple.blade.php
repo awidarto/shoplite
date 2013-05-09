@@ -31,7 +31,9 @@
 			        		@if(is_array($head))
 			        			<th 
 			        				@foreach($head[1] as $key=>$val)
-			        					{{ $key }}="{{ $val }}"
+			        					@if(!is_array($val))
+			        						{{ $key }}="{{ $val }}"
+			        					@endif
 			        				@endforeach
 			        			>
 			        			{{ $head[0] }}
@@ -75,7 +77,16 @@
 			    	@foreach($heads as $in)
 			    		@if( $in[0] != 'select_all' && $in[0] != '')
 				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
-				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" value="Search {{$in[0]}}" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:''}}" /></td>
+				    			@if(isset($in[1]['date']) && $in[1]['date'])
+					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'date'}}" /></td>
+				    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
+				    				<td>
+				    					<input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+				    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector'))}}
+				    				</td>
+				    			@else
+					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" /></td>
+				    			@endif
 			    			@else
 				        		<td>&nbsp;</td>
 			    			@endif
@@ -160,122 +171,7 @@
   </div>
 </footer>
 
-<div id="updatePayment" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Convention Status</h3>
-	</div>
-	<div class="modal-body">
-
-		{{ Form::select('paystatus', Config::get('eventreg.paystatus'),null,array('id'=>'paystatusselect','class'=>'payselect'))}}
-		<br/>
-		<br/>
-		{{ Form::select('printtax', array('dontprinttax'=>'Dont display tax','printtax'=>'Display tax'),null,array('class'=>'taxdisplaystatus','id'=>'taxdisplaystatusConv','style'=>'display:none;'))}}
-		<br/>
-		<span id="paystatusindicator"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="savepaystatus">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-<div id="updateFormStatus" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Operational Form Status</h3>
-	</div>
-	<div class="modal-body">
-
-		{{ Form::select('formstatus', Config::get('eventreg.formstatus'),null,array('id'=>'formstatusselect'))}}
-		
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="saveformstatus">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-
-<div id="updateFormStatusindividual" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Update Individual Form Status</h3>
-	</div>
-	<div class="modal-body">
-
-		<label>Select form no:</label>
-		{{ Form::select('formno', Config::get('eventreg.formindividualno'),null,array('id'=>'formnoindividual'))}}
-
-		<label>Select status:</label>
-		{{ Form::select('formstatus', Config::get('eventreg.formindividualstatus'),null,array('id'=>'formindividualstatusselect'))}}
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="saveformstatusindividual">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-<div id="updatePaymentGolf" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Golf Status</h3>
-	</div>
-	<div class="modal-body">
-
-		{{ Form::select('paystatusgolf', Config::get('eventreg.paystatus'),null,array('id'=>'paystatusselectgolf','class'=>'payselect'))}}
-		<br/>
-		<br/>
-		{{ Form::select('printtax', array('dontprinttax'=>'Dont display tax','printtax'=>'Display tax'),null,array('class'=>'taxdisplaystatus','id'=>'taxdisplaystatusGolf','style'=>'display:none;'))}}
-		<br/>
-		<span id="paystatusindicator"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="savepaystatusGolf">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-
-<div id="updateResendmail" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Resend Email</h3>
-	</div>
-	<div class="modal-body">
-		<label>Select email type to resend:</label>
-		{{ Form::select('resendemailtype', Config::get('eventreg.resendemailtype'),null,array('id'=>'resendemailtype'))}}
-		<br/><span id="errormessagemodal" class="fontRed"></span><span id="successmessagemodal" class="fontGreen"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="submitresend">Submit</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-<div id="exhibitorResendmail" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Send Email</h3>
-	</div>
-	<div class="modal-body">
-
-		<label>Select email type to resend:</label>
-		{{ Form::select('resendemailtype', Config::get('eventreg.exhibitoremailtype'),null,array('id'=>'sendemailtypeexhibitor'))}}
-		<br/><span id="exhbitor_errormessagemodal" class="fontRed"></span><span id="exhbitor_successmessagemodal" class="fontGreen"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="submitemailexhibitor">Submit</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
+@yield('dialog')
 
 <div id="viewformModal" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	
@@ -305,61 +201,6 @@
 	
 	
 
-</div>
-
-
-<div id="updatePaymentGolfConvention" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Golf & Convention Status</h3>
-	</div>
-	<div class="modal-body">
-
-		{{ Form::select('paystatusgolfconvention', Config::get('eventreg.paystatus'),null,array('id'=>'paystatusselectgolfconvention','class'=>'payselect'))}}
-		<br/>
-		<br/>
-		{{ Form::select('printtax', array('dontprinttax'=>'Dont display tax','printtax'=>'Display tax'),null,array('class'=>'taxdisplaystatus','id'=>'taxdisplaystatusAll','style'=>'display:none;'))}}
-		<br/>
-		<span id="paystatusindicator"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="savepaystatusGolfConvention">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-
-<div id="addToGroup" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Add Selected to Group</h3>
-	</div>
-	<div class="modal-body">
-
-		{{ Form::select('paystatus', Config::get('eventreg.paystatus'),null,array('id'=>'paystatusselect'))}}
-		<span id="paystatusindicator"></span>
-
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="savepaystatus">Save</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
-</div>
-
-
-<div id="printBadge" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Print Badge</h3>
-	</div>
-	<div class="modal-body">
-		<iframe src="{{ URL::base().'/print/badge' }}" id="print_frame" class="span12"></iframe>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="printstart">Print</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	</div>
 </div>
 
 <div id="deleteWarning" class="modal warning hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -420,18 +261,6 @@
 
     $(document).ready(function(){
     	
-    	//display tax print
-    	$('.payselect').on('change', function() {
-  			if(this.value == 'paid'){
-  				$('.taxdisplaystatus').show();
-  				$('.taxdisplaystatus').val('dontprinttax');
-  			}else{
-  				$('.taxdisplaystatus').hide();
-  			}
-		});
-
-
-
     	$.fn.dataTableExt.oApi.fnStandingRedraw = function(oSettings) {
 		    if(oSettings.oFeatures.bServerSide === false){
 		        var before = oSettings._iDisplayStart;
@@ -449,9 +278,7 @@
 
 		$('.activity-list').tooltip();
 
-		
-
-		var asInitVals = new Array();
+		asInitVals = new Array();
         
         oTable = $('.dataTable').DataTable(
 			{
@@ -501,62 +328,43 @@
 		    }
 		} );        
 
-		$('tfoot input').keyup( function () {
-			/* Filter on the column (the index) of this element */
-			oTable.fnFilter( this.value, $('tfoot input').index(this) );
-		} );
-
-		/*
-		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
-		 * the footer
-		 */
-		$('tfoot input').each( function (i) {
-			asInitVals[i] = this.value;
-		} );
-
-		$('tfoot input').focus( function () {
-			if ( this.className == 'search_init' )
-			{
-				this.className = '';
-				this.value = '';
-			}
-		} );
-
-		$('tfoot input').blur( function (i) {
-			if ( this.value == '' )
-			{
-				this.className = 'search_init';
-				this.value = asInitVals[$('tfoot input').index(this)];
-			}
-		} );
-
-
-
 		//header search
 
-		$('thead input').keyup( function () {
-			/* Filter on the column (the index) of this element */
+		$('thead input.filter').keyup( function () {
 			console.log($('thead input').index(this));
-
-			oTable.fnFilter( this.value, $('thead input').index(this) );
+			/* Filter on the column (the index) of this element */
+			var search_index = $('thead input').index(this);
+			oTable.fnFilter( this.value, search_index );
 		} );
 
 		$('thead input.date').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
+			var search_index = $('thead input').index(this);
+			oTable.fnFilter( this.value,  search_index  );
+		} );
 
-			oTable.fnFilter( this.value, $('thead input').index(this) );
+		$('thead select.selector').change( function () {
+			/* Filter on the column (the index) of this element */
+			var prev = $(this).prev('input');
+			var search_index = $('thead input').index(prev);
+			console.log(search_index);
+			oTable.fnFilter( this.value,  search_index  );
 		} );
 
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
 		 * the footer
 		 */
+		/*
 		$('thead input').each( function (i) {
 			asInitVals[i] = this.value;
 		} );
 
-		$('thead input').focus( function () {
+		$('thead input.filter').focus( function () {
+			
+			console.log(this);
+
 			if ( this.className == 'search_init' )
 			{
 				this.className = '';
@@ -564,46 +372,16 @@
 			}
 		} );
 
-		$('thead input').blur( function (i) {
+		$('thead input.filter').blur( function (i) {
+			console.log(this);
 			if ( this.value == '' )
 			{
 				this.className = 'search_init';
 				this.value = asInitVals[$('thead input').index(this)];
 			}
 		} );
-
-
-		$('.filter input').keyup( function () {
-			/* Filter on the column (the index) of this element */
-
-			oTable.fnFilter( this.value, $('.filter input').index(this) );
-		} );
-
-		/*
-		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
-		 * the footer
-		 */
-		$('.filter input').each( function (i) {
-			asInitVals[i] = this.value;
-		} );
-
-		$('.filter input').focus( function () {
-			if ( this.className == 'search_init' )
-			{
-				this.className = '';
-				this.value = '';
-			}
-		} );
-
-		$('.filter input').blur( function (i) {
-			if ( this.value == '' )
-			{
-				this.className = 'search_init';
-				this.value = asInitVals[$('.filter input').index(this)];
-			}
-		} );
-
-
+			
+		*/
 
 		$('#select_all').click(function(){
 			if($('#select_all').is(':checked')){

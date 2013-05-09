@@ -36,7 +36,7 @@
 
         <fieldset>
             <legend>Product Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
+                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
 
                 {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
 
@@ -47,9 +47,9 @@
                 {{ Form::label('price','Default Price Set *')}}
                 <div class="row-fluid inputInline">
                   
-                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
+                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('id'=>'priceCurrency'))}}<br />
                     {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
-                    {{ $form->text('salePrice','','Sale Price',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}<br />
+                    {{ $form->text('salePrice','Sale Price','',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}<br />
                     {{ $form->text('effectiveFrom','From','',array('class'=>'text input-medium date','id'=>'effectiveFrom','placeholder'=>'From')) }}
                     {{ $form->text('effectiveUntil','Until','',array('class'=>'text input-medium date','id'=>'effectiveUntil','placeholder'=>'To')) }}
                   
@@ -82,8 +82,8 @@
 <hr />
 
 <div class="row right">
-{{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
-{{ Form::reset('Reset',array('class'=>'button'))}}
+{{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+{{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 </div>
 {{$form->close()}}
 
@@ -103,143 +103,13 @@ $(document).ready(function() {
         // load default permission here
     });
 
-});
-
-
-
-  $("#s2id_field_countryInvoice").select2("val", "ID");
-  $("#s2id_field_country").select2("val", "ID");
-
-</script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-
-  $("#s2id_field_countryInvoice").select2("val", "Indonesia");
-  $("#s2id_field_country").select2("val", "Indonesia");
-  
-  function fillsame(){
-    var companyName = $("#companyName").val();
-    var companyNPWP = $("#companyNPWP").val();
-    
-    var companyPhoneCountry = $("#companyPhoneCountry").val();
-    var companyPhoneArea = $("#companyPhoneArea").val();
-    var companyPhone = $("#companyPhone").val();
-
-
-    var companyFaxCountry = $("#companyFaxCountry").val();
-    var companyFaxArea = $("#companyFaxArea").val();
-    var companyFax = $("#companyFax").val();
-
-    var companyAddress_1 = $("#address_1").val();
-    var companyAddress_2 = $("#address_2").val();
-    
-    var companyCity = $("#city").val();
-    var companyZip = $("#zip").val();
-    var companyCountry = $("#s2id_field_country").select2("val");
-
-
-
-
-    $("#companyNameInv").val(companyName);
-    $("#companyNPWPInv").val(companyNPWP);
-    
-    $("#companyPhoneInvCountry").val(companyPhoneCountry);
-    $("#companyPhoneInvArea").val(companyPhoneArea);
-    $("#companyPhoneInv").val(companyPhone);
-
-
-    $("#companyFaxInvCountry").val(companyFaxCountry);
-    $("#companyFaxInvArea").val(companyFaxArea);
-    $("#companyFaxInv").val(companyFax);
-
-    $("#addressInv_1").val(companyAddress_1);
-    $("#addressInv_2").val(companyAddress_2);
-    
-    $("#cityInv").val(companyCity);
-    $("#zipInv").val(companyZip);
-    $("#s2id_field_countryInvoice").select2("val", companyCountry);
-  }
-
-  function resetinput(){
-    $('.invAdress')
-     .not(':button, :submit, :reset, :hidden')
-     .val('')
-     .removeAttr('checked')
-     .removeAttr('selected');
-      $("#s2id_field_countryInvoice").select2("val", "");
-  }
-
-    $("#invoiceSameCheckbox").change(function() {
-        if($(this).is(":checked")) {
-            $(this).addClass("checked");
-            fillsame();
-
-        } else {
-            $(this).removeClass("checked");
-            resetinput();
-        }
+    $('#name').keyup(function(){
+        var title = $('#name').val();
+        var slug = string_to_slug(title);
+        $('#permalink').val(slug);
     });
 
 
-  function calculatefees(){
-    var regfeeIDR = '400';
-    var regfeeUSD = '';
-    var Golffee   = '2.500.000';
-    var totalUSD   = '';
-    var totalIDR   = '';
-    if($('.regType:checked').val() == 'PO'){
-      //alert($('.field_golfType:checked').val());
-      if($('.field_golfType:checked').val() == 'No'){
-        $('#totalUSDInput').val('500');
-        $('#totalIDRInput').val('-');
-      }else{
-        //alert($('.field_golfType:checked').val());
-
-        $('#totalUSDInput').val('500');
-        $('#totalIDRInput').val('2.500.000');
-        
-      }
-    }
-
-    if($('.regType:checked').val() == 'PD'){
-      //alert($('.field_golfType:checked').val());
-      if($('.field_golfType:checked').val() == 'No'){
-        $('#totalUSDInput').val('-');
-        $('#totalIDRInput').val('4.500.000');
-
-      }else{
-        // /alert($('.field_golfType:checked').val());
-
-        $('#totalUSDInput').val('-');
-        $('#totalIDRInput').val('7.000.000');
-      }
-    }
-
-    if($('.regType:checked').val() == 'SD'){
-      $('#totalUSDInput').val('-');
-      $('#totalIDRInput').val('400.000');
-    }
-
-    if($('.regType:checked').val() == 'SO'){
-
-      $('#totalUSDInput').val('120');
-      $('#totalIDRInput').val('');
-    }
-
-  }
-  //first total
-
-  $('#totalUSDInput').val('');
-  $('#totalIDRInput').val('4.500.000');
-
-  $('.paymentSettle').change(
-      function(){
-        calculatefees();
-      }
-  );
-
-  
 });
 
 </script>
