@@ -23,9 +23,8 @@ class Products_Controller extends Admin_Controller {
 			array('Product Code',array('search'=>true,'sort'=>true)),
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
-			array('Section',array('search'=>true,'sort'=>true,
-				'select'=>Config::get('shoplite.sections')
-				)),
+			array('Section',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.sections'))),
+			//array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('content.news.categories'))),
 			//array('Category',array('search'=>true,'sort'=>true)),
 			//array('Tags',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
