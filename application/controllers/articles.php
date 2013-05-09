@@ -22,8 +22,8 @@ class Articles_Controller extends Admin_Controller {
 			array('Title',array('search'=>true,'sort'=>true)),
 			array('Shorts',array('search'=>true,'sort'=>true)),
 			array('Slug',array('search'=>true,'sort'=>true)),
-			array('Section',array('search'=>true,'sort'=>true)),
-			array('Category',array('search'=>true,'sort'=>true)),
+			array('Section',array('search'=>true,'sort'=>true,'select'=>Config::get('content.articles.sections'))),
+			array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('content.articles.categories'))),
 			array('Tags',array('search'=>true,'sort'=>true)),
 			array('Created',array('search'=>true,'sort'=>true)),
 			array('Last Update',array('search'=>true,'sort'=>true)),
@@ -92,7 +92,7 @@ class Articles_Controller extends Admin_Controller {
 
 	public function makeActions($data){
 		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
-		$edit =	'<a class="icon-"  href="'.URL::to('articles/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update News</span>';
+		$edit =	'<a class="icon-"  href="'.URL::to('articles/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Article</span>';
 
 		$actions = $edit.$delete;
 		return $actions;
