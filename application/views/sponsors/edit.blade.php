@@ -37,15 +37,15 @@
 
                 {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
 
-                {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
+                {{ $form->text('publishFrom','Scheduled','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
 
         </fieldset>
         <fieldset>
             <legend>Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
+                {{ $form->select('section','Default Section',Config::get('content.sponsors.sections'),null,array('id'=>'section','class'=>'input-medium'))}}
 
-                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
+                {{ $form->select('category','Category',Config::get('content.sponsors.categories'),null,array('id'=>'category','class'=>'input-medium'))}}<br />
 
                 {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
 
@@ -59,7 +59,7 @@
 
 
                     <div  class="span2">
-                      {{ HTML::image(URL::base().'/storage/news/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
+                      {{ HTML::image(URL::base().'/storage/sponsors/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
                     </div>
 
                     <div class="span7">

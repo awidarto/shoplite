@@ -15,16 +15,16 @@
         <fieldset>
             <legend>Main</legend>
                 
-                {{ $form->text('title','Title.req','',array('class'=>'text span12','id'=>'title')) }}
+                {{ $form->text('title','Title.req','',array('class'=>'text span11','id'=>'title')) }}
                 
-                {{ $form->text('slug','Slug.req','',array('class'=>'text span12','id'=>'slug')) }}
-                {{ $form->textarea('shorts','Short.req','',array('class'=>'text span12','id'=>'shorts')) }}
+                {{ $form->text('slug','Slug.req','',array('class'=>'text span11','id'=>'slug')) }}
+                {{ $form->textarea('shorts','Short.req','',array('class'=>'text span11','id'=>'shorts')) }}
 
                 {{ Form::label('bodycopy','Body *') }}
 
                 {{ View::make('partials.editortoolbar')->render() }}
 
-                {{ $form->textarea('bodycopy','','',array('class'=>'text span12','id'=>'bodycopy','style'=>'height:250px;')) }}
+                {{ $form->textarea('bodycopy','','',array('class'=>'text span11','id'=>'bodycopy','style'=>'height:250px;')) }}
 
         </fieldset>
         
@@ -37,15 +37,15 @@
 
                 {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
 
-                {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
+                {{ $form->text('publishFrom','Scheduled','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
 
         </fieldset>
         <fieldset>
             <legend>Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
+                {{ $form->select('section','Default Section',Config::get('content.news.sections'),null,array('id'=>'section','class'=>'input-medium'))}}
 
-                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
+                {{ $form->select('category','Category',Config::get('content.news.categories'),null,array('id'=>'category','class'=>'input-medium'))}}<br />
 
                 {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
 

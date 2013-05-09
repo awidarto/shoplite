@@ -92,7 +92,7 @@ class Articles_Controller extends Admin_Controller {
 
 	public function makeActions($data){
 		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
-		$edit =	'<a class="icon-"  href="'.URL::to('articles/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update News</span>';
+		$edit =	'<a class="icon-"  href="'.URL::to('articles/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Article</span>';
 
 		$actions = $edit.$delete;
 		return $actions;
