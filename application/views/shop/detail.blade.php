@@ -14,6 +14,7 @@
       <span class="titlesection" style="text-align:center;width:100%;margin:0 auto;display:block;">ADDITIONAL IMAGES</span>
       
       <div class="addimages">
+        @foreach($product['productpic'] as $pic)
         <a href="#"><img src="{{ URL::base() }}/images/kecil1.jpg"></a>
         <a href="#"><img src="{{ URL::base() }}/images/kecil2.jpg"></a>
       </div>

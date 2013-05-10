@@ -22,6 +22,10 @@
                 {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
                 {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
 
+                {{ Form::label('bodycopy','About Product *') }}
+                {{ View::make('partials.editortoolbar')->render() }}
+                {{ $form->textarea('bodycopy','','',array('class'=>'text span11','id'=>'bodycopy','style'=>'height:200px;')) }}
+
         </fieldset>
         <fieldset>
             <legend>Publishing</legend>
@@ -41,7 +45,7 @@
             <legend>Product Details</legend>
                 {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
 
-                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
+                {{ $form->select('category','Category.req',Config::get('shoplite.categories'),null,array('id'=>'category'))}}<br />
 
                 {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
 
@@ -91,6 +95,8 @@
 </div>
 {{$form->close()}}
 
+{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}   
+{{ HTML::script('js/parser_rules/advanced.js') }}   
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -101,6 +107,11 @@ $(document).ready(function() {
 
   $(":file").filestyle({
     classButton: 'uploader',
+  });
+
+  var editor = new wysihtml5.Editor('bodycopy', { // id of textarea element
+    toolbar:      'wysihtml5-toolbar', // id of toolbar element
+    parserRules:  wysihtml5ParserRules // defined in parser rules set 
   });
 
   $('#name').keyup(function(){
