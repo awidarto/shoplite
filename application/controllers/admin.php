@@ -58,6 +58,8 @@ class Admin_Controller extends Base_Controller {
 
 	public $form_edit = 'edit';
 
+	public $view_object = 'view';
+
 	public function __construct(){
 
 		date_default_timezone_set('Asia/Jakarta');
@@ -502,13 +504,18 @@ class Admin_Controller extends Base_Controller {
 	}
 
 	public function get_view($id){
-		$id = new MongoId($id);
+		$_id = new MongoId($id);
 
-		$product = new Document();
+		$model = $this->model;
 
-		$doc = $product->get(array('_id'=>$id));
+		$obj = $model->get(array('_id'=>$_id));
 
-		return View::make('pop.docview')->with('profile',$doc);
+		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,'View',false);
+		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,$id,false);
+
+		return View::make(strtolower($this->controller_name).'.'.$this->view_object)
+			->with('crumb',$this->crumb)
+			->with('obj',$obj);
 	}
 
 	public function get_action_sample(){
