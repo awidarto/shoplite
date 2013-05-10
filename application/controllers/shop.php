@@ -228,27 +228,44 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_pow($category = 'all',$page = 0,$search = null)
 	{
+		$products = new Product();
+
+		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+		
 		$new = array();
 		$featured = array();
-		$mixmatch = array();
+		$pow = $products->find(array('section'=>'pow'),array(),array('createdDate'=>-1),$limit);
+
+		
 		
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
-			->with('mixmatch',$mixmatch);
+			->with('products',$pow);
 
 	}
 
 	public function get_otb($category = 'all',$page = 0,$search = null)
 	{
+		$products = new Product();
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+		
 		$new = array();
 		$featured = array();
-		$mixmatch = array();
+		$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
-			->with('mixmatch',$mixmatch);
+			->with('products',$otb);
 
 	}
 
@@ -262,7 +279,7 @@ class Shop_Controller extends Base_Controller {
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
-		
+
 		$new = array();
 		$featured = array();
 		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
@@ -270,20 +287,26 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
-			->with('mixmatch',$mixmatch);
+			->with('products',$mixmatch);
 
 	}
 
 	public function get_kind($category = 'all',$page = 0,$search = null)
 	{
+		$products = new Product();
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+		
 		$new = array();
 		$featured = array();
-		$mixmatch = array();
+		$kind = $products->find(array('section'=>'kind'),array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
-			->with('mixmatch',$mixmatch);
+			->with('products',$kind);
 
 	}
 
