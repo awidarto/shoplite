@@ -26,8 +26,9 @@ return array(
 			'kind'=> 'One of A Kind'
 		),
 	'picsizes'=>array(
-		array('prefix'=>'sm_','w'=>200,'h'=>200,'opt'=>'fit','ext'=>'.jpg','q'=>90),
-		array('prefix'=>'med_','w'=>200,'h'=>400,'opt'=>'fit','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'sm_','w'=>50,'h'=>90,'opt'=>'fit','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'med_','w'=>333,'h'=>324,'opt'=>'fit','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'lar_','w'=>333,'h'=>629,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 	)
 
 
