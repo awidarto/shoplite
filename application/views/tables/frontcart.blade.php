@@ -170,7 +170,7 @@
 		        "sAjaxSource": "{{$ajaxsource}}",
 				"oLanguage": { "sSearch": "Search "},
 				"sPaginationType": "full_numbers",
-				"aLengthMenu": [15, 30, 60, "All"],
+				"iDisplayLength": 100,
 				"sDom": 'lrit',
 				@if(isset($excludecol) && $excludecol != '')
 				"oColVis": {

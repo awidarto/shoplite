@@ -14,7 +14,7 @@
               @if(Auth::shoppercheck())
                 Welcome {{ HTML::link('myprofile',Auth::shopper()->firstname.' '.Auth::shopper()->lastname) }}
                 @if(isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != '')
-                  | <i class="icon-cart logo-type"></i> {{ HTML::link('shopper/cart','Shopping Cart')}}
+                  | <i class="icon-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}}
                 @else
                   <span id="nocart">, you have no shopping cart, would you like to <span id="createcart">create one</span> ?</span>
                 @endif

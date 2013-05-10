@@ -23,7 +23,7 @@ class Products_Controller extends Admin_Controller {
 			array('Product Code',array('search'=>true,'sort'=>true)),
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
-			array('Section',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.sections'))),
+			array('Section',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.search_sections'))),
 			//array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('content.news.categories'))),
 			//array('Category',array('search'=>true,'sort'=>true)),
 			//array('Tags',array('search'=>true,'sort'=>true)),
@@ -132,8 +132,9 @@ class Products_Controller extends Admin_Controller {
 	}
 
 	public function namePic($data){
+		$name = HTML::link('products/view/'.$data['_id'],$data['name']);
 		$display = HTML::image(URL::base().'/storage/products/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
-		return $display;
+		return $display.$name;
 	}
 
 	public function afterUpdate($id)

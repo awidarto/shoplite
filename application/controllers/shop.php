@@ -332,11 +332,63 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.detail');
 	}
 
+	public function post_itemdel()
+	{
+
+	}
+
 	public function get_cart(){
 		$form = new Formly();
 		return View::make('shop.cart')
+		->with('ajaxsource',URL::to('shop/cartloader'))
+		->with('ajaxdel',URL::to('shop/itemdel'))
 		->with('form',$form);
 	}
 
+	public function post_cartloader(){
 
+		/*
+          <td class="span3 image"><img src="{{ URL::base() }}/images/pic3.jpg"></td>
+          <td class="span3">Dazel And Angle Orange Long Sleeve Shirt</td>
+          <td class="span1">XL</td>
+          <td class="span2"><select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></td>
+          <td class="span2">IDR 350,000</td>
+          <td class="span2">IDR 350,000</td>
+          <td class="span1">[x]</td>
+		*/
+
+        if(isset(Auth::shopper()->active_cart) && Auth::shopper()->active_cart != '')
+        {	
+        	$_id = new MongoId(Auth::shopper()->active_cart);
+			$carts = new Cart();
+
+			$cart = $carts->get(array('_id'=>$_id));
+        }
+
+		$counter = 1;
+		foreach ($cart['items'] as $item) {
+
+			$aadata[] = array(
+				'<img src="{{ URL::base() }}/images/pic3.jpg">',
+				'Dazel And Angle Orange Long Sleeve Shirt',
+				'XL',
+				'<select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>',
+				'IDR 350,000',
+				'IDR 350,000',
+				'<i class="foundicon-trash action del" id="'.$doc['_id'].'"></i>'
+			);
+			$counter++;
+		}
+
+		
+		$result = array(
+			'iTotalRecords'=>10,
+			'iTotalDisplayRecords'=> 10,
+			'aaData'=>$aadata
+		);
+
+		return Response::json($result);
+
+
+	}
 }
