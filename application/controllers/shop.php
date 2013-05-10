@@ -213,7 +213,6 @@ class Shop_Controller extends Base_Controller {
 			->with('new',$new)
 			->with('featured',$featured)
 			->with('mixmatch',$mixmatch);
-
 	}
 
 

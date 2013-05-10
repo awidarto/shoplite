@@ -327,3 +327,14 @@ a.continueshopping{
 	display: block;
 	float: right;
 }
+.productlist{
+	margin-bottom: 40px;
+}
+.productlist .span3 h3{
+	margin:15px 0 0 0;
+	color: #1a3059;
+	line-height: 20px;
+}
+.productlist .span3 p{
+	margin: 0;
+}
