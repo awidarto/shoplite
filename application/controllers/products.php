@@ -123,6 +123,48 @@ class Products_Controller extends Admin_Controller {
 		return parent::post_add($data);
 	}
 
+	public function post_edit($id,$data = null)
+	{
+		$this->validator = array(
+		    'name' => 'required', 
+		    'productcode' => 'required',
+		    'permalink' => 'required',
+		    'description' => 'required',
+		    'category' => 'required',
+		    'tags' => 'required',
+		    'priceCurrency' => 'required',
+		    'retailPrice' => 'required',
+		    'salePrice' => 'required',
+		    'effectiveFrom' => 'required',
+		    'effectiveUntil' => 'required'
+	    );
+
+		//transform data before actually save it
+
+		$data = Input::get();
+
+		// access posted object array
+		$files = Input::file();
+
+		$data['publishFrom'] = new MongoDate(strtotime($data['publishFrom']));
+		$data['publishUntil'] = new MongoDate(strtotime($data['publishUntil']));
+
+		$data['retailPrice'] = new MongoInt64($data['retailPrice']);
+		$data['salePrice'] = new MongoInt64($data['salePrice']);
+
+		$productpic = array();
+
+		foreach($files as $key=>$val){
+			if($val['name'] != ''){
+				$productpic[$key] = $val;
+			}				
+		}
+
+		$data['productpic'] = $productpic;
+
+		return parent::post_edit($id,$data);
+	}
+
 	public function makeActions($data){
 		$delete = '<a class="action icon-"><i>&#xe001;</i><span class="del" id="'.$data['_id'].'" >Delete</span>';
 		$edit =	'<a class="icon-"  href="'.URL::to('products/edit/'.$data['_id']).'"><i>&#xe164;</i><span>Update Product</span>';

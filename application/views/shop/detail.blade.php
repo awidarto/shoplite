@@ -15,9 +15,11 @@
       <span class="titlesection" style="text-align:center;width:100%;margin:0 auto;display:block;">ADDITIONAL IMAGES</span>
       
       <div class="addimages">
-        @foreach($product['productpic'] as $key=>$pic)
-        <a href="#"><img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_'.$key.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch"  /></a>
-        @endforeach
+        @for($i = 1;$i < 6;$i++)
+          @if(file_exists(realpath('public/storage/products/'.$product['_id']).'/sm_pic0'.$i.'.jpg'))
+              <a href="#"><img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch"  /></a>
+          @endif
+        @endfor
       </div>
     </p>
   </div>
