@@ -254,9 +254,18 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_mixmatch($category = 'all',$page = 0,$search = null)
 	{
+		$products = new Product();
+
+		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+		
 		$new = array();
 		$featured = array();
-		$mixmatch = array();
+		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
@@ -337,7 +346,9 @@ class Shop_Controller extends Base_Controller {
 
 	}
 
-	public function get_detail(){
+	public function get_detail($id){
+
+		$_id = new MongoId($id);
 		$products = new Product();
 
 		$product = $products->get(array('_id'=>$_id));

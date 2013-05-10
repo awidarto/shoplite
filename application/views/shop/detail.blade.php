@@ -4,7 +4,8 @@
 <div class="row">
   
   <div class="span4">
-    <img src="{{ URL::base() }}/images/1.jpg" alt="mm01" class="mixmatch" />
+    <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch"  />
+    
     <br/>
     <a href="#"><img src="{{ URL::base() }}/images/roll-on.png"><span class="titlesectionnormal">ROLL ON TO ZOOM IN</span></a>
     <a style="margin-left:30px;" href="#"><img src="{{ URL::base() }}/images/zoom.png"><span class="titlesectionnormal">VIEW LARGER</span></a>
@@ -14,15 +15,15 @@
       <span class="titlesection" style="text-align:center;width:100%;margin:0 auto;display:block;">ADDITIONAL IMAGES</span>
       
       <div class="addimages">
-        @foreach($product['productpic'] as $pic)
-        <a href="#"><img src="{{ URL::base() }}/images/kecil1.jpg"></a>
-        <a href="#"><img src="{{ URL::base() }}/images/kecil2.jpg"></a>
+        @foreach($product['productpic'] as $key=>$pic)
+        <a href="#"><img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_'.$key.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch"  /></a>
+        @endforeach
       </div>
     </p>
   </div>
   <div class="span8 clearfix">
     <div class="detailproduct">
-      <h2 class="product-title">Ponte Knit Shift <br/><i>by</i> Peach To Black</h2>
+      <h2 class="product-title">{{$product['name']}}</h2>
       <a href="#" class="fblike"><img src="{{ URL::base() }}/images/fblike.gif"/></a>
       <a href="#" class="loves"><img src="{{ URL::base() }}/images/loves4.gif"/><br/><span>based on 196loves</span></a>
       <div class="availablecont">
@@ -33,28 +34,7 @@
       </div>
       <p>Price: IDR 575,000</p>
       <h3>ABOUT THIS PRODUCT</h3>
-      <p class="titlesection">fabric & care</p>
-      <ul>
-        <li>89% Rayon, 9% Nylon, 2% Spandex.</li>
-        <li>Handwash</li>
-        <li>Imported</li>
-      </ul>
-      <p class="titlesection">overview</p>
-      <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-        <li>Praesent nec hendrerit odio</li>
-      </ul>
-      <p class="titlesection">fit & sizing</p>
-      <ul>
-        <li>Body length: Petite: 33 1/4", Regular: 35 1/4"</li>
-      </ul>
-
-      <p class="titlesection">shipping & returns</p>
-      <ul>
-        <li>FREE shipping on all orders over IDR 500,000</li>
-        <li>Select "FREE" option in the shopping bag</li>
-        <li>IDR 50,000 Flat rate for orders under IDR 250,000</li>
-      </ul>
+      {{$product['bodycopy']}}
     </div>
 
     <div class="optionselectproduct detailproduct clearfix">

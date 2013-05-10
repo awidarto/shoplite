@@ -3,39 +3,15 @@
 @section('content')
 
 <div class="row productlist">
-	<div class="span3">
-		<?php print_r($mixmatch);?>
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-		<h3>Title Product</h3>
-		<p>IDR 50,000</p>
-	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
 
-</div>
-
-<div class="clear"></div>
-
-<div class="row productlist">
+	@foreach($mixmatch as $m)
 	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
+		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/med_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
+		<h3>{{$m['name']}}</h3>
+		<p>{{$m['priceCurrency']}} {{$m['retailPrice']}}</p>
 	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
-	<div class="span3">
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
+	@endforeach
+	
 
 </div>
 
