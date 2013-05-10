@@ -193,9 +193,19 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_home()
 	{
+		$products = new Product();
+
+		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+
+		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+
 		$new = array();
 		$featured = array();
-		$mixmatch = array();
 
 		return View::make('shop.home')
 			->with('new',$new)
@@ -328,7 +338,12 @@ class Shop_Controller extends Base_Controller {
 	}
 
 	public function get_detail(){
-		return View::make('shop.detail');
+		$products = new Product();
+
+		$product = $products->get(array('_id'=>$_id));
+
+		return View::make('shop.detail')
+			->with('product',$product);
 	}
 
 	public function post_itemdel()

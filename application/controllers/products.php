@@ -134,7 +134,7 @@ class Products_Controller extends Admin_Controller {
 	public function namePic($data){
 		$name = HTML::link('products/view/'.$data['_id'],$data['name']);
 		$display = HTML::image(URL::base().'/storage/products/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
-		return $display.$name;
+		return $display.'<br />'.$name;
 	}
 
 	public function afterUpdate($id)

@@ -25,6 +25,22 @@ return array(
 			'otb'=> 'Out of The Box',
 			'kind'=> 'One of A Kind'
 		),
+	'categories'=>array(
+			'regular'=>'Regular',
+			'mixmatch'=>'Mix n Match',
+			'pow'=> 'Pick of The Week',
+			'otb'=> 'Out of The Box',
+			'kind'=> 'One of A Kind'
+		),
+	'search_categories'=>array(
+			''=>'All',
+			'regular'=>'Regular',
+			'mixmatch'=>'Mix n Match',
+			'pow'=> 'Pick of The Week',
+			'otb'=> 'Out of The Box',
+			'kind'=> 'One of A Kind'
+		),
+
 	'picsizes'=>array(
 		array('prefix'=>'sm_','w'=>50,'h'=>90,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'med_','w'=>333,'h'=>324,'opt'=>'fit','ext'=>'.jpg','q'=>90),

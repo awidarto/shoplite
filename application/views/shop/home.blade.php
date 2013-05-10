@@ -2,23 +2,13 @@
 
 @section('content')
 <div class="row">
+	@foreach($mixmatch as $m)
 	<div class="span4">
-		<a href="{{ URL::base() }}/shop/detail"><img src="{{ URL::base() }}/images/mm/mm01.jpg" alt="mm01" class="mixmatch"  /></a>
-		<br />
-		<img src="{{ URL::base() }}/images/pow/pow01.jpg" alt="mm01" />
+		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
 	</div>
-	<div class="span4">
-		<img src="{{ URL::base() }}/images/mm/mm02.jpg" alt="mm01" class="mixmatch"  />
-		<br />
-		<img src="{{ URL::base() }}/images/otb/otb01.jpg" alt="mm01" />
-	</div>
-	<div class="span4">
-		<img src="{{ URL::base() }}/images/mm/mm03.jpg" alt="mm01" class="mixmatch" />
-		<br />
-		<img src="{{ URL::base() }}/images/kind/kin01.jpg" alt="mm01" />
-	</div>
-
-	<div class="clear"></div>
+	@endforeach
+</div>
+<div class="row">
 	<div class="articlesetionhome">
 		<div class="span4">
 			<div class="articlehome">
