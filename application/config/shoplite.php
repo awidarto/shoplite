@@ -45,7 +45,14 @@ return array(
 		array('prefix'=>'sm_','w'=>50,'h'=>90,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'med_','w'=>333,'h'=>324,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'lar_','w'=>333,'h'=>629,'opt'=>'fit','ext'=>'.jpg','q'=>90),
+	),
+
+	'auction_run'=>array(
+		'manual'=>'Manual',
+		'auto'=>'Auto'
 	)
+
+
 
 
 );

@@ -464,7 +464,7 @@ class Admin_Controller extends Base_Controller {
 
 	    if($validation->fails()){
 
-	    	return Redirect::to($controller_name.'/edit')->with_errors($validation)->with_input(Input::all());
+	    	return Redirect::to($controller_name.'/edit/'.$id)->with_errors($validation)->with_input(Input::all());
 
 	    }else{
 
@@ -507,6 +507,11 @@ class Admin_Controller extends Base_Controller {
 		return $id;
 	}
 
+	public function beforeView($data)
+	{
+		return $data;
+	}
+
 	public function beforeUpdateForm($population)
 	{
 		if(isset($population['tags']) && is_array($population['tags']))
@@ -523,10 +528,13 @@ class Admin_Controller extends Base_Controller {
 
 		$obj = $model->get(array('_id'=>$_id));
 
+		$obj = $this->beforeView($obj);
+
 		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,'View',false);
 		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,$id,false);
 
-		return View::make(strtolower($this->controller_name).'.'.$this->view_object)
+		//return View::make(strtolower($this->controller_name).'.'.$this->view_object)
+		return View::make('view')
 			->with('crumb',$this->crumb)
 			->with('obj',$obj);
 	}

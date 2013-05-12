@@ -120,6 +120,13 @@ return array(
       'scheduled'=>'Scheduled'
     ),
 
+  'search_publishstatus'=>array(
+      ''=>'All',
+      'online'=>'Online',
+      'offline'=>'Offline',
+      'scheduled'=>'Scheduled'
+    ),
+
   'contentsection'=>array(
       'general'=>'General Information',
       'registration'=>'Registration Information',

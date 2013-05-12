@@ -16,8 +16,11 @@
                 {{ $form->text('name','Product Name.req','',array('class'=>'text span8','id'=>'name')) }}
                 
                 {{ $form->text('productcode','Product Code / SKU.req','',array('class'=>'text span8','id'=>'productcode')) }}
-                {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
                 {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
+
+                {{ Form::label('bodycopy','About Product *') }}
+                {{ View::make('partials.editortoolbar')->render() }}
+                {{ $form->textarea('bodycopy','','',array('class'=>'text span11','id'=>'bodycopy','style'=>'height:200px;')) }}
 
         </fieldset>
         <fieldset>
@@ -29,35 +32,9 @@
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
 
         </fieldset>
-        
-    </div>
-
-    <div class="span6">
 
         <fieldset>
-            <legend>Product Details</legend>
-                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('class'=>'span2','id'=>'priceCurrency'))}}<br />
-
-                {{ $form->text('category','Category.req','',array('class'=>'text span6','id'=>'category')) }}
-
-                {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
-
-
-
-                {{ Form::label('price','Default Price Set *')}}
-                <div class="row-fluid inputInline">
-                  
-                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('class'=>'areacodePhone','id'=>'priceCurrency'))}}<br />
-                    {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
-                    {{ $form->text('salePrice','','Sale Price',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}<br />
-                    {{ $form->text('effectiveFrom','From','',array('class'=>'text input-medium date','id'=>'effectiveFrom','placeholder'=>'From')) }}
-                    {{ $form->text('effectiveUntil','Until','',array('class'=>'text input-medium date','id'=>'effectiveUntil','placeholder'=>'To')) }}
-                  
-                </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Product Main Pictures</legend>
+            <legend>Product Pictures</legend>
 
               @for($i=1;$i<6;$i++)
                   <div class="row-fluid">
@@ -75,6 +52,57 @@
               @endfor
 
         </fieldset>
+        
+    </div>
+
+    <div class="span6">
+
+        <fieldset>
+            <legend>Auction Details</legend>
+                {{ $form->text('title','Auction Title.req','',array('class'=>'text span8','id'=>'title')) }}
+
+                {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
+
+                {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
+
+                {{ $form->select('category','Category.req',Config::get('shoplite.categories'),null,array('id'=>'category'))}}<br />
+
+                {{ $form->text('tags','Tags.req','',array('class'=>'text tag_keyword span6','id'=>'tags')) }}
+
+                {{ Form::label('price','Auction Price Setting *')}}
+                <div class="row-fluid inputInline">
+                  
+                    {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('id'=>'priceCurrency'))}}<br />
+                    {{ $form->text('startingPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Starting Price')) }}                  
+                    {{ $form->text('incrementalPrice','Incremental Value','',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Increment Value')) }}<br />
+                  
+                </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Auction Run Setting</legend>
+
+                {{$form->select('auctionRun','',Config::get('shoplite.auction_run'),'auto',array('id'=>'auctionRun'))}}<br />
+
+                {{ $form->text('auctionStart','From','',array('class'=>'text input-medium date','id'=>'auctionStart','placeholder'=>'From')) }}
+                {{ $form->text('auctionEnd','Until','',array('class'=>'text input-medium date','id'=>'auctionEnd','placeholder'=>'To')) }}
+
+        </fieldset>
+        <fieldset>
+            <legend>Thresholds</legend>
+
+              @for($i=1;$i<4;$i++)
+                  <div class="row-fluid">
+                    <div class="span4">
+                        {{ $form->text('bidValue_'.$i,'Bid Value '.$i,'',array('class'=>'text input-medium','id'=>'bidValue_'.$i,'placeholder'=>'Bid Value')) }}
+                    </div>
+                    <div class="span8">
+                        {{ $form->textarea('message_'.$i,'Message '.$i,'',array('class'=>'text','id'=>'message_'.$i,'style'=>'height:70px;')) }}
+                   </div>
+                  </div>
+              @endfor
+
+        </fieldset>
 
     </div>
 </div>
@@ -82,10 +110,13 @@
 <hr />
 
 <div class="row right">
-{{ Form::submit('Save',array('class'=>'button'))}}&nbsp;&nbsp;
+{{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
 {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 </div>
 {{$form->close()}}
+
+{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}   
+{{ HTML::script('js/parser_rules/advanced.js') }}   
 
 <script type="text/javascript">
 
@@ -103,143 +134,18 @@ $(document).ready(function() {
         // load default permission here
     });
 
-});
+    var editor = new wysihtml5.Editor('bodycopy', { // id of textarea element
+      toolbar:      'wysihtml5-toolbar', // id of toolbar element
+      parserRules:  wysihtml5ParserRules // defined in parser rules set 
+    });
 
-
-
-  $("#s2id_field_countryInvoice").select2("val", "ID");
-  $("#s2id_field_country").select2("val", "ID");
-
-</script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-
-  $("#s2id_field_countryInvoice").select2("val", "Indonesia");
-  $("#s2id_field_country").select2("val", "Indonesia");
-  
-  function fillsame(){
-    var companyName = $("#companyName").val();
-    var companyNPWP = $("#companyNPWP").val();
-    
-    var companyPhoneCountry = $("#companyPhoneCountry").val();
-    var companyPhoneArea = $("#companyPhoneArea").val();
-    var companyPhone = $("#companyPhone").val();
-
-
-    var companyFaxCountry = $("#companyFaxCountry").val();
-    var companyFaxArea = $("#companyFaxArea").val();
-    var companyFax = $("#companyFax").val();
-
-    var companyAddress_1 = $("#address_1").val();
-    var companyAddress_2 = $("#address_2").val();
-    
-    var companyCity = $("#city").val();
-    var companyZip = $("#zip").val();
-    var companyCountry = $("#s2id_field_country").select2("val");
-
-
-
-
-    $("#companyNameInv").val(companyName);
-    $("#companyNPWPInv").val(companyNPWP);
-    
-    $("#companyPhoneInvCountry").val(companyPhoneCountry);
-    $("#companyPhoneInvArea").val(companyPhoneArea);
-    $("#companyPhoneInv").val(companyPhone);
-
-
-    $("#companyFaxInvCountry").val(companyFaxCountry);
-    $("#companyFaxInvArea").val(companyFaxArea);
-    $("#companyFaxInv").val(companyFax);
-
-    $("#addressInv_1").val(companyAddress_1);
-    $("#addressInv_2").val(companyAddress_2);
-    
-    $("#cityInv").val(companyCity);
-    $("#zipInv").val(companyZip);
-    $("#s2id_field_countryInvoice").select2("val", companyCountry);
-  }
-
-  function resetinput(){
-    $('.invAdress')
-     .not(':button, :submit, :reset, :hidden')
-     .val('')
-     .removeAttr('checked')
-     .removeAttr('selected');
-      $("#s2id_field_countryInvoice").select2("val", "");
-  }
-
-    $("#invoiceSameCheckbox").change(function() {
-        if($(this).is(":checked")) {
-            $(this).addClass("checked");
-            fillsame();
-
-        } else {
-            $(this).removeClass("checked");
-            resetinput();
-        }
+    $('#title').keyup(function(){
+        var title = $('#title').val();
+        var slug = string_to_slug(title);
+        $('#permalink').val(slug);
     });
 
 
-  function calculatefees(){
-    var regfeeIDR = '400';
-    var regfeeUSD = '';
-    var Golffee   = '2.500.000';
-    var totalUSD   = '';
-    var totalIDR   = '';
-    if($('.regType:checked').val() == 'PO'){
-      //alert($('.field_golfType:checked').val());
-      if($('.field_golfType:checked').val() == 'No'){
-        $('#totalUSDInput').val('500');
-        $('#totalIDRInput').val('-');
-      }else{
-        //alert($('.field_golfType:checked').val());
-
-        $('#totalUSDInput').val('500');
-        $('#totalIDRInput').val('2.500.000');
-        
-      }
-    }
-
-    if($('.regType:checked').val() == 'PD'){
-      //alert($('.field_golfType:checked').val());
-      if($('.field_golfType:checked').val() == 'No'){
-        $('#totalUSDInput').val('-');
-        $('#totalIDRInput').val('4.500.000');
-
-      }else{
-        // /alert($('.field_golfType:checked').val());
-
-        $('#totalUSDInput').val('-');
-        $('#totalIDRInput').val('7.000.000');
-      }
-    }
-
-    if($('.regType:checked').val() == 'SD'){
-      $('#totalUSDInput').val('-');
-      $('#totalIDRInput').val('400.000');
-    }
-
-    if($('.regType:checked').val() == 'SO'){
-
-      $('#totalUSDInput').val('120');
-      $('#totalIDRInput').val('');
-    }
-
-  }
-  //first total
-
-  $('#totalUSDInput').val('');
-  $('#totalIDRInput').val('4.500.000');
-
-  $('.paymentSettle').change(
-      function(){
-        calculatefees();
-      }
-  );
-
-  
 });
 
 </script>

@@ -36,7 +36,18 @@
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
 
         </fieldset>
-        
+
+
+        <fieldset>
+            <legend>Affiliates</legend>
+
+                {{ $form->text('affiliateMerchant','Merchant Name','',array('class'=>'text','id'=>'affiliateMerchant','placeholder'=>'Merchant Name')) }}
+                {{ $form->text('affiliateMerchantID','Merchant ID','',array('class'=>'text','id'=>'affiliateMerchantID','placeholder'=>'Merchant ID')) }}
+                {{ $form->text('affiliateProductID','Product ID','',array('class'=>'text','id'=>'affiliateProductID','placeholder'=>'Product ID')) }}
+                {{ $form->text('affiliateURL','Merchant Landing Page','',array('class'=>'text','id'=>'affiliateURL','placeholder'=>'Merchant Landing URL')) }}
+
+        </fieldset>
+                
         <fieldset>
             <legend>Related Products / Mix n Match Items</legend>
 

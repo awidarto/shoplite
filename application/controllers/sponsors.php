@@ -108,8 +108,9 @@ class Sponsors_Controller extends Admin_Controller {
 	}
 
 	public function namePic($data){
+		$name = HTML::link('sponsors/view/'.$data['_id'],$data['title']);
 		$display = HTML::image(URL::base().'/storage/sponsors/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
-		return $display;
+		return $display.'<br />'.$name;
 	}
 
 	public function beforeUpdateForm($population){
