@@ -45,7 +45,7 @@
 
                 {{ $form->select('category','Category',Config::get('content.articles.categories'),null,array('id'=>'category','class'=>'input-medium'))}}<br />
 
-                {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
+                {{ $form->text('tags','Tags.req','',array('class'=>'text tag_keyword span6','id'=>'tags')) }}
 
         </fieldset>
 

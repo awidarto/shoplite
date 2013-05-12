@@ -424,6 +424,8 @@ class Admin_Controller extends Base_Controller {
 
 		$population = $model->get(array('_id'=>$_id));
 
+		$population = $this->beforeUpdateForm($population);
+
 		foreach ($population as $key=>$val) {
 			if($val instanceof MongoDate){
 				$population[$key] = date('d-m-Y H:i:s',$val->sec);
@@ -501,6 +503,15 @@ class Admin_Controller extends Base_Controller {
 	public function afterUpdate($id)
 	{
 		return $id;
+	}
+
+	public function beforeUpdateForm($population)
+	{
+		if(isset($population['tags']) && is_array($population['tags']))
+		{
+			$population['tags'] = implode(',', $population['tags'] );
+		}
+		return $population;
 	}
 
 	public function get_view($id){

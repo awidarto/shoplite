@@ -28,7 +28,7 @@
               <li>{{ HTML::link('otb','Out of The Box')}}</li>
               <li>{{ HTML::link('kind','One of A Kind')}}</li>
               <li>{{ HTML::link('/','Home')}}</li>
-              <li>{{ HTML::link('about','About Us')}}</li>
+              <li>{{ HTML::link('article/about','About Us')}}</li>
 
               @if(Auth::shoppercheck())
                     <li>{{ HTML::link('logout','Logout')}}</li>

@@ -27,6 +27,7 @@
     {{ HTML::style('content/css/metro-ui-light.css') }}
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/smart_wizard.css') }}
+    {{ HTML::style('css/jquery.tagsinput.css') }}
     {{ HTML::style('content/css/app.css') }}
     @if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier')
       {{ HTML::style('content/css/bootstrap-modal.css') }}

@@ -86,6 +86,16 @@ class Articles_Controller extends Admin_Controller {
 
 		$data['articlepic'] = $articlepic;
 
+		// deal with tags
+		$data['tags'] = explode(',',$data['tags']);
+
+		if(count($data['tags']) > 0){
+			$tag = new Tag();
+			foreach($data['tags'] as $t){
+				$tag->update(array('tag'=>$t),array('$inc'=>array('count'=>1)),array('upsert'=>true));
+			}
+		}
+
 
 		return parent::post_add($data);
 	}
@@ -101,6 +111,15 @@ class Articles_Controller extends Admin_Controller {
 	public function namePic($data){
 		$display = HTML::image(URL::base().'/storage/articles/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
 		return $display;
+	}
+
+	public function beforeUpdateForm($population){
+		if(isset($population['tags']) && is_array($population['tags']))
+		{
+			$population['tags'] = implode(',', $population['tags'] );
+		}
+
+		return $population;
 	}
 
 	public function afterUpdate($id)

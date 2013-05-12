@@ -37,6 +37,18 @@
 
         </fieldset>
         
+        <fieldset>
+            <legend>Related Products / Mix n Match Items</legend>
+
+              @for($i=1;$i<6;$i++)
+
+                {{ $form->hidden('relatedId_'.$i,'',array('class'=>'related','id'=>'relatedId_'.$i)) }}
+                {{ $form->text('related_'.$i,'','',array('class'=>'text autocomplete_product','id'=>'related_'.$i,'placeholder'=>'Related '.$i)) }}
+              
+              @endfor
+
+        </fieldset>
+
     </div>
 
     <div class="span6">
@@ -47,7 +59,7 @@
 
                 {{ $form->select('category','Category.req',Config::get('shoplite.categories'),null,array('id'=>'category'))}}<br />
 
-                {{ $form->text('tags','Tags.req','',array('class'=>'text span6','id'=>'tags')) }}
+                {{ $form->text('tags','Tags.req','',array('class'=>'text span6 tag_keyword','id'=>'tags')) }}
 
 
 

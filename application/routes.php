@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shoppers','shopper','merchants','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shoppers','shopper','merchants','reader','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -181,6 +181,7 @@ Route::get('paymentsubmitted',array('uses'=>'shopper@paymentsubmitted'));
 Route::get('register-success',array('uses'=>'shopper@success'));
 Route::get('register-landing',array('uses'=>'shopper@landing'));
 
+Route::get('article/(:any)',array('uses'=>'reader@article'));
 
 /*
 Route::get('/',  function(){
@@ -281,7 +282,11 @@ Route::get('pow',array('uses'=>'shop@pow'));
 Route::get('kind',array('uses'=>'shop@kind'));
 Route::get('mixmatch',array('uses'=>'shop@mixmatch'));
 
-Route::get('about',array('uses'=>'shop@about'));
+//Route::get('about',array('uses'=>'reader@article(about)'));
+
+Route::get('about',function(){
+    Redirect::to('reader/article/about');
+});
 
 Route::post('exhibitor/login', function()
 {
