@@ -437,7 +437,22 @@ Route::filter('auth', function()
 
     if (Auth::guest()){
         Session::put('redirect',URL::full());
-        return Redirect::to('signin');   
+        return Redirect::to('signin');
+    }
+    if($redirect = Session::get('redirect')){
+        Session::forget('redirect');
+        return Redirect::to($redirect);
+    }
+
+    //if (Auth::guest()) return Redirect::to('login');
+});
+
+Route::filter('adminauth', function()
+{
+
+    if (Auth::guest()){
+        Session::put('redirect',URL::full());
+        return Redirect::to('commander/login');
     }
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');
