@@ -48,6 +48,8 @@ Route::get('/',function(){
     }
 });
 
+Route::get('shop',array('uses'=>'shop@home'));
+
 Route::get('cps',function(){
     $getvar = Input::all();
     $att = new Attendee();
