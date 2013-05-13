@@ -204,6 +204,12 @@ class Shop_Controller extends Base_Controller {
 		$limit = array($pagelength, $pagestart);
 
 		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+
+		$pow = $products->find(array('section'=>'pow'),array(),array('createdDate'=>-1),$limit);
+
+		$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
+
+		$kind = $products->find(array('section'=>'kind'),array(),array('createdDate'=>-1),$limit);
 		
 		$mixmatchartikel = $articles->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
 
