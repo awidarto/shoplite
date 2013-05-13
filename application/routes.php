@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shoppers','shopper','merchants','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','shoppers','shopper','merchants','reader','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
 Route::get('/',function(){
     if(Auth::check()){
@@ -181,6 +181,7 @@ Route::get('paymentsubmitted',array('uses'=>'shopper@paymentsubmitted'));
 Route::get('register-success',array('uses'=>'shopper@success'));
 Route::get('register-landing',array('uses'=>'shopper@landing'));
 
+Route::get('article/(:any)',array('uses'=>'reader@article'));
 
 /*
 Route::get('/',  function(){
@@ -281,7 +282,11 @@ Route::get('pow',array('uses'=>'shop@pow'));
 Route::get('kind',array('uses'=>'shop@kind'));
 Route::get('mixmatch',array('uses'=>'shop@mixmatch'));
 
-Route::get('about',array('uses'=>'shop@about'));
+//Route::get('about',array('uses'=>'reader@article(about)'));
+
+Route::get('about',function(){
+    Redirect::to('reader/article/about');
+});
 
 Route::post('exhibitor/login', function()
 {
@@ -358,86 +363,4 @@ Route::post('hr',array('before'=>'auth','uses'=>'hr@users'));
 Route::get('document',array('before'=>'auth','uses'=>'document@index'));
 */
 
-/*
-|--------------------------------------------------------------------------
-| Application 404 & 500 Error Handlers
-|--------------------------------------------------------------------------
-|
-| To centralize and simplify 404 handling, Laravel uses an awesome event
-| system to retrieve the response. Feel free to modify this function to
-| your tastes and the needs of your application.
-|
-| Similarly, we use an event to handle the display of 500 level errors
-| within the application. These errors are fired when there is an
-| uncaught exception thrown in the application.
-|
-*/
 
-Event::listen('404', function()
-{
-    return Response::error('404');
-});
-
-Event::listen('500', function()
-{
-    return Response::error('500');
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Route Filters
-|--------------------------------------------------------------------------
-|
-| Filters provide a convenient method for attaching functionality to your
-| routes. The built-in before and after filters are called before and
-| after every request to your application, and you may even create
-| other filters that can be attached to individual routes.
-|
-| Let's walk through an example...
-|
-| First, define a filter:
-|
-|       Route::filter('filter', function()
-|       {
-|           return 'Filtered!';
-|       });
-|
-| Next, attach the filter to a route:
-|
-|       Router::register('GET /', array('before' => 'filter', function()
-|       {
-|           return 'Hello World!';
-|       }));
-|
-*/
-
-Route::filter('before', function()
-{
-    // Do stuff before every request to your application...
-});
-
-Route::filter('after', function($response)
-{
-    // Do stuff after every request to your application...
-});
-
-Route::filter('csrf', function()
-{
-    if (Request::forged()) return Response::error('500');
-});
-
-Route::filter('auth', function()
-{
-
-    if (Auth::guest()){
-        Session::put('redirect',URL::full());
-        return Redirect::to('signin');   
-    }
-    if($redirect = Session::get('redirect')){
-        Session::forget('redirect');
-        return Redirect::to($redirect);
-    }
-
-    //if (Auth::guest()) return Redirect::to('login');
-});

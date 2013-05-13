@@ -2,14 +2,30 @@
 return array(
 	'articles'=>array(
 			'sections'=>array(
-					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',
 					'kind'=> 'One of A Kind'
 				),
 			'categories'=>array(
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_sections'=>array(
 					''=>'All',
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_categories'=>array(
+					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',
@@ -18,14 +34,30 @@ return array(
 		),
 	'news'=>array(
 			'sections'=>array(
-					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',
 					'kind'=> 'One of A Kind'
 				),
 			'categories'=>array(
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_sections'=>array(
 					''=>'All',
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_categories'=>array(
+					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',
@@ -34,14 +66,30 @@ return array(
 		),
 	'sponsors'=>array(
 			'sections'=>array(
-					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',
 					'kind'=> 'One of A Kind'
 				),
 			'categories'=>array(
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_sections'=>array(
 					''=>'All',
+					'general'=>'General',
+					'mixmatch'=>'Mix n Match',
+					'pow'=> 'Pick of The Week',
+					'otb'=> 'Out of The Box',
+					'kind'=> 'One of A Kind'
+				),
+			'search_categories'=>array(
+					''=>'All',
+					'general'=>'General',
 					'mixmatch'=>'Mix n Match',
 					'pow'=> 'Pick of The Week',
 					'otb'=> 'Out of The Box',

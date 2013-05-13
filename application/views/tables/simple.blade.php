@@ -78,7 +78,9 @@
 			    		@if( $in[0] != 'select_all' && $in[0] != '')
 				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
 				    			@if(isset($in[1]['date']) && $in[1]['date'])
-					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'date'}}" /></td>
+					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'date datepick'}}" /></td>
+				    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
+					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'datetime'}}" /></td>
 				    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 				    				<td>
 				    					<input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
@@ -88,8 +90,14 @@
 					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" /></td>
 				    			@endif
 			    			@else
-				        		<td>&nbsp;</td>
+				    			@if(isset($in[1]['clear']) && $in[1]['clear'] == true)
+				    				<td><span id="clearsearch">Clear Search</span></td>
+				    			@else
+					        		<td>&nbsp;</td>
+				    			@endif
 			    			@endif
+				    			
+
 			    		@elseif($in[0] == 'select_all')
 		    				<td>{{ $form->checkbox('select_all','','',false,array('id'=>'select_all')) }}</td>				    		
 			    		@elseif($in[0] == '')
@@ -337,7 +345,14 @@
 			oTable.fnFilter( this.value, search_index );
 		} );
 
-		$('thead input.date').change( function () {
+		$('thead input.datepick').change( function () {
+			/* Filter on the column (the index) of this element */
+			console.log($('thead input').index(this));
+			var search_index = $('thead input').index(this);
+			oTable.fnFilter( this.value,  search_index  );
+		} );
+
+		$('thead input.datetime').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
 			var search_index = $('thead input').index(this);
@@ -352,6 +367,9 @@
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
+		$('#clearsearch').click(function(){
+			$('thead input').val('');
+		});
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in 
 		 * the footer

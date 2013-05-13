@@ -27,6 +27,7 @@
     {{ HTML::style('content/css/metro-ui-light.css') }}
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/smart_wizard.css') }}
+    {{ HTML::style('css/jquery.tagsinput.css') }}
     {{ HTML::style('content/css/app.css') }}
     @if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier')
       {{ HTML::style('content/css/bootstrap-modal.css') }}
@@ -40,6 +41,9 @@
 
     {{ HTML::style('css/select2.css') }}
     {{ HTML::style('content/css/demo.css') }}
+
+    {{ HTML::style('css/anytime.css') }}
+    {{ HTML::style('css/jquery.ui.timepicker.css') }}
 
     <link rel="stylesheet" type="text/css" href="{{URL::base()}}/scripts/google-code-prettify/prettify.css" >
 
@@ -135,6 +139,8 @@
   {{ HTML::script('scripts/google-code-prettify/prettify.js') }}
   {{ HTML::script('scripts/jquery.mousewheel.js') }}
   {{ HTML::script('scripts/jquery.scrollTo.js') }}
+  {{ HTML::script('js/jquery.ui.timepicker.js') }}
+  {{ HTML::script('js/anytime.js') }}
   {{ HTML::script('scripts/bootstrap.min.js') }}
   {{ HTML::script('scripts/bootmetro.js') }}
   {{ HTML::script('scripts/bootmetro-charms.js') }}

@@ -62,6 +62,8 @@ class Admin_Controller extends Base_Controller {
 
 	public function __construct(){
 
+		$this->filter('before','adminauth');
+
 		date_default_timezone_set('Asia/Jakarta');
 
 		$form_options = array(
@@ -95,7 +97,7 @@ class Admin_Controller extends Base_Controller {
 
 		// add action column
 		array_push($heads,
-			array('Actions',array('search'=>false,'sort'=>false))
+			array('Actions',array('search'=>false,'sort'=>false,'clear'=>true))
 		);
 
 		$disablesort = array();
@@ -204,10 +206,12 @@ class Admin_Controller extends Base_Controller {
 					}
 					$qval = array('$gte'=>$daystart,'$lte'=>$dayend);
 					//$qval = Input::get('sSearch_'.$idx);
+				}elseif($type == 'datetime'){
+					$datestring = Input::get('sSearch_'.$idx);
+					$qval = new MongoDate(strtotime($datestring));
 				}
 
 				$q[$field] = $qval;
-
 
 			}
 
@@ -274,8 +278,10 @@ class Admin_Controller extends Base_Controller {
 							$callback = $field[1]['callback'];
 							$row[] = $this->$callback($doc);
 						}else{
-							if($field[1]['kind'] == 'date'){
+							if($field[1]['kind'] == 'datetime'){
 								$rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
+							}elseif($field[1]['kind'] == 'date'){
+								$rowitem = date('d-m-Y',$doc[$field[0]]->sec);
 							}elseif($field[1]['kind'] == 'currency'){
 								$num = (double) $doc[$field[0]];
 								$rowitem = number_format($num,2,',','.');
@@ -424,6 +430,8 @@ class Admin_Controller extends Base_Controller {
 
 		$population = $model->get(array('_id'=>$_id));
 
+		$population = $this->beforeUpdateForm($population);
+
 		foreach ($population as $key=>$val) {
 			if($val instanceof MongoDate){
 				$population[$key] = date('d-m-Y H:i:s',$val->sec);
@@ -460,7 +468,7 @@ class Admin_Controller extends Base_Controller {
 
 	    if($validation->fails()){
 
-	    	return Redirect::to($controller_name.'/edit')->with_errors($validation)->with_input(Input::all());
+	    	return Redirect::to($controller_name.'/edit/'.$id)->with_errors($validation)->with_input(Input::all());
 
 	    }else{
 
@@ -503,6 +511,20 @@ class Admin_Controller extends Base_Controller {
 		return $id;
 	}
 
+	public function beforeView($data)
+	{
+		return $data;
+	}
+
+	public function beforeUpdateForm($population)
+	{
+		if(isset($population['tags']) && is_array($population['tags']))
+		{
+			$population['tags'] = implode(',', $population['tags'] );
+		}
+		return $population;
+	}
+
 	public function get_view($id){
 		$_id = new MongoId($id);
 
@@ -510,10 +532,13 @@ class Admin_Controller extends Base_Controller {
 
 		$obj = $model->get(array('_id'=>$_id));
 
+		$obj = $this->beforeView($obj);
+
 		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,'View',false);
 		$this->crumb->add(strtolower($this->controller_name).'/view/'.$id,$id,false);
 
-		return View::make(strtolower($this->controller_name).'.'.$this->view_object)
+		//return View::make(strtolower($this->controller_name).'.'.$this->view_object)
+		return View::make('view')
 			->with('crumb',$this->crumb)
 			->with('obj',$obj);
 	}

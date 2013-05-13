@@ -22,11 +22,26 @@
 
     	var sharelist = {};
 
+		$('.time').timepicker({
+		   //  hours: { starts: 1, ends: 23 },
+		   minutes: { interval: 5 },
+		   rows: 3,
+		   showPeriodLabels: false,
+		   minuteText: 'Min'
+		});
 
 
 		$('.date').datepicker({
 			dateFormat: "dd-mm-yy"
 		});
+
+		$('.datetime').AnyTime_picker(
+			{ 
+				format: "%d-%m-%Y %H:%i" 
+			}
+		);
+
+
 
 		$('.pop').click(function(){
 			var _id = $(this).attr('id');
