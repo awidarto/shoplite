@@ -194,6 +194,7 @@ class Shop_Controller extends Base_Controller {
 	public function get_home()
 	{
 		$products = new Product();
+		$articles = new Article();
 
 		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
 
@@ -203,7 +204,11 @@ class Shop_Controller extends Base_Controller {
 		$limit = array($pagelength, $pagestart);
 
 		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
-		//$mixmatchartikel = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+		
+		$mixmatchartikel = $articles->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+
+		
+
 		// /$mixandmact
 		$new = array();
 		$featured = array();
