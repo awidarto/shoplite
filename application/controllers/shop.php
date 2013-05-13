@@ -203,7 +203,8 @@ class Shop_Controller extends Base_Controller {
 		$limit = array($pagelength, $pagestart);
 
 		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
-
+		//$mixmatchartikel = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+		// /$mixandmact
 		$new = array();
 		$featured = array();
 
