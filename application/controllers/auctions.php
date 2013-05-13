@@ -30,8 +30,9 @@ class Auctions_Controller extends Admin_Controller {
 			array('Currency',array('search'=>true,'sort'=>true)),
 			array('Starting Price',array('search'=>true,'sort'=>true)),
 			array('Incremental',array('search'=>true,'sort'=>true)),
-			array('Run From',array('search'=>true,'sort'=>true)),
-			array('Run Until',array('search'=>true,'sort'=>true)),
+			array('Auction Date',array('search'=>true,'sort'=>true,'date'=>true)),
+			array('Run From',array('search'=>true,'sort'=>true,'datetime'=>true)),
+			array('Run Until',array('search'=>true,'sort'=>true,'datetime'=>true)),
 			array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
 			array('Last Update',array('search'=>true,'sort'=>true,'date'=>true))
 		);
@@ -55,8 +56,9 @@ class Auctions_Controller extends Admin_Controller {
 			array('priceCurrency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('startingPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
 			array('incrementalPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
-			array('auctionStart',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			array('auctionEnd',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('auctionDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
+			array('auctionStart',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+			array('auctionEnd',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
 			array('createdDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
 			array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
 			//array('auctionsequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true))
@@ -89,8 +91,10 @@ class Auctions_Controller extends Admin_Controller {
 		// access posted object array
 		$files = Input::file();
 
-		$data['auctionStart'] = new MongoDate(strtotime($data['auctionStart']));
-		$data['auctionEnd'] = new MongoDate(strtotime($data['auctionEnd']));
+		$data['auctionStart'] = new MongoDate(strtotime($data['auctionDate'].' '.$data['auctionStart'].':00'));
+		$data['auctionEnd'] = new MongoDate(strtotime($data['auctionDate'].' '.$data['auctionEnd'].':59'));
+
+		$data['auctionDate'] = new MongoDate(strtotime($data['auctionDate']));
 
 		$data['publishFrom'] = new MongoDate(strtotime($data['publishFrom']));
 		$data['publishUntil'] = new MongoDate(strtotime($data['publishUntil']));
@@ -161,8 +165,10 @@ class Auctions_Controller extends Admin_Controller {
 		// access posted object array
 		$files = Input::file();
 
-		$data['auctionStart'] = new MongoDate(strtotime($data['auctionStart']));
-		$data['auctionEnd'] = new MongoDate(strtotime($data['auctionEnd']));
+		$data['auctionStart'] = new MongoDate(strtotime($data['auctionDate'].' '.$data['auctionStart'].':00'));
+		$data['auctionEnd'] = new MongoDate(strtotime($data['auctionDate'].' '.$data['auctionEnd'].':59'));
+
+		$data['auctionDate'] = new MongoDate(strtotime($data['auctionDate']));
 
 		$data['publishFrom'] = new MongoDate(strtotime($data['publishFrom']));
 		$data['publishUntil'] = new MongoDate(strtotime($data['publishUntil']));
@@ -217,6 +223,11 @@ class Auctions_Controller extends Admin_Controller {
 		{
 			$population['tags'] = implode(',', $population['tags'] );
 		}
+		
+		$population['auctionDate'] = (isset($population['auctionDate']))? date('d-m-Y',$population['auctionDate']->sec):'';
+		$population['auctionStart'] = (isset($population['auctionStart']))? date('H:i',$population['auctionStart']->sec):'';
+		$population['auctionEnd'] = (isset($population['auctionEnd']))?date('H:i',$population['auctionEnd']->sec):'';
+
 
 		return $population;
 	}

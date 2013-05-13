@@ -1087,3 +1087,8 @@ select.selector{
 	margin-top: 1em;
 	width:100%;
 }
+
+#clearsearch{
+	cursor: pointer;
+	font-size: 11px;
+}

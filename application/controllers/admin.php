@@ -97,7 +97,7 @@ class Admin_Controller extends Base_Controller {
 
 		// add action column
 		array_push($heads,
-			array('Actions',array('search'=>false,'sort'=>false))
+			array('Actions',array('search'=>false,'sort'=>false,'clear'=>true))
 		);
 
 		$disablesort = array();
@@ -206,10 +206,12 @@ class Admin_Controller extends Base_Controller {
 					}
 					$qval = array('$gte'=>$daystart,'$lte'=>$dayend);
 					//$qval = Input::get('sSearch_'.$idx);
+				}elseif($type == 'datetime'){
+					$datestring = Input::get('sSearch_'.$idx);
+					$qval = new MongoDate(strtotime($datestring));
 				}
 
 				$q[$field] = $qval;
-
 
 			}
 
@@ -276,8 +278,10 @@ class Admin_Controller extends Base_Controller {
 							$callback = $field[1]['callback'];
 							$row[] = $this->$callback($doc);
 						}else{
-							if($field[1]['kind'] == 'date'){
+							if($field[1]['kind'] == 'datetime'){
 								$rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
+							}elseif($field[1]['kind'] == 'date'){
+								$rowitem = date('d-m-Y',$doc[$field[0]]->sec);
 							}elseif($field[1]['kind'] == 'currency'){
 								$num = (double) $doc[$field[0]];
 								$rowitem = number_format($num,2,',','.');
