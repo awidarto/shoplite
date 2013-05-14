@@ -377,6 +377,54 @@
 			}
 		});
 
+		$('.autocomplete_product').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+					url: base + 'ajax/product',
+                    data: { q: request.term, maxResults: 10 },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.label,
+                                avatar: item.pic,
+                                title: item.label,
+                                description: item.description,
+                                id: item.id
+                            };
+                        }))
+                    }
+                })
+            },
+            select: function (event, ui) {
+            	var id = this.id;
+
+            	console.log(ui);
+            	
+            	$('#' + id + '_id').val(ui.item.id);
+
+                return false;
+            }
+        });
+
+		$('.autocomplete_product').each(function() {
+			$(this).data('uiAutocomplete')._renderItem = function (ul, item) {
+		        var inner_html = '<a><div class="list_item_container">'
+		        + '<div class="image">' + item.avatar + '</div>'
+		        + '<div class="description span4">'
+		        + '<div class="label"><h5>' + item.title + '</h5></div>'
+		        + '<p>' + item.description + '</p></div></div></a>';
+	            return $('<li></li>')
+	                    .data("item.autocomplete", item)
+	                    .append(inner_html)
+	                    .appendTo(ul);
+	        };
+		});
+        
+
+        
+
 		
 
 

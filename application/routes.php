@@ -41,10 +41,10 @@ Route::get('/',function(){
         }else if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier'){
            return Redirect::to('onsite');
         }else{
-            return Redirect::to('shop/home');
+            return Redirect::to('shop');
         }
     }else{
-       return Redirect::to('shop/home');
+       return Redirect::to('shop');
     }
 });
 

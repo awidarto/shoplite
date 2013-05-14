@@ -47,12 +47,23 @@
         <fieldset>
             <legend>Related Products / Mix n Match Items</legend>
 
-              @for($i=1;$i<6;$i++)
-
-                {{ $form->hidden('relatedId_'.$i,'',array('class'=>'related','id'=>'relatedId_'.$i)) }}
-                {{ $form->text('related_'.$i,'','',array('class'=>'text autocomplete_product','id'=>'related_'.$i,'placeholder'=>'Related '.$i)) }}
-              
-              @endfor
+            <table id="relatedTable">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ $form->text('related','Product Name','',array('class'=>'text autocomplete_product', 'id'=>'related','placeholder'=>'Product Name')) }}
+                        </th>
+                        <th>
+                            {{ $form->text('relatedId','Product ID','',array('class'=>'text','id'=>'related_id','placeholder'=>'Related ID')) }}
+                        </th>
+                        <th>
+                            <span class="btn" id="related_add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
 
         </fieldset>
         
@@ -102,6 +113,71 @@
 
         </fieldset>
 
+        <fieldset>
+            <legend>Product Variants</legend>
+
+            <datalist id="sizeOptions">
+              <option value="All Size"></option>
+              <option value="XS"></option>
+              <option value="S"></option>
+              <option value="M"></option>
+              <option value="L"></option>
+              <option value="XL"></option>
+              <option value="XXL"></option>
+              <option value="XXXL"></option>
+            </datalist>
+
+            <table id="variantTable">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ $form->text('size','Size','',array('id'=>'size_input','class'=>'input-small','list'=>'sizeOptions'))}}
+                        </th>
+                        <th>
+                            {{ $form->text('color','Color','',array('id'=>'color_input','class'=>'input-small'))}}
+                        </th>
+                        <th>
+                            {{ $form->text('qty','Qty','',array('id'=>'qty_input','class'=>'input-small'))}}
+                        </th>
+                        <th>
+                            {{ $form->text('link','Link to Other Product','',array('id'=>'link_input','class'=>'input-large autocomplete_product'))}}
+                        </th>
+                        <th>
+                            <span class="btn" id="add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Custom Fields</legend>
+
+            <table id="customTable">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ $form->text('cfield','Field Name','',array('id'=>'cfield_input','class'=>'input-large')) }}
+                        </th>
+                        <th>
+                            {{ $form->text('cvalue','Field Value','',array('id'=>'cvalue_input','class'=>'input-small'))}}
+                        </th>
+                        <th>
+                            {{ $form->text('cunit','Field Unit','',array('id'=>'cunit_input','class'=>'input-small','list'=>'unitOptions'))}}
+                        </th>
+                        <th>
+                            <span class="btn" id="custom_add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </fieldset>
     </div>
 </div>
 
@@ -141,6 +217,58 @@ $(document).ready(function() {
         var title = $('#name').val();
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
+    });
+
+    $('#color_input').colorPicker();
+    
+    // dynamic tables
+    $('#add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#variantTable'));
+        return false;
+    });
+
+    // custom field table
+    $('#custom_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#customTable'));
+        return false;
+    });
+
+    $('#related_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#relatedTable'));
+        return false;
+    });
+
+    // shared functions for dynamic table
+    function addTableRow(table)
+    {
+        // clone the last row in the table
+        var $tr = $(table).find('thead tr').clone();
+
+        var trow = $('<tr></tr>');
+
+        $tr.find('input').each(function(){
+            console.log(this);
+            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class'));
+            trow.append($('<td></td>').append(dt));
+        })
+
+        var act = $('<td><span class="btn del" style="cursor:pointer" ><b class="icon-minus-alt"></b></span></td>');
+        
+        trow.append(act);
+
+        // append the new row to the table
+        $(table).find('tbody').append(trow);
+
+        $(table).find('thead input').val('');
+
+    };    
+
+    $('table').on('click','.del',function(){
+        console.log($(this).closest('tr').html());
+        $(this).closest('tr').remove();
     });
 
 

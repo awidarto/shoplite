@@ -44,6 +44,43 @@ class Ajax_Controller extends Base_Controller {
 	{
 	}
 
+	public function get_product()
+	{
+		$q = Input::get('term');
+
+		$user = new Product();
+		$qemail = new MongoRegex('/'.$q.'/i');
+
+		$res = $user->find(array('$or'=>array(array('name'=>$qemail),array('description'=>$qemail)) ));
+
+		$result = array();
+
+		foreach($res as $r){
+			$display = HTML::image(URL::base().'/storage/products/'.$r['_id'].'/sm_pic0'.$r['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $r['_id']));
+			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name'],'pic'=>$display,'description'=>$r['description'],'label'=>$r['name']);
+		}
+
+		return Response::json($result);		
+	}
+
+	public function get_productplain()
+	{
+		$q = Input::get('term');
+
+		$user = new Product();
+		$qemail = new MongoRegex('/'.$q.'/i');
+
+		$res = $user->find(array('$or'=>array(array('name'=>$qemail),array('description'=>$qemail)) ));
+
+		$result = array();
+
+		foreach($res as $r){
+			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['permalink'],'description'=>$r['description'],'label'=>$r['name']);
+		}
+
+		return Response::json($result);		
+	}
+
 	public function get_email()
 	{
 		$q = Input::get('term');

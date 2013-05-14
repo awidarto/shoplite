@@ -16,7 +16,8 @@
 
 
     <!-- remove or comment this line if you want to use the local fonts -->
-
+    {{ HTML::style('css/spectrum.css') }}
+    {{ HTML::style('css/colorPicker.css') }}
 
     {{ HTML::style('content/css/opensans.css') }}
     {{ HTML::style('content/css/bootstrap.css') }}
@@ -36,14 +37,16 @@
 
     {{ HTML::style('css/jquery-datatables/TableTools.css')}}
 
-    {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
     <!--  these two css are to use only for documentation -->
+    {{ HTML::style('css/jquery.appendGrid-1.1.0.css') }}
 
     {{ HTML::style('css/select2.css') }}
     {{ HTML::style('content/css/demo.css') }}
 
     {{ HTML::style('css/anytime.css') }}
-    {{ HTML::style('css/jquery.ui.timepicker.css') }}
+
+    {{ HTML::style('css/jquery-ui-1.10.3.custom.css') }}
+
 
     <link rel="stylesheet" type="text/css" href="{{URL::base()}}/scripts/google-code-prettify/prettify.css" >
 
@@ -58,6 +61,8 @@
     {{ HTML::script('js/jquery-1.8.3.min.js') }}
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js') }}
     {{ HTML::script('js/jquery.jeditable.mini.js') }}
+
+    {{ HTML::script('js/jquery.appendGrid-1.1.0.js') }}
 
     {{ HTML::script('js/select2.min.js') }}   
     {{ HTML::script('js/bootstrap-filestyle.min.js') }}   
@@ -140,7 +145,9 @@
   {{ HTML::script('scripts/jquery.mousewheel.js') }}
   {{ HTML::script('scripts/jquery.scrollTo.js') }}
   {{ HTML::script('js/jquery.ui.timepicker.js') }}
+  {{ HTML::script('js/jquery.colorpicker.js') }}
   {{ HTML::script('js/anytime.js') }}
+  {{ HTML::script('js/spectrum.js') }}
   {{ HTML::script('scripts/bootstrap.min.js') }}
   {{ HTML::script('scripts/bootmetro.js') }}
   {{ HTML::script('scripts/bootmetro-charms.js') }}

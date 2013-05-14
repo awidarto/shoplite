@@ -103,6 +103,8 @@ class Products_Controller extends Admin_Controller {
 
 		$data['productsequence'] = $regsequence;
 
+		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
+
 		//normalize
 		$data['cache_id'] = '';
 		$data['cache_obj'] = '';
@@ -134,6 +136,8 @@ class Products_Controller extends Admin_Controller {
 
 	public function post_edit($id,$data = null)
 	{
+		//print_r(Input::get());
+
 		$this->validator = array(
 		    'name' => 'required', 
 		    'productcode' => 'required',
@@ -168,6 +172,8 @@ class Products_Controller extends Admin_Controller {
 				$productpic[$key] = $val;
 			}				
 		}
+
+		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
 
 		$data['productpic'] = $productpic;
 
