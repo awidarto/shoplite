@@ -221,6 +221,9 @@ class Shop_Controller extends Base_Controller {
 
 		return View::make('shop.home')
 			->with('new',$new)
+			->with('pow',$pow)
+			->with('otb',$otb)
+			->with('kind',$kind)
 			->with('featured',$featured)
 			->with('mixmatch',$mixmatch);
 	}
