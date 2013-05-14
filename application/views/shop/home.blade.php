@@ -6,8 +6,34 @@
 	<div class="span4">
 		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
 	</div>
+
 	@endforeach
 </div>
+
+<div class="row">
+	@foreach($pow as $m)
+	<div class="span4">
+		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
+	</div>
+	
+	@endforeach
+
+	@foreach($otb as $m)
+	<div class="span4">
+		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
+	</div>
+	
+	@endforeach
+
+	@foreach($kind as $m)
+	<div class="span4">
+		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
+	</div>
+	
+	@endforeach
+
+</div>
+
 <div class="row">
 	<div class="articlesetionhome">
 		<div class="span4">
