@@ -207,7 +207,7 @@ class Shop_Controller extends Base_Controller {
 
 		$pow = $products->find(array('section'=>'pow'),array(),array('createdDate'=>-1),$limit);
 
-		$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
+		//$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
 
 		$kind = $products->find(array('section'=>'kind'),array(),array('createdDate'=>-1),$limit);
 		
@@ -222,6 +222,8 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.home')
 			->with('new',$new)
 			->with('featured',$featured)
+			->with('pow',$pow)
+			// /->with('otb',$otb)
 			->with('mixmatch',$mixmatch);
 	}
 
