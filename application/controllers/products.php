@@ -84,6 +84,22 @@ class Products_Controller extends Admin_Controller {
 
 		$data = Input::get();
 
+		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
+		$keys = array('size','color','qty','link');
+		$data['variants'] = combiner($in,$keys);
+
+		$in = array($data['related'],$data['relatedId']);
+		$keys = array('related','relatedId');
+		$data['relatedProducts'] = combiner($in,$keys);
+
+		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
+		$keys = array('field','val','unit');
+		$data['customFields'] = combiner($in,$keys);
+
+		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
+
+		$data = array_merge($data,$customs);
+
 		// access posted object array
 		$files = Input::file();
 
@@ -138,6 +154,7 @@ class Products_Controller extends Admin_Controller {
 	{
 		//print_r(Input::get());
 
+
 		$this->validator = array(
 		    'name' => 'required', 
 		    'productcode' => 'required',
@@ -155,6 +172,24 @@ class Products_Controller extends Admin_Controller {
 		//transform data before actually save it
 
 		$data = Input::get();
+
+		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
+		$keys = array('size','color','qty','link');
+		$data['variants'] = combiner($in,$keys);
+
+
+		$in = array($data['related'],$data['relatedId']);
+		$keys = array('related','relatedId');
+		$data['relatedProducts'] = combiner($in,$keys);
+
+		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
+		$keys = array('field','val','unit');
+		$data['customFields'] = combiner($in,$keys);
+		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
+
+		$data = array_merge($data,$customs);
+
+		//print_r($customs);
 
 		// access posted object array
 		$files = Input::file();
@@ -187,6 +222,8 @@ class Products_Controller extends Admin_Controller {
 			}
 		}
 
+		//print_r($data);
+
 		return parent::post_edit($id,$data);
 	}
 
@@ -209,6 +246,17 @@ class Products_Controller extends Admin_Controller {
 		{
 			$population['tags'] = implode(',', $population['tags'] );
 		}
+
+		$population['size'] = '';
+		$population['color'] = '';
+		$population['qty'] = '';
+		$population['link'] = '';
+		$population['related'] = '';
+		$population['relatedId'] = '';
+		$population['cfield'] = '';
+		$population['cvalue'] = '';
+		$population['cunit'] = '';
+
 
 		return $population;
 	}

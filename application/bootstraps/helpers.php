@@ -1,5 +1,66 @@
 <?php
 
+function makerows($in,$class = array()){
+	$rows = array();
+
+	$rowtemplate = '<td><input type="text" name="%s[]" value="%s" class="text %s" readonly="readonly"></td>';
+
+	foreach($in as $val){
+		$row = '';
+		$row = '<tr>';
+		$cnt = 0;
+		foreach($val as $k=>$v){
+			$cls = ( count($class) > 0 && isset($class[$cnt]))?$class[$cnt]:'input-small';
+			$row .= sprintf($rowtemplate,$k,$v,$cls);
+			$cnt++;
+		}
+		$row .= '<td><span class="btn del" style="cursor:pointer"><b class="icon-minus-alt"></b></span></td>';
+		$row .= '</tr>';
+
+		$rows[] = $row;
+	}
+
+	$rows = implode('',$rows);
+
+	return $rows;
+}
+
+function customcombiner($keys,$val,$unit){
+	$out = array();
+
+	if(is_array($keys)){
+		$counter = 0;
+		foreach ($keys as $key) {
+			$out[$key] = array('val'=>$val[$counter],'unit'=>$unit[$counter]);
+		}
+	}
+
+	return $out;
+}
+
+function combiner($in,$keys){
+
+	$out = array();
+
+	if(is_array($in[0])){
+		$count = count($in[0]);
+		$keycount = count($keys);
+
+		if($count > 0){
+			for($i = 0; $i < $count; $i++){
+				$item = array();
+				$kc = 0;
+				foreach($keys as $k){
+					$item[$k] = $in[$kc][$i];
+					$kc++;
+				}
+				$out[] = $item;
+			}			
+		}			
+	}
+
+	return $out;
+}
 
 
 function rand_string( $length ) {

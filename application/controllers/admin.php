@@ -222,7 +222,9 @@ class Admin_Controller extends Base_Controller {
 		$model = $this->model;
 
 		/* first column is always sequence number, so must be omitted */
-		$fidx = Input::get('iSortCol_0');
+		$fidx = Input::get('iSortCol_0') - 1;
+
+		$fidx = ($fidx == -1 )?0:$fidx;
 
 		$sort_col = $fields[$fidx][0];
 		$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;

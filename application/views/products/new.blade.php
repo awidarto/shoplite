@@ -251,7 +251,7 @@ $(document).ready(function() {
 
         $tr.find('input').each(function(){
             console.log(this);
-            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class'));
+            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
             trow.append($('<td></td>').append(dt));
         })
 

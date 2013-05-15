@@ -153,6 +153,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(isset($formdata['variants']))
+                        <?php $classes = array('input-small','input-small','input-small','input-large'); ?>
+                        {{ makerows($formdata['variants'],$classes) }}
+                    @endif
                 </tbody>
             </table>
 
@@ -241,31 +245,6 @@ $(document).ready(function() {
         addTableRow($('#relatedTable'));
         return false;
     });
-
-    // shared functions for dynamic table
-    function addTableRow(table)
-    {
-        // clone the last row in the table
-        var $tr = $(table).find('thead tr').clone();
-
-        var trow = $('<tr></tr>');
-
-        $tr.find('input').each(function(){
-            console.log(this);
-            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class'));
-            trow.append($('<td></td>').append(dt));
-        })
-
-        var act = $('<td><span class="btn del" style="cursor:pointer" ><b class="icon-minus-alt"></b></span></td>');
-        
-        trow.append(act);
-
-        // append the new row to the table
-        $(table).find('tbody').append(trow);
-
-        $(table).find('thead input').val('');
-
-    };    
 
     $('table').on('click','.del',function(){
         console.log($(this).closest('tr').html());
