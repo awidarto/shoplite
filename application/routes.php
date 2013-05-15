@@ -184,6 +184,8 @@ Route::get('register-success',array('uses'=>'shopper@success'));
 Route::get('register-landing',array('uses'=>'shopper@landing'));
 
 Route::get('article/(:any)',array('uses'=>'reader@article'));
+Route::get('news/(:any)',array('uses'=>'reader@news'));
+Route::get('sponsor/(:any)',array('uses'=>'reader@sponsor'));
 
 /*
 Route::get('/',  function(){
