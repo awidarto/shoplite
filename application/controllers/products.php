@@ -84,6 +84,22 @@ class Products_Controller extends Admin_Controller {
 
 		$data = Input::get();
 
+		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
+		$keys = array('size','color','qty','link');
+		$data['variants'] = combiner($in,$keys);
+
+		$in = array($data['related'],$data['relatedId']);
+		$keys = array('related','relatedId');
+		$data['relatedProducts'] = combiner($in,$keys);
+
+		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
+		$keys = array('field','val','unit');
+		$data['customFields'] = combiner($in,$keys);
+
+		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
+
+		$data = array_merge($data,$customs);
+
 		// access posted object array
 		$files = Input::file();
 
@@ -102,6 +118,8 @@ class Products_Controller extends Admin_Controller {
 		//$reg_number[] = $regsequence;
 
 		$data['productsequence'] = $regsequence;
+
+		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
 
 		//normalize
 		$data['cache_id'] = '';
@@ -134,6 +152,9 @@ class Products_Controller extends Admin_Controller {
 
 	public function post_edit($id,$data = null)
 	{
+		//print_r(Input::get());
+
+
 		$this->validator = array(
 		    'name' => 'required', 
 		    'productcode' => 'required',
@@ -152,6 +173,24 @@ class Products_Controller extends Admin_Controller {
 
 		$data = Input::get();
 
+		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
+		$keys = array('size','color','qty','link');
+		$data['variants'] = combiner($in,$keys);
+
+
+		$in = array($data['related'],$data['relatedId']);
+		$keys = array('related','relatedId');
+		$data['relatedProducts'] = combiner($in,$keys);
+
+		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
+		$keys = array('field','val','unit');
+		$data['customFields'] = combiner($in,$keys);
+		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
+
+		$data = array_merge($data,$customs);
+
+		//print_r($customs);
+
 		// access posted object array
 		$files = Input::file();
 
@@ -169,6 +208,8 @@ class Products_Controller extends Admin_Controller {
 			}				
 		}
 
+		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
+
 		$data['productpic'] = $productpic;
 
 		// deal with tags
@@ -180,6 +221,8 @@ class Products_Controller extends Admin_Controller {
 				$tag->update(array('tag'=>$t),array('$inc'=>array('count'=>1)),array('upsert'=>true));
 			}
 		}
+
+		//print_r($data);
 
 		return parent::post_edit($id,$data);
 	}
@@ -203,6 +246,17 @@ class Products_Controller extends Admin_Controller {
 		{
 			$population['tags'] = implode(',', $population['tags'] );
 		}
+
+		$population['size'] = '';
+		$population['color'] = '';
+		$population['qty'] = '';
+		$population['link'] = '';
+		$population['related'] = '';
+		$population['relatedId'] = '';
+		$population['cfield'] = '';
+		$population['cvalue'] = '';
+		$population['cunit'] = '';
+
 
 		return $population;
 	}

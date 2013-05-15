@@ -1092,3 +1092,86 @@ select.selector{
 	cursor: pointer;
 	font-size: 11px;
 }
+
+.appendGrid tfoot button, .appendGrid tbody td.last button {
+	width: 60px;
+	height: 60px;
+	margin: 0px;
+	min-width: 0px;
+	padding:0px;
+	border:none;
+	background: transparent;
+	font-size: 14px;
+}
+
+.appendGrid tbody input[type=text] {
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin: 0px;
+}
+
+.appendGrid tbody input[type=color] {
+	width: 100%;
+	height:100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin: 0px;
+}
+
+.appendGrid thead td {
+	text-align: center;
+	padding: 3px;
+	font-weight: normal;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.list_item_container {
+	padding: 8px;
+	border-bottom: thin solid gray;
+	display: inline-block;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.image {
+	width:90px;
+	float: left;
+}
+
+.description {
+	font-size: 0.95em;
+	color: gray;
+	padding: 5px;
+	margin: 5px;
+}
+
+div.colorPicker-picker{
+	width:80px;
+	height:26px;
+	margin-bottom: 10px;
+	background-position: bottom right;
+}
+
+a.win-command, button, input[type=button], input[type=reset], input[type=submit]{
+	margin-top: 9px;
+}
+
+input[type="submit"].btn {
+	height: 32px;
+	margin-bottom: 8px;
+}
+
+.del{
+	color: red;
+}
+
+span.btn{
+	margin-top:8px;
+}
+
+span.btn.del{
+	margin-top:0px;
+	margin-bottom: 8px;
+}

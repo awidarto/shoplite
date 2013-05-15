@@ -1,3 +1,28 @@
+    // shared functions for dynamic table
+    function addTableRow(table)
+    {
+        // clone the last row in the table
+        var $tr = $(table).find('thead tr').clone();
+
+        var trow = $('<tr></tr>');
+
+        $tr.find('input').each(function(){
+            console.log(this);
+            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
+            trow.append($('<td></td>').append(dt));
+        })
+
+        var act = $('<td><span class="btn del" style="cursor:pointer" ><b class="icon-minus-alt"></b></span></td>');
+        
+        trow.append(act);
+
+        // append the new row to the table
+        $(table).find('tbody').append(trow);
+
+        $(table).find('thead input').val('');
+
+    }   	
+
 	function string_to_slug(str) {
 		str = str.replace(/^\s+|\s+$/g, ''); // trim
 		str = str.toLowerCase();
@@ -376,6 +401,54 @@
 				hallId = $('#exhibitorid').val();
 			}
 		});
+
+		$('.autocomplete_product').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+					url: base + 'ajax/product',
+                    data: { q: request.term, maxResults: 10 },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.label,
+                                avatar: item.pic,
+                                title: item.label,
+                                description: item.description,
+                                id: item.id
+                            };
+                        }))
+                    }
+                })
+            },
+            select: function (event, ui) {
+            	var id = this.id;
+
+            	console.log(ui);
+            	
+            	$('#' + id + '_id').val(ui.item.id);
+
+                return false;
+            }
+        });
+
+		$('.autocomplete_product').each(function() {
+			$(this).data('uiAutocomplete')._renderItem = function (ul, item) {
+		        var inner_html = '<a><div class="list_item_container">'
+		        + '<div class="image">' + item.avatar + '</div>'
+		        + '<div class="description span4">'
+		        + '<div class="label"><h5>' + item.title + '</h5></div>'
+		        + '<p>' + item.description + '</p></div></div></a>';
+	            return $('<li></li>')
+	                    .data("item.autocomplete", item)
+	                    .append(inner_html)
+	                    .appendTo(ul);
+	        };
+		});
+        
+
+        
 
 		
 
