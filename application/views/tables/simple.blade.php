@@ -78,13 +78,31 @@
 			    		@if( $in[0] != 'select_all' && $in[0] != '')
 				    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
 				    			@if(isset($in[1]['date']) && $in[1]['date'])
-					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'date datepick'}}" /></td>
+					        		<td>
+										<div id="search_{{$in[0]}}" class="input-append datepickersearch">
+										    <input name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+										    <span class="add-on">
+												<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+												</i>
+										    </span>
+										</div>
+					        		</td>
 				    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
-					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'datetime'}}" /></td>
+					        		<td>
+										<div id="search_{{$in[0]}}" class="input-append datetimepickersearch">
+										    <input name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+										    <span class="add-on">
+												<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+												</i>
+										    </span>
+										</div>
+					        		</td>
 				    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 				    				<td>
 				    					<input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
-				    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector'))}}
+				    					<div class="styled-select">
+					    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small'))}}
+				    					</div>
 				    				</td>
 				    			@else
 					        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" /></td>
@@ -345,19 +363,47 @@
 			oTable.fnFilter( this.value, search_index );
 		} );
 
-		$('thead input.datepick').change( function () {
+		$('thead input.dateinput').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
 			var search_index = $('thead input').index(this);
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
-		$('thead input.datetime').change( function () {
+		$('thead input.datetimeinput').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
 			var search_index = $('thead input').index(this);
 			oTable.fnFilter( this.value,  search_index  );
 		} );
+
+		eldatetime = $('.datetimepickersearch').datetimepicker({
+			maskInput: false, 
+		});
+
+		eldate = $('.datepickersearch').datetimepicker({
+			maskInput: false, 
+			pickTime: false
+		});
+
+
+		eldate.on('changeDate', function(e) {
+			console.log(this);
+			var ins = $(this).find('input');
+			console.log(ins);
+			console.log($('thead input').index(ins));
+			var search_index = $('thead input').index(ins);
+			oTable.fnFilter( $(ins).val(),  search_index  );
+		});
+
+		eldatetime.on('changeDate', function(e) {
+			console.log(this);
+			var ins = $(this).find('input');
+			console.log(ins);
+			console.log($('thead input').index(ins));
+			var search_index = $('thead input').index(ins);
+			oTable.fnFilter( $(ins).val(),  search_index  );
+		});
 
 		$('thead select.selector').change( function () {
 			/* Filter on the column (the index) of this element */

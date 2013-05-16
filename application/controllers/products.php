@@ -86,15 +86,23 @@ class Products_Controller extends Admin_Controller {
 
 		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
 		$keys = array('size','color','qty','link');
-		$data['variants'] = combiner($in,$keys);
+		$types = array('text','text','text','text');
+		$data['variants'] = combiner($in,$keys,$types);
 
 		$in = array($data['related'],$data['relatedId']);
 		$keys = array('related','relatedId');
-		$data['relatedProducts'] = combiner($in,$keys);
+		$types = array('text','text');
+		$data['relatedProducts'] = combiner($in,$keys,$types);
+
+		$in = array($data['component'],$data['componentId']);
+		$keys = array('component','componentId');
+		$types = array('text','text');
+		$data['componentProducts'] = combiner($in,$keys,$types);
 
 		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
 		$keys = array('field','val','unit');
-		$data['customFields'] = combiner($in,$keys);
+		$types = array('text','text','text');
+		$data['customFields'] = combiner($in,$keys,$types);
 
 		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
 
@@ -120,6 +128,7 @@ class Products_Controller extends Admin_Controller {
 		$data['productsequence'] = $regsequence;
 
 		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
+		$data['groupParent'] = (isset($data['groupParent']) && $data['groupParent'] == 'Yes')?true:false;
 
 		//normalize
 		$data['cache_id'] = '';
@@ -175,16 +184,24 @@ class Products_Controller extends Admin_Controller {
 
 		$in = array($data['size'],$data['color'],$data['qty'],$data['link']);
 		$keys = array('size','color','qty','link');
-		$data['variants'] = combiner($in,$keys);
-
+		$types = array('text','text','text','text');
+		$data['variants'] = combiner($in,$keys,$types);
 
 		$in = array($data['related'],$data['relatedId']);
 		$keys = array('related','relatedId');
-		$data['relatedProducts'] = combiner($in,$keys);
+		$types = array('text','text');
+		$data['relatedProducts'] = combiner($in,$keys,$types);
+
+		$in = array($data['component'],$data['componentId']);
+		$keys = array('component','componentId');
+		$types = array('text','text');
+		$data['componentProducts'] = combiner($in,$keys,$types);
 
 		$in = array($data['cfield'],$data['cvalue'],$data['cunit']);
 		$keys = array('field','val','unit');
-		$data['customFields'] = combiner($in,$keys);
+		$types = array('text','text','text');
+		$data['customFields'] = combiner($in,$keys,$types);
+
 		$customs = customcombiner($data['cfield'],$data['cvalue'],$data['cunit']);
 
 		$data = array_merge($data,$customs);
@@ -209,6 +226,7 @@ class Products_Controller extends Admin_Controller {
 		}
 
 		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
+		$data['groupParent'] = (isset($data['groupParent']) && $data['groupParent'] == 'Yes')?true:false;
 
 		$data['productpic'] = $productpic;
 
@@ -239,6 +257,21 @@ class Products_Controller extends Admin_Controller {
 		$name = HTML::link('products/view/'.$data['_id'],$data['name']);
 		$display = HTML::image(URL::base().'/storage/products/'.$data['_id'].'/sm_pic0'.$data['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $data['_id']));
 		return $display.'<br />'.$name;
+	}
+
+	public function beforeValidateAdd($data)
+	{
+		$data['size'] = '';
+		$data['color'] = '';
+		$data['qty'] = '';
+		$data['link'] = '';
+		$data['related'] = '';
+		$data['relatedId'] = '';
+		$data['cfield'] = '';
+		$data['cvalue'] = '';
+		$data['cunit'] = '';
+
+		return $data;
 	}
 
 	public function beforeUpdateForm($population){

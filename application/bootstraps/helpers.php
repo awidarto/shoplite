@@ -1,9 +1,9 @@
 <?php
 
-function makerows($in,$class = array()){
+function makerows($in,$class = array(),$ro = array()){
 	$rows = array();
 
-	$rowtemplate = '<td><input type="text" name="%s[]" value="%s" class="text %s" readonly="readonly"></td>';
+	$rowtemplate = '<td><input type="text" name="%s[]" value="%s" class="text %s" %s ></td>';
 
 	foreach($in as $val){
 		$row = '';
@@ -11,7 +11,8 @@ function makerows($in,$class = array()){
 		$cnt = 0;
 		foreach($val as $k=>$v){
 			$cls = ( count($class) > 0 && isset($class[$cnt]))?$class[$cnt]:'input-small';
-			$row .= sprintf($rowtemplate,$k,$v,$cls);
+			$read = ( count($ro) > 0 && isset($ro[$cnt]))?$ro[$cnt]:'readonly="readonly"';
+			$row .= sprintf($rowtemplate,$k,$v,$cls,$read);
 			$cnt++;
 		}
 		$row .= '<td><span class="btn del" style="cursor:pointer"><b class="icon-minus-alt"></b></span></td>';
@@ -38,7 +39,7 @@ function customcombiner($keys,$val,$unit){
 	return $out;
 }
 
-function combiner($in,$keys){
+function combiner($in,$keys,$types){
 
 	$out = array();
 
@@ -51,7 +52,11 @@ function combiner($in,$keys){
 				$item = array();
 				$kc = 0;
 				foreach($keys as $k){
-					$item[$k] = $in[$kc][$i];
+					if($types[$kc] == 'text'){
+						$item[$k] = $in[$kc][$i];
+					}else if($types[$kc] == 'checkbox'){
+						$item[$k] = isset($in[$kc][$i])?$in[$kc][$i]:false;
+					}
 					$kc++;
 				}
 				$out[] = $item;

@@ -387,9 +387,11 @@ class Admin_Controller extends Base_Controller {
 			$data = Input::get();
 		}
 
+		$data = $this->beforeValidateAdd($data);
+
 		$controller_name = strtolower($this->controller_name);
 
-	    $validation = Validator::make($input = Input::all(), $this->validator);
+	    $validation = Validator::make($input = $data, $this->validator);
 
 	    if($validation->fails()){
 
@@ -514,6 +516,11 @@ class Admin_Controller extends Base_Controller {
 	}
 
 	public function beforeView($data)
+	{
+		return $data;
+	}
+
+	public function beforeValidateAdd($data)
 	{
 		return $data;
 	}

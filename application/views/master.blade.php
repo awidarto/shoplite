@@ -43,9 +43,11 @@
     {{ HTML::style('css/select2.css') }}
     {{ HTML::style('content/css/demo.css') }}
 
-    {{ HTML::style('css/anytime.css') }}
-
     {{ HTML::style('css/jquery-ui-1.10.3.custom.css') }}
+
+    {{ HTML::style('css/bootstrap-timepicker.css') }}
+
+    {{ HTML::style('css/bootstrap-datetimepicker.min.css') }}
 
 
     <link rel="stylesheet" type="text/css" href="{{URL::base()}}/scripts/google-code-prettify/prettify.css" >
@@ -66,6 +68,8 @@
 
     {{ HTML::script('js/select2.min.js') }}   
     {{ HTML::script('js/bootstrap-filestyle.min.js') }}   
+
+    
 </head>
 
 <body>
@@ -144,9 +148,11 @@
   {{ HTML::script('scripts/google-code-prettify/prettify.js') }}
   {{ HTML::script('scripts/jquery.mousewheel.js') }}
   {{ HTML::script('scripts/jquery.scrollTo.js') }}
-  {{ HTML::script('js/jquery.ui.timepicker.js') }}
   {{ HTML::script('js/jquery.colorpicker.js') }}
-  {{ HTML::script('js/anytime.js') }}
+
+  {{ HTML::script('js/bootstrap-timepicker.js') }}   
+  {{ HTML::script('js/bootstrap-datetimepicker.min.js') }}   
+
   {{ HTML::script('js/spectrum.js') }}
   {{ HTML::script('scripts/bootstrap.min.js') }}
   {{ HTML::script('scripts/bootmetro.js') }}
