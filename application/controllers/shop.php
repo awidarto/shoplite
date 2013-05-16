@@ -225,6 +225,8 @@ class Shop_Controller extends Base_Controller {
 			->with('otb',$otb)
 			->with('kind',$kind)
 			->with('featured',$featured)
+			->with('pow',$pow)
+			// /->with('otb',$otb)
 			->with('mixmatch',$mixmatch);
 	}
 
