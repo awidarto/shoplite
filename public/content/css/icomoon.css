@@ -2052,3 +2052,16 @@
 .icon-sunrise:before {
 	content: "\e244";
 }
+.icon-chevron-up:before {
+	content: "\e042";
+}
+.icon-chevron-right:before {
+	content: "\e043";
+}
+.icon-chevron-down:before {
+	content: "\e044";
+}
+.icon-chevron-left:before {
+	content: "\e045";
+}
+

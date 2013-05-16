@@ -57,7 +57,7 @@ class Ajax_Controller extends Base_Controller {
 
 		foreach($res as $r){
 			$display = HTML::image(URL::base().'/storage/products/'.$r['_id'].'/sm_pic0'.$r['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $r['_id']));
-			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name'],'pic'=>$display,'description'=>$r['description'],'label'=>$r['name']);
+			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name'],'link'=>$r['permalink'],'pic'=>$display,'description'=>$r['description'],'label'=>$r['name']);
 		}
 
 		return Response::json($result);		

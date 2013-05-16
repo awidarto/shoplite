@@ -8,7 +8,12 @@
 
         $tr.find('input').each(function(){
             console.log(this);
-            var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
+            var dt;
+            if($(this).attr('type') == 'text'){
+	            dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
+            }else if($(this).attr('type') == 'checkbox'){
+	            dt = $('<input type="checkbox">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly').attr('checked',$(this).attr('checked'));
+            }
             trow.append($('<td></td>').append(dt));
         })
 
@@ -22,6 +27,11 @@
         $(table).find('thead input').val('');
 
     }   	
+
+    $('table').on('click','.del',function(){
+        console.log($(this).closest('tr').html());
+        $(this).closest('tr').remove();
+    });
 
 	function string_to_slug(str) {
 		str = str.replace(/^\s+|\s+$/g, ''); // trim
@@ -47,26 +57,25 @@
 
     	var sharelist = {};
 
-		$('.time').timepicker({
-		   //  hours: { starts: 1, ends: 23 },
-		   minutes: { interval: 5 },
-		   rows: 3,
-		   showPeriodLabels: false,
-		   minuteText: 'Min'
-		});
+	    $('.timepicker').timepicker({
+	        minuteStep: 10,
+	        showSeconds: false,
+	        showMeridian: false
+	    });
 
 
 		$('.date').datepicker({
 			dateFormat: "dd-mm-yy"
 		});
 
-		$('.datetime').AnyTime_picker(
-			{ 
-				format: "%d-%m-%Y %H:%i" 
-			}
-		);
+		$('.datetimepicker').datetimepicker({
+			maskInput: false, 
+		});
 
-
+		$('.datepicker').datetimepicker({
+			maskInput: false, 
+			pickTime: false
+		});
 
 		$('.pop').click(function(){
 			var _id = $(this).attr('id');
@@ -447,6 +456,45 @@
 	        };
 		});
         
+		$('.autocomplete_product_link').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+					url: base + 'ajax/product',
+                    data: { q: request.term, maxResults: 10 },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        response($.map(data, function (item) {
+                            return {
+                                value: item.link,
+                                avatar: item.pic,
+                                title: item.label,
+                                description: item.description,
+                                id: item.id
+                            };
+                        }))
+                    }
+                })
+            },
+            select: function (event, ui) {
+
+                return false;
+            }
+        });
+
+		$('.autocomplete_product_link').each(function() {
+			$(this).data('uiAutocomplete')._renderItem = function (ul, item) {
+		        var inner_html = '<a><div class="list_item_container">'
+		        + '<div class="image">' + item.avatar + '</div>'
+		        + '<div class="description span4">'
+		        + '<div class="label"><h5>' + item.title + '</h5></div>'
+		        + '<p>' + item.description + '</p></div></div></a>';
+	            return $('<li></li>')
+	                    .data("item.autocomplete", item)
+	                    .append(inner_html)
+	                    .appendTo(ul);
+	        };
+		});
 
         
 

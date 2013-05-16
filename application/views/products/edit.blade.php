@@ -37,19 +37,26 @@
 
         </fieldset>
 
+        <fieldset>
+            <legend>Ownership</legend>
+                <div class="annotation">Leave blank for single merchant shop</div>
+                {{ $form->text('ownerMerchant','Merchant Name','',array('class'=>'text input-xlarge','id'=>'ownerMerchant','placeholder'=>'Merchant Name')) }}
+                {{ $form->text('ownerMerchantID','Merchant ID','',array('class'=>'text input-xlarge','id'=>'ownerMerchantID','placeholder'=>'Merchant ID')) }}
+                {{ Form::label('ownerMerchantLabel','Leave blank for single merchant shop')}}
+        </fieldset>
 
         <fieldset>
             <legend>Affiliates</legend>
 
-                {{ $form->text('affiliateMerchant','Merchant Name','',array('class'=>'text','id'=>'affiliateMerchant','placeholder'=>'Merchant Name')) }}
-                {{ $form->text('affiliateMerchantID','Merchant ID','',array('class'=>'text','id'=>'affiliateMerchantID','placeholder'=>'Merchant ID')) }}
-                {{ $form->text('affiliateProductID','Product ID','',array('class'=>'text','id'=>'affiliateProductID','placeholder'=>'Product ID')) }}
-                {{ $form->text('affiliateURL','Merchant Landing Page','',array('class'=>'text','id'=>'affiliateURL','placeholder'=>'Merchant Landing URL')) }}
+                {{ $form->text('affiliateMerchant','Merchant Name','',array('class'=>'text input-xlarge','id'=>'affiliateMerchant','placeholder'=>'Merchant Name')) }}
+                {{ $form->text('affiliateMerchantID','Merchant ID','',array('class'=>'text input-xlarge','id'=>'affiliateMerchantID','placeholder'=>'Merchant ID')) }}
+                {{ $form->text('affiliateProductID','Product ID','',array('class'=>'text input-xlarge','id'=>'affiliateProductID','placeholder'=>'Product ID')) }}
+                {{ $form->text('affiliateURL','Merchant Landing Page','',array('class'=>'text input-xxlarge','id'=>'affiliateURL','placeholder'=>'Merchant Landing URL')) }}
 
         </fieldset>
-                
+
         <fieldset>
-            <legend>Related Products / Mix n Match Items</legend>
+            <legend>Related Products</legend>
 
             <table id="relatedTable">
                 <thead>
@@ -66,6 +73,44 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(isset($formdata['relatedProducts']))
+                        <?php $classes = array('input-large','input-large'); ?>
+                        {{ makerows($formdata['relatedProducts'],$classes) }}
+                    @endif
+                </tbody>
+            </table>
+
+        </fieldset>
+
+                
+        <fieldset>
+            <legend>Compound Product</legend>
+
+            {{ $form->checkbox('groupParent','This Product is a Compound Product','Yes',null)}}
+        </fieldset>
+
+        <fieldset>
+            <legend>Compound Product Component</legend>
+
+            <table id="componentTable">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ $form->text('component','Product Name','',array('class'=>'text autocomplete_product', 'id'=>'component','placeholder'=>'Product Name')) }}
+                        </th>
+                        <th>
+                            {{ $form->text('componentId','Product ID','',array('class'=>'text','id'=>'component_id','placeholder'=>'Related ID')) }}
+                        </th>
+                        <th>
+                            <span class="btn" id="component_add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(isset($formdata['componentProducts']))
+                        <?php $classes = array('input-large','input-large'); ?>
+                        {{ makerows($formdata['componentProducts'],$classes) }}
+                    @endif
                 </tbody>
             </table>
 
@@ -77,6 +122,7 @@
 
         <fieldset>
             <legend>Product Details</legend>
+
                 {{ $form->select('section','Default Section',Config::get('shoplite.sections'),null,array('id'=>'section'))}}<br />
 
                 {{ $form->select('category','Category.req',Config::get('shoplite.categories'),null,array('id'=>'category'))}}<br />
@@ -104,7 +150,9 @@
                   <div class="row-fluid">
 
                     <div  class="span2">
-                      {{ HTML::image(URL::base().'/storage/products/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
+                        @if(file_exists(realpath('public/storage/products/'.$formdata['_id']).'/sm_pic0'.$i.'.jpg'))
+                            {{ HTML::image(URL::base().'/storage/products/'.$formdata['_id'].'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $formdata['_id'])) }}
+                        @endif
                     </div>
 
                     <div class="span7">
@@ -145,7 +193,7 @@
                             {{ $form->text('qty','Qty','',array('id'=>'qty_input','class'=>'input-small'))}}
                         </th>
                         <th>
-                            {{ $form->text('link','Link to Other Product','',array('id'=>'link_input','class'=>'input-large autocomplete_product'))}}
+                            {{ $form->text('link','Link to Other Product','',array('id'=>'link_input','class'=>'input-large autocomplete_product_link'))}}
                         </th>
                         <th>
                             <span class="btn" id="add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
@@ -246,11 +294,11 @@ $(document).ready(function() {
         return false;
     });
 
-    $('table').on('click','.del',function(){
-        console.log($(this).closest('tr').html());
-        $(this).closest('tr').remove();
+    $('#component_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#componentTable'));
+        return false;
     });
-
 
 });
 

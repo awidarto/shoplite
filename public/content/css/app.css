@@ -1079,14 +1079,6 @@ form h4{
 	margin-bottom: 8px;	
 }
 
-select.selector{
-	font-size: 11px;
-	border: thin solid #ddd;
-	border-radius: 0px;
-	height:2em;
-	margin-top: 1em;
-	width:100%;
-}
 
 #clearsearch{
 	cursor: pointer;
@@ -1174,4 +1166,63 @@ span.btn{
 span.btn.del{
 	margin-top:0px;
 	margin-bottom: 8px;
+}
+
+.annotation{
+	text-align: right;
+	font-size: 11px;
+	color: maroon;
+	margin: 0px;
+	padding: 0 2;
+}
+
+.datetimepickersearch .add-on, .datepickersearch .add-on{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.timepicker-picker a.btn{
+	background-color:transparent;
+	border:none;
+}
+
+.styled-select{
+	display: block;
+	border: 2px solid #cccccc;
+	padding: 0px;
+	height:24px;
+	margin-top: 10px;
+	background: url(dk_arrows.png) no-repeat 95% 50% #fff;
+}
+
+.styled-select select{
+	margin:0px;
+	margin-left: 2px;
+	background: transparent;
+	font-size: 11px;
+	line-height: 1em;
+	height: 24px;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+}
+
+.styled-menu-select{
+	display: block;
+	border: 2px solid #cccccc;
+	padding: 0px;
+	height:24px;
+	background: url(dk_arrows.png) no-repeat 95% 50% #fff;
+}
+
+.styled-menu-select select{
+	margin:0px;
+	margin-left: 2px;
+	background: transparent;
+	font-size: 11px;
+	line-height: 1em;
+	height: 24px;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
 }

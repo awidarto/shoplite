@@ -573,7 +573,12 @@ class Formly
 			$result = $this->defaults->$name;
 		}
 
+		if(is_array($result)){
+	        $result = '';
+		}
+
         return $result;
+
 	}
 
 	/**
