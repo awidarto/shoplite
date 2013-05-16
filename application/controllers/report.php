@@ -96,6 +96,58 @@ class Report_Controller extends Base_Controller {
 			->with('crumb',$this->crumb);
 	}
 
+	public function get_onsite(){
+
+		$attendee = new Attendee();
+
+	    $companies = $attendee->distinct('company');
+
+
+		$stat['PO'] = $attendee->count(array('regtype'=>'PO'));
+
+		$stat['PD'] = $attendee->count(array('regtype'=>'PD'));
+
+		$stat['SO'] = $attendee->count(array('regtype'=>'SO'));
+
+		$stat['SD'] = $attendee->count(array('regtype'=>'SD'));
+
+		$stat['Attendee'] = $attendee->count();
+
+
+		$stat['paidAttendee'] = $attendee->count(array('conventionPaymentStatus'=>'paid'));
+
+		$stat['unpaidAttendee'] = $attendee->count(array('conventionPaymentStatus'=>'unpaid'));
+
+		$stat['Golf'] = $attendee->count(array('golf'=>'Yes'));
+		$stat['Dinner'] = $attendee->count(array('attenddinner'=>'Yes'));
+		$country = Config::get('country.countries');
+		$today = date('Y-m-d');
+		$getdate = $this->makeDateRange('2013-02-11', $today);
+		$getCount = $this->getCountAttendee('2013-02-11', $today);
+		
+		foreach($companies as $key => $value){
+			$companyValue[$value] = $attendee->count(array('company'=>$value));
+		}
+
+		foreach ($country as $key => $value) {
+			$coutryValue[$value] = $attendee->count(array('country'=>$value));
+		}
+
+		return View::make('report.onsite')
+			->with('title','Report')
+			->with('stat',$stat)
+			->with('companies',$companies)
+			->with('coutryValue',$coutryValue)
+			->with('companyValue',$companyValue)
+			->with('country',$country)
+			->with('getdate',$getdate)
+			->with('getCount',$getCount)
+			
+			->with('crumb',$this->crumb);
+
+
+	}
+
 	private function makeDateRange($strDateFrom,$strDateTo){
 
 	  $aryRange=array();

@@ -94,6 +94,7 @@
  {{ HTML::script('scripts/bootmetro-charms.js') }}
  {{ HTML::script('scripts/demo.js') }}
  {{ HTML::script('scripts/holder.js') }}
+ {{ HTML::script('scripts/jquery.appendGrid-1.1.0.js') }}
  
 
  <script type="text/javascript">
