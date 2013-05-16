@@ -175,11 +175,13 @@
 		   				Use selection for:
 		   			</div>
 		   			<div class="span5">
-		   				@if(isset($ajaxexhibitorsendmail))
-				   			{{ $form->select('action','',Config::get('kickstart.actionselectionexhibitor'))}}
-				   		@else
-				   			{{ $form->select('action','',Config::get('kickstart.actionselection'))}}
-				   		@endif
+		   				<div class="styled-menu-select">
+			   				@if(isset($ajaxexhibitorsendmail))
+					   			{{ $form->select('action','',Config::get('kickstart.actionselectionexhibitor'))}}
+					   		@else
+					   			{{ $form->select('action','',Config::get('kickstart.actionselection'))}}
+					   		@endif
+		   				</div>
 		   			</div>
 						<a class="win-command" id="do_action">
 							<span class="win-commandimage win-commandring">&#xe132;</span>
