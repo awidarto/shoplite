@@ -240,7 +240,21 @@ class Products_Controller extends Admin_Controller {
 			}
 		}
 
-		//print_r($data);
+		$inventory = new Inventory();
+
+		if(isset($obj['variants']) && count($obj['variants']) > 0){
+			foreach($obj['variants'] as $v){
+				$qty = $v['qty'];
+				$v['productId'] = $obj['_id']->__toString();
+				$v['createdDate'] = new MongoDate();			
+				$v['status'] = 'available';	
+				for($i = 0; $i < $qty;$i++)
+				{	
+					$inventory->insert($v);
+				}
+			}
+		}
+
 
 		return parent::post_edit($id,$data);
 	}
@@ -360,6 +374,22 @@ class Products_Controller extends Admin_Controller {
 				}
 
 			}				
+		}
+
+		$inventory = new Inventory();
+
+		if(isset($obj['variants']) && count($obj['variants']) > 0){
+			foreach($obj['variants'] as $v){
+				$qty = (int) $v['qty'];
+				print $qty;
+				$v['productId'] = $obj['_id']->__toString();
+				$v['createdDate'] = new MongoDate();				
+				for($i = 0; $i < $qty;$i++)
+				{	
+					print_r($v);
+					$inventory->insert($v,array('upsert'=>-1));
+				}
+			}
 		}
 
 		return $obj;

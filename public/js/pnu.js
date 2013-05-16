@@ -8,12 +8,7 @@
 
         $tr.find('input').each(function(){
             console.log(this);
-            var dt;
-            if($(this).attr('type') == 'text'){
-	            dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
-            }else if($(this).attr('type') == 'checkbox'){
-	            dt = $('<input type="checkbox">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly').attr('checked',$(this).attr('checked'));
-            }
+	        var dt = $('<input type="text">').attr('name',$(this).attr('name')+'[]').attr('value',$(this).val()).attr('class',$(this).attr('class')).attr('readonly','readonly');
             trow.append($('<td></td>').append(dt));
         })
 
