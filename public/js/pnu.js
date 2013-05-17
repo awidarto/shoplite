@@ -59,8 +59,10 @@
 	    });
 
 
+		//$('.date').datetimepicker({
 		$('.date').datepicker({
 			dateFormat: "dd-mm-yy"
+			//pickTime: false
 		});
 
 		$('.datetimepicker').datetimepicker({

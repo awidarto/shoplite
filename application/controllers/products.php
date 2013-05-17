@@ -170,7 +170,7 @@ class Products_Controller extends Admin_Controller {
 		    'permalink' => 'required',
 		    'description' => 'required',
 		    'category' => 'required',
-		    'tags' => 'required',
+		    //'tags' => 'required',
 		    'priceCurrency' => 'required',
 		    'retailPrice' => 'required',
 		    'salePrice' => 'required',
@@ -240,22 +240,6 @@ class Products_Controller extends Admin_Controller {
 			}
 		}
 
-		$inventory = new Inventory();
-
-		if(isset($obj['variants']) && count($obj['variants']) > 0){
-			foreach($obj['variants'] as $v){
-				$qty = $v['qty'];
-				$v['productId'] = $obj['_id']->__toString();
-				$v['createdDate'] = new MongoDate();			
-				$v['status'] = 'available';	
-				for($i = 0; $i < $qty;$i++)
-				{	
-					$inventory->insert($v);
-				}
-			}
-		}
-
-
 		return parent::post_edit($id,$data);
 	}
 
@@ -308,7 +292,7 @@ class Products_Controller extends Admin_Controller {
 		return $population;
 	}
 
-	public function afterUpdate($id)
+	public function afterUpdate($id,$data = null)
 	{
 
 		$files = Input::file();
@@ -339,6 +323,37 @@ class Products_Controller extends Admin_Controller {
 
 			}				
 		}
+
+		$inventory = new Inventory();
+
+		if(isset($data['variants']) && count($data['variants']) > 0){
+			
+			$o = array();
+
+			foreach($data['variants'] as $v){
+
+				$v['productId'] = $id;
+
+				$avail = $inventory->count($v);
+
+				$qty = (int) $v['qty'];
+
+				$qty = $qty - $avail;
+
+				$v['status'] = 'available';
+				$v['createdDate'] = new MongoDate();				
+				$v['cartId'] = '';
+
+				for($i = 0; $i < $qty;$i++)
+				{	
+					$v['_id'] = new MongoId(Str::random(24));
+					$inventory->insert($v,array('upsert'=>false));
+				}
+
+			}
+
+		}
+
 
 		return $id;
 
@@ -379,17 +394,26 @@ class Products_Controller extends Admin_Controller {
 		$inventory = new Inventory();
 
 		if(isset($obj['variants']) && count($obj['variants']) > 0){
+			
+			$o = array();
+
 			foreach($obj['variants'] as $v){
+
 				$qty = (int) $v['qty'];
-				print $qty;
+
 				$v['productId'] = $obj['_id']->__toString();
 				$v['createdDate'] = new MongoDate();				
+				$v['status'] = 'available';
+				$v['cartId'] = '';
+
 				for($i = 0; $i < $qty;$i++)
 				{	
-					print_r($v);
-					$inventory->insert($v,array('upsert'=>-1));
+					$v['_id'] = new MongoId(Str::random(24));
+					$inventory->insert($v,array('upsert'=>false));
 				}
+
 			}
+
 		}
 
 		return $obj;

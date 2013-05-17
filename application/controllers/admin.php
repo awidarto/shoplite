@@ -490,7 +490,7 @@ class Admin_Controller extends Base_Controller {
 
 			if($obj = $model->update(array('_id'=>$id),array('$set'=>$data))){
 
-				$obj = $this->afterUpdate($id);
+				$obj = $this->afterUpdate($id,$data);
 
 		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
 			}else{
@@ -510,7 +510,7 @@ class Admin_Controller extends Base_Controller {
 		return '';
 	}
 
-	public function afterUpdate($id)
+	public function afterUpdate($id,$data = null)
 	{
 		return $id;
 	}
