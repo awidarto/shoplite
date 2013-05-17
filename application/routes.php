@@ -281,10 +281,10 @@ Route::post('signin', function()
 
 });
 
-Route::get('otb',array('uses'=>'shop@otb'));
-Route::get('pow',array('uses'=>'shop@pow'));
-Route::get('kind',array('uses'=>'shop@kind'));
-Route::get('mixmatch',array('uses'=>'shop@mixmatch'));
+Route::get('outofthebox',array('uses'=>'shop@otb'));
+Route::get('pickoftheweek',array('uses'=>'shop@pow'));
+Route::get('oneofakind',array('uses'=>'shop@kind'));
+Route::get('mixandmatch',array('uses'=>'shop@mixmatch'));
 
 //Route::get('about',array('uses'=>'reader@article(about)'));
 

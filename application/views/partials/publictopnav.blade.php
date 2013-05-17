@@ -23,10 +23,10 @@
 
           <div class="nav-collapse collapse navmainp2b">
             <ul class="nav">
-    		      <li>{{ HTML::link('mixmatch','Mix & Match')}}</li>
-              <li>{{ HTML::link('pow','Pick of The Week')}}</li>
-              <li>{{ HTML::link('otb','Out of The Box')}}</li>
-              <li>{{ HTML::link('kind','One of A Kind')}}</li>
+    		      <li>{{ HTML::link('mixandmatch','Mix & Match')}}</li>
+              <li>{{ HTML::link('pickoftheweek','Pick of The Week')}}</li>
+              <li>{{ HTML::link('outofthebox','Out of The Box')}}</li>
+              <li>{{ HTML::link('oneofakind','One of A Kind')}}</li>
               <li>{{ HTML::link('/','Home')}}</li>
               <li>{{ HTML::link('article/about','About Us')}}</li>
 
