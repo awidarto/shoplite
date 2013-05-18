@@ -45,11 +45,12 @@
 <script type="text/javascript">
   $( document ).ready(function() {
 
-
+    /*
     $('select').select2({
         width : 'resolve'
       });
-
+    */
+    
     $('#createcart').click(function(){
           $.post('{{ URL::to("shopper/newcart") }}',{}, function(data) {
             if(data.result == 'OK'){

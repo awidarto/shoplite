@@ -47,12 +47,42 @@
     <div class="optionselectproduct detailproduct clearfix">
       <div class="selectsize">
         <span class="titleselectbox">SELECT SIZE</span><br/>        
-        <select class="span2" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="-" selected="selected">-</option><option value="s">S</option><option value="m">M</option><option value="l">L</option></select>
+        <select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0">
+          <option value="-" selected="selected">-</option>
+          @foreach($sizes as $size)
+            <option value="{{$size}}">{{$size}}</option>
+          @endforeach
+        </select>
       </div>
+
+
+      <style type="text/css">
+        .coloroption{
+          display:block;
+          height:28px;
+          width:40px;
+        }
+      </style>
+
+      <div class="selectsize">
+        <span class="titleselectbox">SELECT COLOR</span><br/>        
+        <select size="1" name="color" >
+          <option value="-" selected="selected">-</option>
+          @foreach($colors as $color)
+            <option value="{{$color}}">{{$color}}</option>
+          @endforeach
+        </select>
+      </div>
+
+      <script type="text/javascript">
+      $(document).ready(function(){
+        $('select[name="color"]').simplecolorpicker();
+      });
+      </script>
 
       <div class="selectsize">
         <span class="titleselectbox">SELECT QUANTITY</span><br/>        
-        <select class="span2" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option></select>
+        <select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option></select>
       </div>
       <div class="selectsize">
         <span class="titleselectbox">ADD TO CART</span><br/>        

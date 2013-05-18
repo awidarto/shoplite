@@ -393,7 +393,24 @@ class Shop_Controller extends Base_Controller {
 
 		$product = $products->get(array('_id'=>$_id));
 
+		$inventory = new Inventory();
+
+		$variants = $inventory->find(array('productId'=>$_id),array('size'=>true,'color'=>true,'_id'=>false));
+
+		$ca = array();
+		$sa = array();
+
+		foreach($variants as $v){
+			$ca[] = $v['color'];
+			$sa[] = $v['size'];
+		}
+
+		$sizes = array_unique($sa);
+		$colors = array_unique($ca);
+
 		return View::make('shop.detail')
+			->with('sizes',$sizes)
+			->with('colors',$colors)
 			->with('product',$product);
 	}
 
