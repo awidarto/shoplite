@@ -477,7 +477,10 @@ class Front_Controller extends Base_Controller {
 
 			if($obj = $model->update(array('_id'=>$id),array('$set'=>$data))){
 
-				$obj = $this->afterUpdate($id);
+				$obj = $this->	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+afterUpdate($id,$data = null);
 
 		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
 			}else{
@@ -497,7 +500,10 @@ class Front_Controller extends Base_Controller {
 		return '';
 	}
 
-	public function afterUpdate($id)
+	public function 	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+afterUpdate($id,$data = null)
 	{
 		return $id;
 	}

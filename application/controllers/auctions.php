@@ -232,7 +232,10 @@ class Auctions_Controller extends Admin_Controller {
 		return $population;
 	}
 
-	public function afterUpdate($id)
+	public function 	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+	public function afterUpdate($id,$data = null)
+afterUpdate($id,$data = null)
 	{
 
 		$files = Input::file();
