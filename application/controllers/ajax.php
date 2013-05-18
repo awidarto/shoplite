@@ -42,6 +42,7 @@ class Ajax_Controller extends Base_Controller {
 
 	public function post_index()
 	{
+	
 	}
 
 	public function get_product()

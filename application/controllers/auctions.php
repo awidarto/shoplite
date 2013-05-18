@@ -208,7 +208,7 @@ class Auctions_Controller extends Admin_Controller {
 	}
 
 	public function nameTitle($data){
-		$title = HTML::link('auctions/view/'.$data['_id'],$data['title']);
+		$title = HTML::link('auctions/panel/'.$data['_id'],$data['title']);
 		return $title;
 	}
 
@@ -301,6 +301,17 @@ class Auctions_Controller extends Admin_Controller {
 		}
 
 		return $obj;
+	}
+
+	public function get_panel($id){
+		$auctions = new Auction();
+
+		$_id = new MongoId($id);
+		$auction = $auctions->get(array('_id'=>$_id));
+
+		return View::make('auctions.panel')
+			->with('auction',$auction);
+
 	}
 
 }

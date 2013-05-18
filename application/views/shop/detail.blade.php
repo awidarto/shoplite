@@ -44,10 +44,11 @@
       {{$product['bodycopy']}}
     </div>
 
-    <div class="optionselectproduct detailproduct clearfix">
-      <div class="selectsize">
+    <div class="optionselectproduct detailproduct clearfix row-fluid">
+
+      <div class="span2">
         <span class="titleselectbox">SELECT SIZE</span><br/>        
-        <select class="span1" size="1" name="size" >
+        <select name="size" class="span12" >
           <option value="-" selected="selected">-</option>
           @foreach($sizes as $size)
             <option value="{{$size}}">{{$size}}</option>
@@ -55,31 +56,95 @@
         </select>
       </div>
 
-      <div class="selectsize">
+      <div class="span5">
         <span class="titleselectbox">SELECT COLOR</span><br/>        
-        <select size="1" name="color" >
-          <option value="-" selected="selected">-</option>
-          @foreach($colors as $color)
-            <option value="{{$color}}">{{$color}}</option>
-          @endforeach
+        <select name="color" disable="disable" >
         </select>
       </div>
 
+      {{ Form::hidden('pid',$product['_id'],array('id'=>'product_id'))}} 
       <script type="text/javascript">
       $(document).ready(function(){
-        $('select[name="color"]').simplecolorpicker({
-          
+
+        var cart_id = '{{ (Auth::guest())?'': Auth::shopper()->activeCart }}';
+
+        var product_id = '{{ $product['_id']}}';
+
+        $('select[name="size"]').on('change',function(){
+          $.post('{{ URL::to('shop/color')}}',{ size: this.value, _id:product_id },function(data){
+              $('select[name="color"]').html(data.html)
+                .simplecolorpicker('destroy')
+                .simplecolorpicker();
+          },'json');
         });
+
+        $('select[name="color"]').simplecolorpicker().on('change',function(){  
+            $.post('{{ URL::to('shop/qty')}}',{ color: $(this).val(), size: $('select[name="size"]').val(), _id:product_id },function(data){
+                $('select[name="qty"]').html(data.html);
+            },'json');
+        });
+
+
+      @if(Auth::shoppercheck() == false)
+
+        $('#addtocart').click(function(){
+          $('#signInModal').modal();
+        })
+
+        $('#signInNow').on('click',function(){
+            var color = $('select[name="color"]').val();
+            var size = $('select[name="size"]').val();
+            var qty = $('select[name="qty"]').val();
+            var username = $('#signInUsername').val();
+            var password = $('#signInPassword').val();
+
+            $.post('{{ URL::to('shop/signin')}}',{ username: username, password: password, color: color, size: size, qty: qty, _id:product_id, cart_id: '' },
+              function(data){
+                console.log(data);
+                if(data.result == 'NOTSIGNEDIN'){
+                  alert(data.message);
+                }
+
+            },'json');          
+
+        });
+
+      @else
+
+        $('#addtocart').click(function(){
+            var color = $('select[name="color"]').val();
+            var size = $('select[name="size"]').val();
+            var qty = $('select[name="qty"]').val();
+
+            $.post('{{ URL::to('shop/addtocart')}}',{ color: color, size: size, qty: qty, _id:product_id, cart_id: cart_id },function(data){
+                console.log(data);
+                if(data.result == 'NOTSIGNEDIN'){
+                  alert(data.message);
+                }
+
+            },'json');          
+        })
+
+      @endif
+
       });
       </script>
 
-      <div class="selectsize">
+      <div class="span3">
         <span class="titleselectbox">SELECT QUANTITY</span><br/>        
-        <select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option></select>
+        <select class="span12" name="qty">
+          <option value="1" selected="selected">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
       </div>
-      <div class="selectsize">
+
+      <div class="span2">
         <span class="titleselectbox">ADD TO CART</span><br/>        
-        <a href="#"><img src="{{ URL::base() }}/images/trolly.png"/></a>
+        
+        <!-- Button to trigger modal -->
+        <img src="{{ URL::base() }}/images/trolly.png" id="addtocart" />
+
       </div>
   </div>
   <div class="clear"></div>
@@ -181,5 +246,25 @@
     }
   });
 </script>
+
+<div id="signInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="signInLabel">Sign In</h3>
+  </div>
+  <div class="modal-body">
+    <p>Please sign in before making order, thank you.</p>
+    <p>{{ Form::label('username', 'Email') }}</p>
+    <p>{{ Form::text('username','',array('id'=>'signInUsername')) }}</p>
+    <!-- password field -->
+    <p>{{ Form::label('password', 'Password') }}</p>
+    <p>{{ Form::password('password',array('id'=>'signInPassword')) }}</p>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">No Thanks !</button>
+    <button class="btn btn-primary" id="signInNow">Sign In Now !</button>
+  </div>
+</div>
 
 @endsection

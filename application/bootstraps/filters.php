@@ -49,6 +49,7 @@ Route::filter('auth', function()
         Session::put('redirect',URL::full());
         return Redirect::to('signin');
     }
+    
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');
         return Redirect::to($redirect);
@@ -64,6 +65,7 @@ Route::filter('adminauth', function()
         Session::put('redirect',URL::full());
         return Redirect::to('commander/login');
     }
+
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');
         return Redirect::to($redirect);

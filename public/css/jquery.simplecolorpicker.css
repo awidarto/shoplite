@@ -73,8 +73,8 @@
 
   .simplecolorpicker.inline {
     display: inline-block;
-    height: 18px;
-    padding: 4px 0;
+    height: 28px;
+    padding: 0;
   }
 
   .simplecolorpicker.icon,
@@ -89,6 +89,8 @@
     border: 1px solid transparent;
   }
   .simplecolorpicker div {
+    width:28px;
+    height:28px;
     margin: 0 4px 4px 0;
     border: 1px solid #ccc;
   }
