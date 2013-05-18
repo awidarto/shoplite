@@ -29,7 +29,6 @@
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/smart_wizard.css') }}
     {{ HTML::style('css/jquery.tagsinput.css') }}
-    {{ HTML::style('content/css/app.css') }}
     @if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier')
       {{ HTML::style('content/css/bootstrap-modal.css') }}
     @endif
@@ -49,6 +48,7 @@
 
     {{ HTML::style('css/bootstrap-datetimepicker.min.css') }}
 
+    {{ HTML::style('content/css/app.css') }}
 
     <link rel="stylesheet" type="text/css" href="{{URL::base()}}/scripts/google-code-prettify/prettify.css" >
 

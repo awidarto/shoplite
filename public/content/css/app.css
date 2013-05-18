@@ -1226,3 +1226,8 @@ span.btn.del{
 	border-radius: 0;
 	-webkit-appearance: none;
 }
+
+.simplecolorpicker div:hover, 
+.simplecolorpicker div.selected{
+	border: 2px solid #222;
+}

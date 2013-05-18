@@ -47,22 +47,13 @@
     <div class="optionselectproduct detailproduct clearfix">
       <div class="selectsize">
         <span class="titleselectbox">SELECT SIZE</span><br/>        
-        <select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0">
+        <select class="span1" size="1" name="size" >
           <option value="-" selected="selected">-</option>
           @foreach($sizes as $size)
             <option value="{{$size}}">{{$size}}</option>
           @endforeach
         </select>
       </div>
-
-
-      <style type="text/css">
-        .coloroption{
-          display:block;
-          height:28px;
-          width:40px;
-        }
-      </style>
 
       <div class="selectsize">
         <span class="titleselectbox">SELECT COLOR</span><br/>        
@@ -76,7 +67,9 @@
 
       <script type="text/javascript">
       $(document).ready(function(){
-        $('select[name="color"]').simplecolorpicker();
+        $('select[name="color"]').simplecolorpicker({
+          
+        });
       });
       </script>
 
