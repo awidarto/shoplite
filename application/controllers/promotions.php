@@ -132,10 +132,7 @@ class Promotions_Controller extends Admin_Controller {
 		return $display;
 	}
 
-	public function 	public function afterUpdate($id,$data = null)
 	public function afterUpdate($id,$data = null)
-	public function afterUpdate($id,$data = null)
-afterUpdate($id,$data = null)
 	{
 
 		$files = Input::file();
