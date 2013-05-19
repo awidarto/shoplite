@@ -45,7 +45,6 @@
     </div>
 
     <div class="optionselectproduct detailproduct clearfix row-fluid">
-
       <div class="span2">
         <span class="titleselectbox">SELECT SIZE</span><br/>        
         <select name="size" class="span12" >
@@ -105,6 +104,10 @@
                   alert(data.message);
                 }
 
+                if(data.result == 'PRODUCTADDED'){
+                  alert(data.message);
+                }
+
             },'json');          
 
         });
@@ -116,13 +119,38 @@
             var size = $('select[name="size"]').val();
             var qty = $('select[name="qty"]').val();
 
-            $.post('{{ URL::to('shop/addtocart')}}',{ color: color, size: size, qty: qty, _id:product_id, cart_id: cart_id },function(data){
-                console.log(data);
-                if(data.result == 'NOTSIGNEDIN'){
-                  alert(data.message);
-                }
+            if(color != '' && size != '-' && qty >= 0){
 
-            },'json');          
+                $.post('{{ URL::to('shop/addtocart')}}',{ color: color, size: size, qty: qty, _id:product_id, cart_id: cart_id },function(data){
+                    console.log(data);
+                    if(data.result == 'NOTSIGNEDIN'){
+                      alert(data.message);
+                    }
+
+                    if(data.result == 'PRODUCTADDED'){
+                      var remaining = data.data.remaining;
+                      var qtyopt = '';
+
+                      for(i = 1; i <= remaining; i++){
+                        qtyopt += '<option value="' + i + '" >' + i + '</option>';
+                      }
+
+                      console.log(qtyopt);
+
+                      $('select[name="qty"]').html(qtyopt);
+
+                      alert(data.message);
+                    }
+
+
+                },'json');          
+
+
+
+            }else{
+              alert('Please specify size, color and quantity');
+            }
+
         })
 
       @endif

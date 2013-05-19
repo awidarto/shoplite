@@ -485,19 +485,34 @@ class Shop_Controller extends Base_Controller {
 
 		    $qty = $in['qty'];
 
-	    	if(isset(Auth::shopper()->cart_id) == false || Auth::shopper()->cart_id == ''){
+	    	if(isset(Auth::shopper()->activeCart) == false || Auth::shopper()->activeCart == ''){
 	    		$cart = $this->newCart();
+
 	    	}else{
 	    		$cart = $this->getCurrentCart();
 	    	}
 
+	    	//$result = $cart;
+
 	    	$result = $this->addToCart($cart,$item,$qty);
+
+	    	$query = $item;
+	    	$query['productId'] = new MongoId($query['productId']);
+	    	$query['status'] = 'available';
+
+	    	$inv = new Inventory();
+
+	    	$result['remaining'] = $inv->count($query);
+
+			$carts = new Cart();
+
+			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'])),array('upsert'=>true));
 
 			//return Response::json(array('result'=>'PRODUCTNOTAVAIL','message'=>'Product no longer available'));
 
 			//return Response::json(array('result'=>'PRODUCTLESSQTY','message'=>'Available quantity is less than you ordered'));
 
-			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Product added','data'=>$result));
+			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Product added into Shopping Cart','data'=>$result));
 		}
 
 	}
@@ -518,13 +533,15 @@ class Shop_Controller extends Base_Controller {
 	    if ( $userdata = Auth::shopperattempt(array('username'=>$username, 'password'=>$password)) )
 	    {
 	    	
-	    	if(Auth::shopper()->cart_id == ''){
+	    	if(Auth::shopper()->activeCart == ''){
 	    		$cart = $this->newCart();
 	    	}else{
 	    		$cart = $this->getCurrentCart();
 	    	}
 
 	    	$result = $this->addToCart($cart,$item,$qty);
+
+			print_r($result);
 
 			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Successfully Signed In and Product Added','data'=>$cart));
 	    }
@@ -556,17 +573,40 @@ class Shop_Controller extends Base_Controller {
 		$item_ids = array_keys($invitem);
 
 		$up = array();
+
 		foreach ($item_ids as $key) {
 			$up[] = array('_id'=>new MongoId($key));
+
+			$setinv = $inventory->update(array('_id'=>new MongoId($key),'status'=>'available'),
+				array(
+					'$set'=>array(
+						'status'=>'incart',
+						'cartId'=>$cartobj['_id']
+					)
+				)
+			);
 		}
-		$updatequery = array('$or'=>$up);
 
-		print_r($updatequery);
+		$aquery = array('productId'=>$query['productId'],
+			'cartId'=>$cartobj['_id'],
+			'status'=>'incart',
+			'size'=>$item['size'],
+			'color'=>$item['color']);
 
-		$item['items'] = $invitem; 
-	    $item['ordered'] = $qty;
+		$actual = $inventory->find($aquery);
 
-	    return $invitem;
+		$item['items'] = $actual;
+		$item['actual'] = count($actual);
+
+		if(isset($item['ordered'])){
+		    $item['ordered'] += $qty;
+		}else{
+		    $item['ordered'] = $qty;
+		}
+
+	    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']] = $item;
+
+	    return $cartobj;
 
 	}
 
@@ -577,11 +617,12 @@ class Shop_Controller extends Base_Controller {
 	}
 
 	private function getCurrentCart(){
+
 		$carts = new Cart();
 
-		$cart_id = Auth::shopper()->cart_id;
+		$cart_id = Auth::shopper()->activeCart;
 
-		$cart = $carts->get(array('_id'=>new MongoId($cart_id)));
+		$cart = $carts->get(array('_id'=>new MongoId($cart_id) ));
 
 		return $cart;
 	}
@@ -605,7 +646,7 @@ class Shop_Controller extends Base_Controller {
 			$_id = new MongoId(Auth::shopper()->id);
 
 			$shopper->update(array('_id'=>$_id),
-				array('$set'=>array('activeCart'=>$newcart['_id'])),
+				array('$set'=>array('activeCart'=>$newcart['_id']->__toString() )),
 				array('upsert'=>true)
 				);
 

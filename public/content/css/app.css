@@ -1231,3 +1231,7 @@ span.btn.del{
 .simplecolorpicker div.selected{
 	border: 2px solid #222;
 }
+
+#addtocart{
+	cursor: pointer;
+}

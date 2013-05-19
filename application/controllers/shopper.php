@@ -654,7 +654,7 @@ class Shopper_Controller extends Base_Controller {
 			$_id = new MongoId(Auth::shopper()->id);
 
 			$shopper->update(array('_id'=>$_id),
-				array('$set'=>array('activeCart'=>$newcart['_id'])),
+				array('$set'=>array('activeCart'=>$newcart['_id']->__toString() )),
 				array('upsert'=>true)
 				);
 
@@ -1205,9 +1205,9 @@ class Shopper_Controller extends Base_Controller {
 			$this->crumb = new Breadcrumb();
 		}
 
-		$user = new Attendee();
+		$user = new Shopper();
 
-		$id = (is_null($id))?Auth::attendee()->id:$id;
+		$id = (is_null($id))?Auth::shopper()->id:$id;
 
 		$id = new MongoId($id);
 
