@@ -338,3 +338,50 @@ a.continueshopping{
 .productlist .span3 p{
 	margin: 0;
 }
+
+.color-chip{
+	display: block;
+	padding:4px;
+	width:25px;
+}
+
+.qty-box {
+	width: 35px;
+}
+
+table.var-box{
+	width:100%;
+}
+
+table.var-box tr{
+	border: none;
+}
+
+table.var-box td{
+	vertical-align: middle;
+	padding: 4px;
+	border: none;
+}
+
+table#shoppingcart th{
+	text-align: center;
+}
+
+table#shoppingcart td{
+	padding-top: 15px;
+	vertical-align: top;
+}
+
+table#shoppingcart tr{
+	border-bottom: thin solid #ddd;
+}
+
+table#shoppingcart td.price{
+	text-align: right;
+}
+
+table#shoppingcart thead{
+	border-bottom: thin solid #ccc;
+	margin-bottom: 25px;
+}
+

@@ -387,6 +387,8 @@ class Admin_Controller extends Base_Controller {
 			$data = Input::get();
 		}
 
+		//print_r($data);
+
 		$data = $this->beforeValidateAdd($data);
 
 		$controller_name = strtolower($this->controller_name);
@@ -406,6 +408,9 @@ class Admin_Controller extends Base_Controller {
 
 			
 			$model = $this->model;
+
+
+			$data = $this->beforeSave($data);
 
 			if($obj = $model->insert($data)){
 
@@ -499,6 +504,11 @@ class Admin_Controller extends Base_Controller {
 
 	    }
 
+	}
+
+	public function beforeSave($data)
+	{
+		return $data;
 	}
 
 	public function afterSave($data)

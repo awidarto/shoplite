@@ -58,6 +58,7 @@ class Users_Controller extends Admin_Controller {
 	        'repass'=> 'required'
 	    );
 
+		//print_r(Input::get());
 		//transform data before actually save it
 
 		$data = Input::get();
@@ -95,10 +96,13 @@ class Users_Controller extends Admin_Controller {
 			*/
 		}
 
-		$data['pass'] = Hash::make($data['pass']);
+		//print_r($data);
+
+		//$data['pass'] = Hash::make($data['pass']);
+		//$data['repass'] = Hash::make($data['repass']);
 		$data['permissions'] = $permissions;
 
-		unset($data['repass']);
+		//unset($data['repass']);
 		unset($data['csrf_token']);
 
 		$data['creatorName'] = Auth::user()->fullname;
@@ -160,6 +164,14 @@ class Users_Controller extends Admin_Controller {
 
 		return $id;
 
+	}
+
+	public function beforeSave($obj)
+	{
+		$obj['pass'] = Hash::make($obj['pass']);
+		unset($obj['repass']);
+
+		return $obj;
 	}
 
 	public function afterSave($obj)

@@ -659,10 +659,28 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_cart(){
 		$form = new Formly();
+
+		$active_cart = new MongoId(Auth::shopper()->activeCart);
+
+		$carts = new Cart();
+
+		$cart = $carts->get(array('_id'=>$active_cart));
+
+		$or = array();
+		foreach($cart['items'] as $key=>$val){
+			$or[] = array('_id'=>new MongoId($key));
+		}
+
+		$prods = new Product();
+
+		$products = $prods->find(array('$or'=>$or));
+
 		return View::make('shop.cart')
-		->with('ajaxsource',URL::to('shop/cartloader'))
-		->with('ajaxdel',URL::to('shop/itemdel'))
-		->with('form',$form);
+			->with('ajaxsource',URL::to('shop/cartloader'))
+			->with('ajaxdel',URL::to('shop/itemdel'))
+			->with('products',$products)
+			->with('cart',$cart)
+			->with('form',$form);
 	}
 
 	public function post_cartloader(){
