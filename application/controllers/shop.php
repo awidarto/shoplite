@@ -683,6 +683,39 @@ class Shop_Controller extends Base_Controller {
 			->with('form',$form);
 	}
 
+	public function post_checkout()
+	{
+		//print_r(Input::get());
+
+		$form = new Formly();
+
+		$in = Input::get();
+
+		$active_cart = new MongoId($in['cartId']);
+
+		$carts = new Cart();
+
+		$cart = $carts->get(array('_id'=>$active_cart));
+
+		$or = array();
+		foreach($cart['items'] as $key=>$val){
+			$or[] = array('_id'=>new MongoId($key));
+		}
+
+		$prods = new Product();
+
+		$products = $prods->find(array('$or'=>$or));
+
+		return View::make('shop.checkout')
+			->with('ajaxsource',URL::to('shop/cartloader'))
+			->with('ajaxdel',URL::to('shop/itemdel'))
+			->with('postdata',$in)
+			->with('products',$products)
+			->with('cart',$cart)
+			->with('form',$form);
+
+	}
+
 	public function post_cartloader(){
 
 		/*

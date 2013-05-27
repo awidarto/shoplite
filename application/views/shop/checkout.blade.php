@@ -26,6 +26,7 @@
             $i = $products[$key]['defaultpic'];
 
             $product_prefix = $key;
+
           ?>
 
           <tr>
@@ -48,7 +49,8 @@
                     </td>
                     <td>
                       <?php $qty += $v['ordered'];?>
-                      {{ Form::text($product_prefix.'_'.$k.'_qty',$v['ordered'],array('class'=>'qty-box')) }}<br />
+                      {{  $postdata[$product_prefix.'_'.$k.'_qty'] }}
+                      {{ Form::hidden($k.'_qty',$v['ordered'],array('class'=>'qty-box')) }}<br />
                     </td>
                     <td class="span1"><i class="icon-remove"></i></td>
                   </tr>
@@ -67,27 +69,32 @@
     <div class="paymentmethod span12">
       <div class="method1 span3">
         <h4>payment method</p>  
-        <input id="field_daterange" checked="checked" type="radio" name="paymentmethod" value="bca">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/bca.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="paymentmethod" value="mandiri">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/mandiri.png"><br/>
+        @if($postdata['paymentmethod'] == 'mandiri')
+          <img src="{{ URL::base() }}/images/mandiri.png">
+        @elseif($postdata['paymentmethod'] == 'bca')
+          <img src="{{ URL::base() }}/images/bca.png">
+        @endif
       </div>
 
       <div class="method2 span3">
-        <h4>shipping method</p>  
-        <input id="field_daterange" checked="checked" type="radio" name="shippingmethod" value="jex">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/jexcod.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="shippingmethod" value="jne">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/jne.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="shippingmethod" value="gojek">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/gojek.png"><br/><br/>
+        <h4>shipping method</p>
+        @if($postdata['shippingmethod'] == 'jex')
+          <img src="{{ URL::base() }}/images/jexcod.png">
+        @elseif( $postdata['shippingmethod'] == 'jne')
+          <img src="{{ URL::base() }}/images/jne.png">
+        @elseif($postdata['shippingmethod'] == 'gojek')
+          <img src="{{ URL::base() }}/images/gojek.png">
+        @endif
       </div>
 
       <div class="method3 span5">
-        <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Update Cart</a>
-
         <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,459,000"></p>
         <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 30,000"></p>
         <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,489,000"></p>
-
-          <a class="btn primary" id="checkoutnow" href="{{ URL::to('shop/checkout')}}" ><i class="icon-checkmark"></i> Go To Check Out</a><br /><br />
-
-          <a class="btn primary" href="{{ URL::base()}}"><i class="icon-shopping"></i> Continue Shopping</a></p>
+        <p class="buttonshopcart">
+          <a class="btn primary" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a><br /><br />
+          <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Go Back & Update Cart</a><br /><br />
+          <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Continue Shopping</a></p>
       </div>
       
     </div>
@@ -98,7 +105,8 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#checkoutnow').click(function(){
+  $('.checkoutnow').click(function(){
+      alert('submit called');
       $('#shoppingcartform').submit();
       return false;
   });
