@@ -34,12 +34,12 @@
 
 Route::controller(array('register','shop','shoppers','shopper','merchants','reader','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
+Route::get('shop',array('uses'=>'shop@home'));
+
 Route::get('/',function(){
     if(Auth::check()){
         if(Auth::user()->role == 'root' || Auth::user()->role == 'super' || Auth::user()->role == 'exhibitionadmin'){
            return Redirect::to('dashboard');
-        }else if(Auth::user()->role == 'onsite' || Auth::user()->role == 'cashier'){
-           return Redirect::to('onsite');
         }else{
             return Redirect::to('shop');
         }
@@ -48,7 +48,6 @@ Route::get('/',function(){
     }
 });
 
-Route::post('shop',array('uses'=>'shop@home'));
 
 //Route::post('shop/commit',array('uses'=>'shop@commit'));
 
