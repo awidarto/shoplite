@@ -4,7 +4,7 @@
 <div class="row">
   
   {{-- print_r($cart['items'])}}
-{{ $form->open('shop/checkout','POST',array('id'=>'shoppingcartform'))}}
+{{ $form->open('shop/commit','POST',array('id'=>'shoppingcartform'))}}
   <div class="span12">
     <h3>shopping cart</h3>
     {{ $form->hidden('cartId',$cart['_id'])}}
@@ -13,13 +13,18 @@
         <tr class="headshoppingcart">
           <th class="span2"></th>
           <th class="span4">ITEM DESCRIPTION</th>
-          <th class="span1">SIZE / COLOR / QTY</th>
+          <th class="span2">SIZE / COLOR / QTY</th>
           <th class="span2">UNIT PRICE</th>
           <th class="span2">PRICE TOTAL</th>
-          <th class="span1">&nbsp;</th>
         </tr>
       </thead>
       <tbody>
+
+      <?php
+
+      $totalPrice = 0;
+
+      ?>
       @foreach($cart['items'] as $key=>$val)
 
           <?php
@@ -36,7 +41,7 @@
                 @endif
             </td>
             <td class="span4"><h5>{{ $products[$key]['name'];}}</h5>{{ $products[$key]['description'];}}</td>
-            <td class="span1">
+            <td class="span2">
               <table class="var-box">
                 <?php $qty = 0;?>
                 @foreach($val as $k=>$v)
@@ -48,19 +53,25 @@
                       <span class="color-chip" style="background-color: {{ $v['color'] }}; ">&nbsp;</span>
                     </td>
                     <td>
-                      <?php $qty += $v['ordered'];?>
+                      <?php $qty += $postdata[$product_prefix.'_'.$k.'_qty'] ;?>
                       {{  $postdata[$product_prefix.'_'.$k.'_qty'] }}
-                      {{ Form::hidden($k.'_qty',$v['ordered'],array('class'=>'qty-box')) }}<br />
+                      {{ Form::hidden($product_prefix.'_'.$k.'_qty',$v['ordered'],array('class'=>'qty-box')) }}<br />
                     </td>
-                    <td class="span1"><i class="icon-remove"></i></td>
                   </tr>
                 @endforeach
               </table>
             </td>
-            <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
+            <td class="span2 price">
+              {{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}
+              <input type="hidden" name="{{$key}}_retailPrice" value="{{$products[$key]['retailPrice']}}" />
+            </td>
             <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
-            <td class="span1"><i class="icon-remove"></i></td>
+              <input type="hidden" name="{{$key}}_subTotalPrice" value="{{$qty * $products[$key]['retailPrice']}}" />
           </tr>
+
+          <?php
+            $totalPrice += $qty * (double) $products[$key]['retailPrice'];
+          ?>
       @endforeach
 
       </tbody>
@@ -74,6 +85,7 @@
         @elseif($postdata['paymentmethod'] == 'bca')
           <img src="{{ URL::base() }}/images/bca.png">
         @endif
+        <input type="hidden" value="{{$postdata['paymentmethod']}}" name="paymentmethod">
       </div>
 
       <div class="method2 span3">
@@ -85,14 +97,22 @@
         @elseif($postdata['shippingmethod'] == 'gojek')
           <img src="{{ URL::base() }}/images/gojek.png">
         @endif
+        <input type="hidden" value="{{$postdata['shippingmethod']}}" name="shippingmethod">
       </div>
 
       <div class="method3 span5">
-        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,459,000"></p>
-        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 30,000"></p>
-        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,489,000"></p>
+        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="totalPriceDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($totalPrice,2,',','.') ;}}">
+          <input name="totalPrice" type="hidden" value="{{ $totalPrice }}">
+        </p>
+
+        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="shippingFeeDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($shippingFee,2,',','.') ;}}"></p>
+          <input name="shippingFee" type="hidden" value="{{ $shippingFee }}">
+
+        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="totalDueDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($totalPrice + $shippingFee,2,',','.') ;}}"></p>
+          <input name="totalDue" type="hidden" value="{{ $totalPrice + $shippingFee }}">
+
         <p class="buttonshopcart">
-          <a class="btn primary" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a><br /><br />
+          <a class="btn primary" id="commitnow" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a><br /><br />
           <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Go Back & Update Cart</a><br /><br />
           <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Continue Shopping</a></p>
       </div>
@@ -103,10 +123,16 @@
 {{ $form->close() }}  
 </div>
 
+<style type="text/css">
+input.currency-display{
+  text-align: right;
+
+}
+</style>
+
 <script type="text/javascript">
 $(document).ready(function(){
-  $('.checkoutnow').click(function(){
-      alert('submit called');
+  $('#commitnow').click(function(){
       $('#shoppingcartform').submit();
       return false;
   });

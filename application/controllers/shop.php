@@ -706,60 +706,51 @@ class Shop_Controller extends Base_Controller {
 
 		$products = $prods->find(array('$or'=>$or));
 
+		$shippingFee = 30000;
+
 		return View::make('shop.checkout')
 			->with('ajaxsource',URL::to('shop/cartloader'))
 			->with('ajaxdel',URL::to('shop/itemdel'))
 			->with('postdata',$in)
 			->with('products',$products)
+			->with('shippingFee',$shippingFee)
 			->with('cart',$cart)
 			->with('form',$form);
 
 	}
 
-	public function post_cartloader(){
+	public function post_commit()
+	{
+		//print_r(Input::get());
 
-		/*
-          <td class="span3 image"><img src="{{ URL::base() }}/images/pic3.jpg"></td>
-          <td class="span3">Dazel And Angle Orange Long Sleeve Shirt</td>
-          <td class="span1">XL</td>
-          <td class="span2"><select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></td>
-          <td class="span2">IDR 350,000</td>
-          <td class="span2">IDR 350,000</td>
-          <td class="span1">[x]</td>
-		*/
+		$form = new Formly();
 
-        if(isset(Auth::shopper()->active_cart) && Auth::shopper()->active_cart != '')
-        {	
-        	$_id = new MongoId(Auth::shopper()->active_cart);
-			$carts = new Cart();
+		$in = Input::get();
 
-			$cart = $carts->get(array('_id'=>$_id));
-        }
+		$active_cart = new MongoId($in['cartId']);
 
-		$counter = 1;
-		foreach ($cart['items'] as $item) {
+		$carts = new Cart();
 
-			$aadata[] = array(
-				'<img src="{{ URL::base() }}/images/pic3.jpg">',
-				'Dazel And Angle Orange Long Sleeve Shirt',
-				'XL',
-				'<select class="span1" size="1" name="DataTables_Table_0_length" aria-controls="DataTables_Table_0"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>',
-				'IDR 350,000',
-				'IDR 350,000',
-				'<i class="foundicon-trash action del" id="'.$doc['_id'].'"></i>'
-			);
-			$counter++;
+		$cart = $carts->get(array('_id'=>$active_cart));
+
+		$or = array();
+		foreach($cart['items'] as $key=>$val){
+			$or[] = array('_id'=>new MongoId($key));
 		}
 
-		
-		$result = array(
-			'iTotalRecords'=>10,
-			'iTotalDisplayRecords'=> 10,
-			'aaData'=>$aadata
-		);
+		$prods = new Product();
 
-		return Response::json($result);
+		$products = $prods->find(array('$or'=>$or));
 
+		$shippingFee = 30000;
+
+		return View::make('shop.commit')
+			->with('postdata',$in)
+			->with('products',$products)
+			->with('shippingFee',$shippingFee)
+			->with('cart',$cart)
+			->with('form',$form);
 
 	}
+
 }
