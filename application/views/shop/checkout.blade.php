@@ -6,7 +6,7 @@
   {{-- print_r($cart['items'])}}
 {{ $form->open('shop/commit','POST',array('id'=>'shoppingcartform'))}}
   <div class="span12">
-    <h3>shopping cart</h3>
+    <h3>check out</h3>
     {{ $form->hidden('cartId',$cart['_id'])}}
     <table class='dataTable' id="shoppingcart">
       <thead>

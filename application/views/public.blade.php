@@ -37,7 +37,7 @@
   <body>
 
     <div id="wrap">
-      @yield('topnav')
+      @yield('publictopnav')
 
       <div class="container">
         <div class="row">

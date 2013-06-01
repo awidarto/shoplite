@@ -658,6 +658,9 @@ class Shop_Controller extends Base_Controller {
 	}
 
 	public function get_cart(){
+
+		$this->filter('before','auth');
+
 		$form = new Formly();
 
 		$active_cart = new MongoId(Auth::shopper()->activeCart);
@@ -686,6 +689,7 @@ class Shop_Controller extends Base_Controller {
 	public function post_checkout()
 	{
 		//print_r(Input::get());
+		$this->filter('before','auth');
 
 		$form = new Formly();
 
@@ -722,6 +726,7 @@ class Shop_Controller extends Base_Controller {
 	public function post_commit()
 	{
 		//print_r(Input::get());
+		$this->filter('before','auth');
 
 		$form = new Formly();
 

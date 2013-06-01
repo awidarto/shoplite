@@ -5,24 +5,6 @@
      <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-        @if(Auth::user()->role == 'client' || Auth::user()->role == 'principal_vendor' || Auth::user()->role == 'subcon')
-            <li>{{ HTML::link('document/type/clients','Clients')}}</li>
-            <li>{{ HTML::link('document/type/principal_vendor','Principal / Vendors')}}</li>
-            <li>{{ HTML::link('document/type/subcon','3rd Party / Sub-Con')}}</li>
-        @else
-        @endif
-
-
-        @if(Auth::user()->role == 'onsite')
-            <li>{{ HTML::link('attendee','Attendees')}}</li>
-        @elseif(Auth::user()->role == 'exhibitionadmin')
-
-        @elseif(Auth::user()->role == 'cashier')
-
-        @else
-
-        @endif        
-
 
         @if(Auth::user()->role == 'root' || Auth::user()->role == 'super' )
             <li>{{ HTML::link('shoppers','Shoppers')}}</li>

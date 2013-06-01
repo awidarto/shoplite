@@ -8,7 +8,7 @@
 
 View::composer('public',function($view){
 
-    $view->nest('topnav','partials.publictopnav');
+    $view->nest('publictopnav','partials.publictopnav');
 
 });
 

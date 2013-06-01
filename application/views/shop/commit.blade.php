@@ -4,7 +4,7 @@
 <div class="row">
     {{-- print_r($cart['items'])}}
     <div class="span12">
-        <h3>shopping cart</h3>
+        <h3>purchase order</h3>
         <table class='dataTable' id="shoppingcart">
         <thead>
         <tr class="headshoppingcart">

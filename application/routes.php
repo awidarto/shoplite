@@ -48,7 +48,9 @@ Route::get('/',function(){
     }
 });
 
-Route::post('shop/commit',array('uses'=>'shop@commit'));
+Route::post('shop',array('uses'=>'shop@home'));
+
+//Route::post('shop/commit',array('uses'=>'shop@commit'));
 
 Route::get('cps',function(){
     $getvar = Input::all();
