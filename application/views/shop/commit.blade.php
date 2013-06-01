@@ -94,7 +94,7 @@
                 <tr>
                     <td colspan="3"></td>
                     <td class="span2 currency-display">TOTAL PRICE</td>
-                    <td class="span2 currency-display">{{ $products[$key]['priceCurrency'].' '.number_format($totalPrice + $postdata['totalDue'],2,',','.') ;}}</td>
+                    <td class="span2 currency-display">{{ $products[$key]['priceCurrency'].' '.number_format($postdata['totalDue'],2,',','.') ;}}</td>
                 </tr>
                 <tr>
                     <td colspan="4"></td>
