@@ -17,9 +17,6 @@
 	</div>
 	
 	@endforeach
-
-	
-
 </div>
 
 <div class="row">

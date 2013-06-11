@@ -65,7 +65,9 @@ return array(
 	'auction_run'=>array(
 		'manual'=>'Manual',
 		'auto'=>'Auto'
-	)
+	),
+	'admin_email'=>'admin@peachtoblack.com',
+	'admin_name'=>'Shopkeeper@PeachtoBlack'
 
 
 

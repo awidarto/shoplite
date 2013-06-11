@@ -36,6 +36,7 @@ class Shop_Controller extends Base_Controller {
 		//$this->filter('before','auth');
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add('shop','Shop');
+		//$this->filter('before', 'auth')->only(array('confirm'));
 	}
 
 	public function get_index()
@@ -732,6 +733,8 @@ class Shop_Controller extends Base_Controller {
 
 		$in = Input::get();
 
+		$shoppers = new Shopper();
+
 		$active_cart = new MongoId($in['cartId']);
 
 		$carts = new Cart();
@@ -749,6 +752,14 @@ class Shop_Controller extends Base_Controller {
 
 		$shippingFee = 30000;
 
+		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
+
+		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout', 'lastUpdate'=>new MongoDate() )));
+
+		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
+			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
+			array('upsert'=>true) );
+
 		return View::make('shop.commit')
 			->with('postdata',$in)
 			->with('products',$products)
@@ -756,6 +767,59 @@ class Shop_Controller extends Base_Controller {
 			->with('cart',$cart)
 			->with('form',$form);
 
+	}
+
+	public function get_confirm(){
+
+		//$this->filter('before','auth');
+
+		$form = new Formly();
+
+		return View::make('shop.confirm')
+			->with('form',$form);
+	}
+
+	public function post_confirm(){
+
+		//$this->filter('before','auth');
+
+		$form = new Formly();
+
+		$in = Input::get();
+
+		$shoppers = new Shopper();
+
+		$active_cart = new MongoId($in['cartId']);
+
+		$carts = new Cart();
+
+		$cart = $carts->get(array('_id'=>$active_cart));
+
+		$or = array();
+		foreach($cart['items'] as $key=>$val){
+			$or[] = array('_id'=>new MongoId($key));
+		}
+
+		$prods = new Product();
+
+		$products = $prods->find(array('$or'=>$or));
+
+		$shippingFee = 30000;
+
+		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
+
+		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout', 'lastUpdate'=>new MongoDate() )));
+
+		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
+			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
+			array('upsert'=>true) );
+
+		return View::make('shop.confirm')
+			->with('postdata',$in)
+			->with('products',$products)
+			->with('shippingFee',$shippingFee)
+			->with('cart',$cart)
+			->with('form',$form);
 	}
 
 }

@@ -38,7 +38,7 @@ Route::get('shop',array('uses'=>'shop@home'));
 
 Route::get('/',function(){
     if(Auth::check()){
-        if(Auth::user()->role == 'root' || Auth::user()->role == 'super' || Auth::user()->role == 'exhibitionadmin'){
+        if(Auth::user()->role == 'root' || Auth::user()->role == 'super'){
            return Redirect::to('dashboard');
         }else{
             return Redirect::to('shop');

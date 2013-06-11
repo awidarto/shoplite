@@ -35,6 +35,7 @@ return array(
 	|	'encryption' =>	'ssl',
 	*/
 
+	/*
 	'transports' => array(
 
 		'smtp' => array(
@@ -53,12 +54,14 @@ return array(
 
 	),
 
-	/*'transports' => array(
+	*/
+
+	'transports' => array(
 
 		'smtp' => array(
 			'host'       =>	'smtp.gmail.com', 
-			'username'   =>	'taufiq@kickstartlab.com',
-			'password'   =>	'taufiq123',
+			'username'   =>	'bolongsox@gmail.com',
+			'password'   =>	'masukajadeh',
 			'port'       =>	465,
 			'encryption' =>	'ssl',
 		),
@@ -69,5 +72,5 @@ return array(
 
 		'mail',
 
-	),*/
+	),
 );

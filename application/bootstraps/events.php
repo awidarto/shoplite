@@ -24,6 +24,26 @@ Event::listen('500', function()
     return Response::error('500');
 });
 
+Event::listen('commit.checkout',function($shopper,$cart){
+    $shoppers = new Shopper();
+
+    $s_id = new MongoId($shopper);
+
+    $data = $shoppers->get(array('_id'=>$s_id));
+
+    $carts = new Cart();
+
+    $body = View::make('email.checkout')->render();
+
+    Message::to($data['email'])
+        ->from(Config::get('shoplite.admin_email'), Config::get('shoplite.admin_name'))
+        ->subject(Config::get('site.title'))
+        ->body( $body )
+        ->html(true)
+        ->send();
+    
+});
+
 Event::listen('attendee.create',function($id,$newpass,$picemail,$picname){
     $attendee = new Attendee();
     $_id = $id;
