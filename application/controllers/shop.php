@@ -416,6 +416,7 @@ class Shop_Controller extends Base_Controller {
 
 		$product['relatedProducts'] = $related;
 
+		$availcolors = array();
 
 		$sizes = array_unique($sa);
 		$colors = array_unique($ca);
@@ -423,6 +424,7 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.detail')
 			->with('sizes',$sizes)
 			->with('colors',$colors)
+			->with('variants',$variants)
 			->with('product',$product);
 	}
 

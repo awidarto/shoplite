@@ -33,9 +33,9 @@
       <a href="#" class="loves"><img src="{{ URL::base() }}/images/loves4.gif"/><br/><span>based on 196loves</span></a>
       <div class="availablecont">
         <p>Available in:</p>
-        <a href="#" class="coloravailableselect red"></a>
-        <a href="#" class="coloravailableselect black"></a>
-        <a href="#" class="coloravailableselect blue"></a>
+        @foreach($colors as $ac)
+          <div class="coloravailableselect" style="background-color:{{$ac}}"></div>
+        @endforeach
       </div>
       <p>Price: IDR 575,000</p>
       <h3>ABOUT THIS PRODUCT</h3>
