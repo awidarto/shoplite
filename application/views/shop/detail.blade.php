@@ -5,8 +5,6 @@
   
   <div class="span4">
 
-    
-
     <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" alt="{{ $product['name']}}" id="mainimageproduct" class="mixmatch" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" />
     
     <br/>
@@ -240,10 +238,13 @@
 
   <div class="otherproducts span12">
     <h3>We also recomend</h3>
-    <a href="#"><img src="{{ URL::base() }}/images/recomen1.jpg"></a>
-    <a href="#"><img src="{{ URL::base() }}/images/recomen2.jpg"></a>
-    <a href="#"><img src="{{ URL::base() }}/images/recomen3.jpg"></a>
-    <a href="#"><img src="{{ URL::base() }}/images/recomen4.jpg"></a>
+    @foreach($product['relatedProducts'] as $r)
+
+          @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+              <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+          @endif
+
+    @endforeach
   </div>
 
 </div>

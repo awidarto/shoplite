@@ -406,6 +406,17 @@ class Shop_Controller extends Base_Controller {
 			$sa[] = $v['size'];
 		}
 
+		$related = array();
+		if(isset($product['relatedProducts']) && count($product['relatedProducts']) > 0){
+			foreach($product['relatedProducts'] as $r){
+				$r_id = new MongoId($r['relatedId']);
+				$related[] = $products->get(array('_id'=>$r_id));
+			}
+		}
+
+		$product['relatedProducts'] = $related;
+
+
 		$sizes = array_unique($sa);
 		$colors = array_unique($ca);
 
