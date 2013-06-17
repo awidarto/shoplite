@@ -493,11 +493,14 @@ class Admin_Controller extends Base_Controller {
 
 			$model = $this->model;
 
+			$data = $this->beforeUpdate($id,$data);
+
 			if($obj = $model->update(array('_id'=>$id),array('$set'=>$data))){
 
 				$obj = $this->afterUpdate($id,$data);
-
-		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
+				if($obj != false){
+			    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
+				}
 			}else{
 		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
 			}
@@ -518,6 +521,11 @@ class Admin_Controller extends Base_Controller {
 
 	public function makeActions($data){
 		return '';
+	}
+
+	public function beforeUpdate($id,$data)
+	{
+		return $data;
 	}
 
 	public function afterUpdate($id,$data = null)

@@ -1,5 +1,25 @@
 <?php
 
+function getvariantinventory($prod_id,$variantparams)
+{	
+	$inv = new Inventory();
+
+	$variantparams['productId'] = new MongoId($prod_id);
+
+	//print_r($variantparams);
+
+	$products = $inv->find($variantparams);
+
+	$count_total = $inv->count($variantparams);
+
+	$variantparams['status'] = 'available';
+
+	$count_avail = $inv->count($variantparams);
+
+	return array('product'=>$products,'total'=>$count_total,'avail'=>$count_avail);
+
+}
+
 function makerows($in,$class = array(),$ro = array()){
 	$rows = array();
 
@@ -11,7 +31,7 @@ function makerows($in,$class = array(),$ro = array()){
 		$cnt = 0;
 		foreach($val as $k=>$v){
 			$cls = ( count($class) > 0 && isset($class[$cnt]))?$class[$cnt]:'input-small';
-			$read = ( count($ro) > 0 && isset($ro[$cnt]))?$ro[$cnt]:'readonly="readonly"';
+			$read = ( count($ro) > 0 && isset($ro[$cnt])) && $ro[$cnt] == true?'':'readonly="readonly"';
 			$row .= sprintf($rowtemplate,$k,$v,$cls,$read);
 			$cnt++;
 		}

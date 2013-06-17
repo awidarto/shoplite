@@ -20,6 +20,7 @@
                 @endif
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
               @endif          
+                  {{ HTML::link('shop/confirm','Confirm Payment')}}
             </div>
 
           <div class="nav-collapse collapse navmainp2b">

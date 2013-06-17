@@ -72,10 +72,10 @@ class Products_Controller extends Admin_Controller {
 		    'permalink' => 'required',
 		    'description' => 'required',
 		    'category' => 'required',
-		    'tags' => 'required',
+		    //'tags' => 'required',
 		    'priceCurrency' => 'required',
 		    'retailPrice' => 'required',
-		    'salePrice' => 'required',
+		    //'salePrice' => 'required',
 		    'effectiveFrom' => 'required',
 		    'effectiveUntil' => 'required'
 	    );
@@ -173,7 +173,7 @@ class Products_Controller extends Admin_Controller {
 		    //'tags' => 'required',
 		    'priceCurrency' => 'required',
 		    'retailPrice' => 'required',
-		    'salePrice' => 'required',
+		    //'salePrice' => 'required',
 		    'effectiveFrom' => 'required',
 		    'effectiveUntil' => 'required'
 	    );
@@ -288,6 +288,47 @@ class Products_Controller extends Admin_Controller {
 		$population['cvalue'] = '';
 		$population['cunit'] = '';
 
+		//print_r($population['variants']);
+
+		//$population['variants'] = array_unique($population['variants']);
+
+		$keycheck = array();
+
+		foreach ($population['variants'] as $v) {
+			//print $v['size'].'_'.$v['color'];
+			$keycheck[] = $v['size'].'_'.$v['color'].'_'.$v['link'];
+		}
+
+		$keycheck = array_unique($keycheck);
+
+		//print_r($keycheck);
+
+		$vars = array();
+
+		foreach($keycheck as $k)
+		{
+			$pop = array();
+
+			$v = explode('_',$k);
+			$variant_params = array(
+					'size' => $v[0],                                                                                                                                                      
+	                'color' => $v[1]
+				);
+
+			$variants = getvariantinventory($population['_id']->__toString(),$variant_params);
+
+            //$pop['qty_avail'] = $variants['avail'];
+			$pop['size'] = $v[0];
+            $pop['color'] = $v[1];
+            $pop['qty'] = $variants['total'];
+            $pop['link'] = $v[2];
+
+            $vars[] = $pop;
+
+		}
+
+		//print_r($variants);
+		$population['variants'] = $vars;
 
 		return $population;
 	}
@@ -332,23 +373,49 @@ class Products_Controller extends Admin_Controller {
 
 			foreach($data['variants'] as $v){
 
-				$v['productId'] = $id;
 
-				$avail = $inventory->count($v);
+				$v['productId'] = $id;
 
 				$qty = (int) $v['qty'];
 
-				$qty = $qty - $avail;
+				unset($v['qty']);
+				unset($v['link']);
 
-				$v['status'] = 'available';
-				$v['createdDate'] = new MongoDate();				
-				$v['cartId'] = '';
+				$avail = $inventory->count($v);
 
-				for($i = 0; $i < $qty;$i++)
-				{	
-					$v['_id'] = new MongoId(Str::random(24));
-					$inventory->insert($v,array('upsert'=>false));
+				//print $qty.' vs '.$avail;
+
+				
+				if($qty > $avail){
+					$qty = $qty - $avail;
+
+					$v['status'] = 'available';
+					$v['createdDate'] = new MongoDate();				
+					$v['cartId'] = '';
+
+					for($i = 0; $i < $qty;$i++)
+					{	
+						$v['_id'] = new MongoId(Str::random(24));
+						$inventory->insert($v,array('upsert'=>false));
+					}
+
+				}elseif($qty < $avail){
+
+					$qty = $avail - $qty;
+
+					$d['productId'] = $id;
+					$d['status'] = 'available';
+					$d['cartId'] = '';
+
+					for($i = 0; $i < $qty;$i++)
+					{	
+						$inventory->deleteOne($v);
+					}
+
 				}
+
+
+
 
 			}
 
@@ -356,7 +423,13 @@ class Products_Controller extends Admin_Controller {
 
 
 		return $id;
+		//return false;
 
+	}
+
+	public function beforeUpdate($id,$data)
+	{
+		return $data;
 	}
 
 	public function afterSave($obj)

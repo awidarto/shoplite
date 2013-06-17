@@ -237,14 +237,30 @@
   <div class="clear"></div>
 
   <div class="otherproducts span12">
-    <h3>We also recomend</h3>
-    @foreach($product['relatedProducts'] as $r)
+    @if($product['groupParent'] == true && $product['section'] == 'mixmatch')
 
-          @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
-              <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
-          @endif
+      <h3>Composition</h3>
+      @foreach($product['componentProducts'] as $r)
 
-    @endforeach
+            @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+            @endif
+
+      @endforeach
+
+    @else
+
+      <h3>We also recomend</h3>
+      @foreach($product['relatedProducts'] as $r)
+
+            @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+            @endif
+
+      @endforeach
+
+
+    @endif
   </div>
 
 </div>

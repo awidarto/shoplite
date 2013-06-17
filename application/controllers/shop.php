@@ -257,7 +257,26 @@ class Shop_Controller extends Base_Controller {
 		
 		$new = array();
 		$featured = array();
-		$pow = $products->find(array('section'=>'pow'),array(),array('createdDate'=>-1),$limit);
+
+		$today = new MongoDate();
+
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
+
+		$online = array(
+			'publishStatus'=>'online',
+		);
+
+
+		$query = array(
+			'section'=>'pow',
+			'$or'=>array($scheduled,$online)
+		);
+
+		$pow = $products->find($query,array(),array('createdDate'=>-1),$limit);
 
 		
 		
@@ -278,7 +297,26 @@ class Shop_Controller extends Base_Controller {
 		
 		$new = array();
 		$featured = array();
-		$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
+
+		$today = new MongoDate();
+
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
+
+		$online = array(
+			'publishStatus'=>'online',
+		);
+
+
+		$query = array(
+			'section'=>'otb',
+			'$or'=>array($scheduled,$online)
+		);
+
+		$otb = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
@@ -300,7 +338,26 @@ class Shop_Controller extends Base_Controller {
 
 		$new = array();
 		$featured = array();
-		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+
+		$today = new MongoDate();
+
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
+
+		$online = array(
+			'publishStatus'=>'online',
+		);
+
+
+		$query = array(
+			'section'=>'mixmatch',
+			'$or'=>array($scheduled,$online)
+		);
+
+		$mixmatch = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
@@ -319,7 +376,26 @@ class Shop_Controller extends Base_Controller {
 		
 		$new = array();
 		$featured = array();
-		$kind = $products->find(array('section'=>'kind'),array(),array('createdDate'=>-1),$limit);
+
+		$today = new MongoDate();
+
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
+
+		$online = array(
+			'publishStatus'=>'online',
+		);
+
+
+		$query = array(
+			'section'=>'kind',
+			'$or'=>array($scheduled,$online)
+		);
+
+		$kind = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
 		return View::make('shop.collection')
 			->with('new',$new)
@@ -415,6 +491,16 @@ class Shop_Controller extends Base_Controller {
 		}
 
 		$product['relatedProducts'] = $related;
+
+		$component = array();
+		if(isset($product['componentProducts']) && count($product['componentProducts']) > 0){
+			foreach($product['componentProducts'] as $r){
+				$r_id = new MongoId($r['componentId']);
+				$component[] = $products->get(array('_id'=>$r_id));
+			}
+		}
+
+		$product['componentProducts'] = $component;
 
 		$availcolors = array();
 

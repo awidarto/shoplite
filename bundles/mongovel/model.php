@@ -145,6 +145,17 @@ class Model {
 	}
 
 	/**
+	 * Delete a document
+	 *
+	 * @param  array $criteria
+	 * @return null
+	 */
+	public function deleteOne(array $criteria)
+	{
+		return $this->_db->remove($this->_collection, $criteria, array('justOne' => true));
+	}
+
+	/**
 	 * Set an index for collection
 	 *
 	 * @param  $keys

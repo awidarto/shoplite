@@ -30,7 +30,7 @@
         <fieldset>
             <legend>Publishing</legend>
 
-                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
+                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),null,array('id'=>'publishStatus'))}}<br />
 
                 {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
@@ -202,8 +202,11 @@
                 </thead>
                 <tbody>
                     @if(isset($formdata['variants']))
-                        <?php $classes = array('input-small','input-small','input-small','input-large'); ?>
-                        {{ makerows($formdata['variants'],$classes) }}
+                        <?php 
+                            $classes = array('input-small','input-small','input-small','input-large');
+                            $ro = array(false,false,true,false);                            
+                         ?>
+                        {{ makerows($formdata['variants'],$classes,$ro) }}
                     @endif
                 </tbody>
             </table>
