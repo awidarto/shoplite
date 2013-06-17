@@ -409,9 +409,10 @@
 
 		$('thead select.selector').change( function () {
 			/* Filter on the column (the index) of this element */
-			var prev = $(this).prev('input');
+			var prev = $(this).parent().prev('input');
+
 			var search_index = $('thead input').index(prev);
-			console.log(search_index);
+
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
