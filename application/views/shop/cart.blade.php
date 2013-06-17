@@ -134,6 +134,18 @@ $(document).ready(function(){
   $('.refresh-qty').click(function(){
     var prev = $(this).prev();
     console.log(prev[0].id);
+
+        var _id = prev[0].id;
+        var qty = prev.val();
+
+        console.log(qty);
+
+        $.post('{{ URL::to('shop/updateqty') }}',{'id':_id,'qty':qty}, function(data) {
+          if(data.result == 'OK:ITEMADDED' || data.result == 'OK:ITEMREMOVED'){
+              alert(data.message);
+          }
+        },'json');
+
   });
 
 

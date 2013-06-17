@@ -587,7 +587,6 @@ class Shop_Controller extends Base_Controller {
 
 	    	if(isset(Auth::shopper()->activeCart) == false || Auth::shopper()->activeCart == ''){
 	    		$cart = $this->newCart();
-
 	    	}else{
 	    		$cart = $this->getCurrentCart();
 	    	}
@@ -674,6 +673,114 @@ class Shop_Controller extends Base_Controller {
 	public function post_updateqty()
 	{
 
+		$in = Input::get();
+		$c = explode('_', $in['id']);
+
+		$productId = $c[0];
+		$size = $c[1];
+		$color = $c[2];
+
+		$qty = $in['qty'];
+
+		$cart = $this->getCurrentCart();
+
+		//print_r($cart);
+
+		$currentorder = $cart['items'][$productId][$size.'_'.$color]['ordered'];
+		$currentqty = $cart['items'][$productId][$size.'_'.$color]['actual'];
+
+		/*
+		print $qty."\r\n";
+		print $currentorder."\r\n";
+		print $currentqty."\r\n";
+		*/
+		$inventory = new Inventory();
+
+		if($qty < $currentqty){
+
+			//release some items
+
+			$query = array(
+				'productId'=>new MongoId($productId),
+				'color'=>$color,
+				'size'=>$size,
+				'cartId'=>$cart['_id']
+			);
+
+			$invs = $inventory->find($query);
+
+			$set = array(
+				'cartId'=>'',
+				'status'=>'available'
+				);
+
+			$removed = $currentqty - $qty;
+
+			for($i = 0;$i < $removed;$i++){
+				$inv = array_pop($invs);
+				$inventory->update(array('_id'=>$inv['_id']),array('$set'=>$set));
+			}
+
+			$aquery = array(
+				'productId'=>$query['productId'],
+				'cartId'=>$cart['_id'],
+				'status'=>'incart',
+				'size'=>$size,
+				'color'=>$color
+			);
+
+			$actual = $inventory->find($aquery);
+
+			$actual_count = $inventory->count($aquery);
+
+			if($cart){
+				$cart['items'][$productId][$size.'_'.$color]['ordered'] = $qty;
+				$cart['items'][$productId][$size.'_'.$color]['actual'] = $actual_count;
+			}
+
+			//print_r($cart);			
+
+			$carts = new Cart();
+
+			$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'])),array('upsert'=>true));
+			
+			if($upcart){
+				return Response::json(array('result'=>'OK:ITEMREMOVED','message'=>$removed.' items removed from current order'));
+			}else{
+				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
+			}
+		}elseif($qty > $currentqty){
+			// check next available 
+			$added = $qty - $currentqty;
+
+			//print $added;
+
+			//exit();
+			//print_r($cart);
+
+			$item['productId'] = $productId;
+			$item['color'] = $color;
+			$item['size'] = $size;
+			//$item['cartId'] = $cart['_id'];
+
+	    	$result = $this->addToCart($cart,$item,$added);
+
+	    	//print_r($result);
+
+			$carts = new Cart();
+
+			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'])),array('upsert'=>true));
+
+			if($upcart){
+				return Response::json(array('result'=>'OK:ITEMADDED','message'=>$added.' items added to current order'));
+			}else{
+				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
+			}
+
+		}elseif($qty == $currentqty){
+			return Response::json(array('result'=>'NOCHANGES'));
+		}
+
 
 
 
@@ -749,9 +856,6 @@ class Shop_Controller extends Base_Controller {
 			);
 		}
 
-
-
-
 		$aquery = array('productId'=>$query['productId'],
 			'cartId'=>$cartobj['_id'],
 			'status'=>'incart',
@@ -762,18 +866,6 @@ class Shop_Controller extends Base_Controller {
 
 		$actual_count = $inventory->count($aquery);
 
-/*
-		$item['items'] = $actual;
-		$item['actual'] = count($actual);
-
-		if(isset($item['ordered'])){
-		    $item['ordered'] += $qty;
-		}else{
-		    $item['ordered'] = $qty;
-		}
-
-
-*/
 		if(isset($cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['ordered'])){
 		    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['ordered'] += $qty;
 		}else{
