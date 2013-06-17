@@ -37,7 +37,7 @@
           <div class="coloravailableselect" style="background-color:{{$ac}}"></div>
         @endforeach
       </div>
-      <p>Price: IDR 575,000</p>
+      <p>Price: {{ $product['priceCurrency'].' '.number_format($product['retailPrice'],2,',','.')}}</p>
       <h3>ABOUT THIS PRODUCT</h3>
       {{$product['bodycopy']}}
     </div>
@@ -100,6 +100,7 @@
                 console.log(data);
                 if(data.result == 'NOTSIGNEDIN'){
                   alert(data.message);
+                  $('#signInModal').modal('close');
                 }
 
                 if(data.result == 'PRODUCTADDED'){
@@ -116,6 +117,12 @@
             var color = $('select[name="color"]').val();
             var size = $('select[name="size"]').val();
             var qty = $('select[name="qty"]').val();
+
+            console.log(color);
+            console.log(size);
+            console.log(qty);
+
+
 
             if(color != '' && size != '-' && qty >= 0){
 
@@ -159,9 +166,7 @@
       <div class="span3">
         <span class="titleselectbox">SELECT QUANTITY</span><br/>        
         <select class="span12" name="qty">
-          <option value="1" selected="selected">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+          <option value="-" selected="selected">-</option>
         </select>
       </div>
 

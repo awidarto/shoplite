@@ -617,6 +617,68 @@ class Shop_Controller extends Base_Controller {
 
 	}
 
+	public function post_removeitem()
+	{
+
+		$id = Input::get('id');
+
+		$c = explode('_', $id);
+
+		$productId = $c[0];
+		$size = $c[1];
+		$color = $c[2];
+
+
+		$cart = $this->getCurrentCart();
+
+		//print_r($cart);
+
+		if($cart){
+			unset($cart['items'][$productId][$size.'_'.$color]);
+		}
+
+		//print_r($cart);
+
+		$carts = new Cart();
+
+		$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'])),array('upsert'=>true));
+
+		if($upcart){
+			$inventory = new Inventory();
+
+			$query = array(
+				'productId'=>new MongoId($productId),
+				'color'=>$color,
+				'size'=>$size,
+				'cartId'=>$cart['_id']
+			);
+
+			$invitems = $inventory->find($query);
+
+			$set = array(
+				'cartId'=>'',
+				'status'=>'available'
+				);
+
+			foreach($invitems as $inv){
+				$inventory->update(array('_id'=>$inv['_id']),array('$set'=>$set));
+			}
+
+			$id = str_replace('#', '', $id);
+			return Response::json(array('result'=>'OK','message'=>'Item removed','row'=>$id.'_row' ));
+		}else{
+			return Response::json(array('result'=>'ERR','message'=>'Failed to remove item'));
+		}
+	}
+
+	public function post_updateqty()
+	{
+
+
+
+
+	}
+
 	public function post_signin()
 	{
 		$in = Input::get();
@@ -641,7 +703,7 @@ class Shop_Controller extends Base_Controller {
 
 	    	$result = $this->addToCart($cart,$item,$qty);
 
-			print_r($result);
+			//print_r($result);
 
 			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Successfully Signed In and Product Added','data'=>$cart));
 	    }
@@ -687,6 +749,9 @@ class Shop_Controller extends Base_Controller {
 			);
 		}
 
+
+
+
 		$aquery = array('productId'=>$query['productId'],
 			'cartId'=>$cartobj['_id'],
 			'status'=>'incart',
@@ -695,6 +760,9 @@ class Shop_Controller extends Base_Controller {
 
 		$actual = $inventory->find($aquery);
 
+		$actual_count = $inventory->count($aquery);
+
+/*
 		$item['items'] = $actual;
 		$item['actual'] = count($actual);
 
@@ -704,7 +772,14 @@ class Shop_Controller extends Base_Controller {
 		    $item['ordered'] = $qty;
 		}
 
-	    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']] = $item;
+
+*/
+		if(isset($cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['ordered'])){
+		    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['ordered'] += $qty;
+		}else{
+		    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['ordered'] = $qty;
+		}
+	    $cartobj['items'][$item['productId']][$item['size'].'_'.$item['color']]['actual'] = $actual_count;
 
 	    return $cartobj;
 

@@ -342,7 +342,7 @@ a.continueshopping{
 .color-chip{
 	display: block;
 	padding:4px;
-	width:25px;
+	/*width:25px;*/
 }
 
 .qty-box {
@@ -383,5 +383,18 @@ table#shoppingcart td.price{
 table#shoppingcart thead{
 	border-bottom: thin solid #ccc;
 	margin-bottom: 25px;
+}
+
+table#shoppingcart h5{
+	margin: 0px;
+}
+
+.removebox{
+	vertical-align: middle;
+	text-align: center;
+}
+
+.central{
+	text-align: center;	
 }
 
