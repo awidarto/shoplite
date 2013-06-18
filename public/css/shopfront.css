@@ -412,4 +412,11 @@ input.total-prices, .subtotal{
 	text-align: right;
 }
 
+.big-code{
+	font-size: 24px;
+	font-weight: bold;
+	color:blue;
+	text-align: center;
+}
+
 
