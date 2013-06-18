@@ -398,3 +398,18 @@ table#shoppingcart h5{
 	text-align: center;	
 }
 
+.price h4{
+	margin-top: 0px;
+	padding-top: 0px;
+}
+
+.price{
+	padding: 0px;
+	margin: 0px;
+}
+
+input.total-prices, .subtotal{
+	text-align: right;
+}
+
+

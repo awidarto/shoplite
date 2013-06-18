@@ -19,8 +19,9 @@
                   <span id="nocart">, you have no shopping cart, would you like to <span id="createcart">create one</span> ?</span>
                 @endif
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
+              @else
+                {{ HTML::link('shop/confirm','Confirm Payment')}}
               @endif          
-                  {{ HTML::link('shop/confirm','Confirm Payment')}}
             </div>
 
           <div class="nav-collapse collapse navmainp2b">

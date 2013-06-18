@@ -13,7 +13,9 @@
         <tr class="headshoppingcart">
           <th class="span2"></th>
           <th class="span4">ITEM DESCRIPTION</th>
-          <th class="span2">SIZE / COLOR / QTY</th>
+          <th class="span1">SIZE</th>
+          <th class="span1">COLOR</th>
+          <th class="span1">QTY</th>
           <th class="span2">UNIT PRICE</th>
           <th class="span2">PRICE TOTAL</th>
         </tr>
@@ -24,16 +26,20 @@
 
       $totalPrice = 0;
 
+      //print_r($cart);
+
       ?>
       @foreach($cart['items'] as $key=>$val)
 
           <?php
             $i = $products[$key]['defaultpic'];
-
             $product_prefix = $key;
-
           ?>
 
+          @foreach($val as $k=>$v)
+            <?php
+              $kx = str_replace('#', '', $k);
+            ?>
           <tr>
             <td class="span2 image">
                 @if(file_exists(realpath('public/storage/products/'.$key).'/sm_pic0'.$i.'.jpg'))
@@ -41,38 +47,76 @@
                 @endif
             </td>
             <td class="span4"><h5>{{ $products[$key]['name'];}}</h5>{{ $products[$key]['description'];}}</td>
-            <td class="span2">
-              <table class="var-box">
-                <?php $qty = 0;?>
-                @foreach($val as $k=>$v)
-                  <tr>
-                    <td>
-                      {{ $v['size'] }}
-                    </td>
-                    <td>
-                      <span class="color-chip" style="background-color: {{ $v['color'] }}; ">&nbsp;</span>
-                    </td>
-                    <td>
-                      <?php $qty += $postdata[$product_prefix.'_'.$k.'_qty'] ;?>
-                      {{  $postdata[$product_prefix.'_'.$k.'_qty'] }}
-                      {{ Form::hidden($product_prefix.'_'.$k.'_qty',$v['ordered'],array('class'=>'qty-box')) }}<br />
-                    </td>
-                  </tr>
-                @endforeach
-              </table>
+
+            <?php $qty = 0;?>
+              <?php
+
+                  $vx = explode('_',$k);
+                  $size = $vx[0];
+                  $color = $vx[1];
+
+              ?>
+            <td class="span1 central" >
+              {{ $size }}
+            </td>
+            <td class="span1 central" >
+              <span class="color-chip" style="background-color: {{ $color }}; ">&nbsp;</span>
+            </td>
+            <td class="span2 central">
+              {{  $cart['items'][$product_prefix][$k]['actual'] }}
+              {{ Form::hidden($product_prefix.'_'.$k.'_qty',$cart['items'][$product_prefix][$k]['actual'],array('class'=>'qty-box')) }}<br />
+            </td>
+
+            <td class="span2 price">
+              {{ $cart['prices'][$product_prefix][$k]['unit_price_fmt'] ;}}
+              <input type="hidden" name="{{$key}}_retailPrice" value="{{$cart['prices'][$product_prefix][$k]['unit_price']}}" />
             </td>
             <td class="span2 price">
-              {{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}
-              <input type="hidden" name="{{$key}}_retailPrice" value="{{$products[$key]['retailPrice']}}" />
-            </td>
-            <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
-              <input type="hidden" name="{{$key}}_subTotalPrice" value="{{$qty * $products[$key]['retailPrice']}}" />
+              {{ $cart['prices'][$product_prefix][$k]['sub_total_price_fmt'] ;}}
+              <input type="hidden" name="{{$key}}_subTotalPrice" value="{{ $cart['prices'][$product_prefix][$k]['sub_total_price'] }}" />
           </tr>
+
+
+
+          @endforeach
+
 
           <?php
             $totalPrice += $qty * (double) $products[$key]['retailPrice'];
           ?>
       @endforeach
+          <tr>
+            <td colspan="5"></td>
+            <td class="span2 price">
+              <h4 class="titleselectbox">sub-total</h4>
+            </td>
+            <td class="span2 price">
+              {{ $cart['prices']['total_due_fmt'] }}
+              <input name="totalPrice" type="hidden" value="{{ $cart['prices']['total_due'] }}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="5"></td>
+            <td class="span2 price">
+              <h4 class="titleselectbox">shipping</h4>
+            </td>
+            <td class="span2 price">
+              {{ $cart['prices']['shipping_fmt'] }}
+              <input name="shippingFee" type="hidden" value="{{ $cart['prices']['shipping'] }}" />
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="5"></td>
+            <td class="span2 price">
+              <h4 class="titleselectbox">total</h4>
+            </td>
+            <td class="span2 price">
+              {{ $cart['prices']['total_due_fmt'] }}
+              <input name="totalDue" type="hidden" value="{{ $cart['prices']['total_billing'] }}" />
+            </td>
+          </tr>
 
       </tbody>
     </table>
@@ -101,16 +145,7 @@
       </div>
 
       <div class="method3 span5">
-        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="totalPriceDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($totalPrice,2,',','.') ;}}">
-          <input name="totalPrice" type="hidden" value="{{ $totalPrice }}">
-        </p>
-
-        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="shippingFeeDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($shippingFee,2,',','.') ;}}"></p>
-          <input name="shippingFee" type="hidden" value="{{ $shippingFee }}">
-
-        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="currency-display" disabled="disabled" id="field_fromDate" type="text" name="totalDueDisplay" value="{{ $products[$key]['priceCurrency'].' '.number_format($totalPrice + $shippingFee,2,',','.') ;}}"></p>
-          <input name="totalDue" type="hidden" value="{{ $totalPrice + $shippingFee }}">
-
+        
         <p class="buttonshopcart">
           <a class="btn primary" id="commitnow" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a><br /><br />
           <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Go Back & Update Cart</a><br /><br />

@@ -40,13 +40,11 @@
                   @endif
               </td>
               <td class="span4"><h5>{{ $products[$key]['name'];}}</h5>{{ $products[$key]['description'];}}</td>
-              <?php $qty = 0;?>
                 <?php
-
+                    $qty = 0;
                     $vx = explode('_',$k);
                     $size = $vx[0];
                     $color = $vx[1];
-
                 ?>
               <td class="span1 central" >
                 {{ $size }}
@@ -60,7 +58,7 @@
                 &nbsp;&nbsp;<i class="icon-reload-CW refresh-qty" style="font-size:20px;font-weight:bold;" data-toggle="tooltip" title="update quantity" ></i>
               </td>
               <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
-              <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
+              <td class="span2 subtotal" id="{{$product_prefix.'_'.$kx.'_sub'}}">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
               <td class="span1 removebox"><i class="icon-remove remove-item" id="{{$product_prefix.'_'.$k.'_del'}}" ></i></td>
             </tr>
 
@@ -89,9 +87,9 @@
           <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Update Cart</a>
         -->
 
-        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,459,000"></p>
-        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 30,000"></p>
-        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="" disabled="disabled" id="field_fromDate" type="text" name="fromDate" value="IDR 2,489,000"></p>
+        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="total_due" type="text" name="fromDate" value="{{ $prices['total_due_fmt'] }}"></p>
+        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="shipping" type="text" name="fromDate" value="{{ $prices['shipping_fmt'] }}"></p>
+        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="total_billing" type="text" name="fromDate" value="{{ $prices['total_billing_fmt'] }}"></p>
 
           <a class="btn primary" id="checkoutnow" href="{{ URL::to('shop/checkout')}}" ><i class="icon-checkmark"></i> Go To Check Out</a><br /><br />
 
@@ -132,17 +130,27 @@ $(document).ready(function(){
   });
 
   $('.refresh-qty').click(function(){
-    var prev = $(this).prev();
-    console.log(prev[0].id);
-
+        var prev = $(this).prev();
         var _id = prev[0].id;
         var qty = prev.val();
-
-        console.log(qty);
 
         $.post('{{ URL::to('shop/updateqty') }}',{'id':_id,'qty':qty}, function(data) {
           if(data.result == 'OK:ITEMADDED' || data.result == 'OK:ITEMREMOVED'){
               alert(data.message);
+
+
+              $('.subtotal').each(function(i){
+                  //console.log(this.id);
+                  var si = this.id;
+                  var subt = data.prices[si];
+                  console.log(subt.sub_total_price_fmt);
+                  $(this).html(subt.sub_total_price_fmt);
+              });
+
+
+              $('#total_due').val(data.prices.total_due_fmt);
+              $('#shipping').val(data.prices.shipping_fmt);
+              $('#total_billing').val(data.prices.total_billing_fmt);
           }
         },'json');
 

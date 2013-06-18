@@ -740,12 +740,14 @@ class Shop_Controller extends Base_Controller {
 
 			//print_r($cart);			
 
+			$prices = $this->recalculate($cart);
+
 			$carts = new Cart();
 
-			$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'])),array('upsert'=>true));
+			$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'],'prices'=>$prices)),array('upsert'=>true));
 			
 			if($upcart){
-				return Response::json(array('result'=>'OK:ITEMREMOVED','message'=>$removed.' items removed from current order'));
+				return Response::json(array('result'=>'OK:ITEMREMOVED','message'=>$removed.' items removed from current order','prices'=>$prices));
 			}else{
 				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
 			}
@@ -765,14 +767,15 @@ class Shop_Controller extends Base_Controller {
 
 	    	$result = $this->addToCart($cart,$item,$added);
 
+			$prices = $this->recalculate($result);
 	    	//print_r($result);
 
 			$carts = new Cart();
 
-			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'])),array('upsert'=>true));
+			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'],'prices'=>$prices)),array('upsert'=>true));
 
 			if($upcart){
-				return Response::json(array('result'=>'OK:ITEMADDED','message'=>$added.' items added to current order'));
+				return Response::json(array('result'=>'OK:ITEMADDED','message'=>$added.' items added to current order','prices'=>$prices));
 			}else{
 				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
 			}
@@ -781,9 +784,48 @@ class Shop_Controller extends Base_Controller {
 			return Response::json(array('result'=>'NOCHANGES'));
 		}
 
+	}
+
+	public function recalculate($cart)
+	{
+		$product = new Product();
+
+		$prices = array();
+
+		$total_due = 0;
+		foreach ($cart['items'] as $key => $val) {
+
+			$prod = $product->get(array('_id'=>new MongoId($key)));
+
+			foreach($val as $k=>$v){
+				$kx = str_replace('#', '', $k);
+				$prices[$key][$k]['unit_price'] = $prod['retailPrice'];
+				$prices[$key][$k]['unit_price_fmt'] = $prod['priceCurrency'].' '.number_format($prod['retailPrice'],2,',','.');
+
+				$subtotal = $prod['retailPrice']*$v['actual'];
+
+				$prices[$key][$k]['sub_total_price'] = $subtotal;
+				$prices[$key][$k]['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.');
+				$prices[$key.'_'.$kx.'_sub']['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.'); 
+
+				$total_due += $subtotal;
+			}
+
+		}
+
+		$prices['total_due'] = $total_due;
+		$prices['total_due_fmt'] = $prod['priceCurrency'].' '.number_format($total_due,2,',','.');
+
+		$shipping = 30000;
+		$prices['shipping'] = $shipping;
+		$prices['shipping_fmt'] = $prod['priceCurrency'].' '.number_format($shipping,2,',','.');
+
+		$total_billing = $total_due + $shipping;
+		$prices['total_billing'] = $total_billing;
+		$prices['total_billing_fmt'] = $prod['priceCurrency'].' '.number_format($total_billing,2,',','.');
 
 
-
+		return $prices;
 	}
 
 	public function post_signin()
@@ -945,10 +987,15 @@ class Shop_Controller extends Base_Controller {
 
 		$products = $prods->find(array('$or'=>$or));
 
+		$prices = $this->recalculate($cart);
+
+		$carts->update(array('_id'=>$active_cart),array('$set'=>array('prices'=>$prices)));		
+
 		return View::make('shop.cart')
 			->with('ajaxsource',URL::to('shop/cartloader'))
 			->with('ajaxdel',URL::to('shop/itemdel'))
 			->with('products',$products)
+			->with('prices',$prices)
 			->with('cart',$cart)
 			->with('form',$form);
 	}
@@ -1018,13 +1065,15 @@ class Shop_Controller extends Base_Controller {
 
 		$shippingFee = 30000;
 
-		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
+		$confirmcode = Str::random(8, 'alpha');
 
-		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout', 'lastUpdate'=>new MongoDate() )));
+		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout','confirmationCode'=>$confirmcode, 'lastUpdate'=>new MongoDate() )));
 
 		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
 			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
 			array('upsert'=>true) );
+
+		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
 
 		return View::make('shop.commit')
 			->with('postdata',$in)
