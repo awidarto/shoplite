@@ -1065,7 +1065,7 @@ class Shop_Controller extends Base_Controller {
 
 		$shippingFee = 30000;
 
-		$confirmcode = Str::random(8, 'alpha');
+		$confirmcode = strtoupper(Str::random(8, 'alpha'));
 
 		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout','confirmationCode'=>$confirmcode, 'lastUpdate'=>new MongoDate() )));
 
