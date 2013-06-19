@@ -182,6 +182,11 @@ Route::get('logout',function(){
     return Redirect::to('/');
 });
 
+Route::get('commander/logout',function(){
+    Auth::logout();
+    return Redirect::to('commander/login');
+});
+
 Route::get('user/profile',array('before'=>'auth','uses'=>'user@profile'));
 
 

@@ -53,7 +53,7 @@
         @else
             <li>{{ HTML::link('dashboard', 'Home') }}</li>
         @endif        
-        <li>{{ HTML::link('logout', 'Logout') }}</li>
+        <li>{{ HTML::link('commander/logout', 'Logout') }}</li>
     </ul>
 
 
