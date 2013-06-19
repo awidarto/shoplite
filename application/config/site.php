@@ -1,7 +1,7 @@
 <?php
 return array(
 	'title' => 'Peach To Black',
-	'admintitle' => 'Kickstart Shop Commander',
+	'admintitle' => 'Peach to Black Shop Commander',
 	
 	'register_success' => 'Registration Success',
 	'register_failed' => 'Registration Success',

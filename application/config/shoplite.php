@@ -26,19 +26,25 @@ return array(
 			'kind'=> 'One of A Kind'
 		),
 	'categories'=>array(
-			'regular'=>'Regular',
-			'mixmatch'=>'Mix n Match',
-			'pow'=> 'Pick of The Week',
-			'otb'=> 'Out of The Box',
-			'kind'=> 'One of A Kind'
+			'skirts'=>'Skirts',
+			'pants'=>'Pants',
+			'outer'=>'Outer',
+			'sets'=>'Sets',
+			'jumpsuits'=>'Jumpsuits',
+			'accessories'=>'Accessories',
+			'tops'=>'Tops',
+			'dress'=>'Dress'
 		),
 	'search_categories'=>array(
 			''=>'All',
-			'regular'=>'Regular',
-			'mixmatch'=>'Mix n Match',
-			'pow'=> 'Pick of The Week',
-			'otb'=> 'Out of The Box',
-			'kind'=> 'One of A Kind'
+			'skirts'=>'Skirts',
+			'pants'=>'Pants',
+			'outer'=>'Outer',
+			'sets'=>'Sets',
+			'jumpsuits'=>'Jumpsuits',
+			'accessories'=>'Accessories',
+			'tops'=>'Tops',
+			'dress'=>'Dress'
 		),
 	'cartstatus'=>array(
 			'open'=>'Regular',
