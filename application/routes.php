@@ -285,6 +285,7 @@ Route::post('signin', function()
 
 });
 
+Route::get('collections',array('uses'=>'shop@collections'));
 Route::get('outofthebox',array('uses'=>'shop@otb'));
 Route::get('pickoftheweek',array('uses'=>'shop@pow'));
 Route::get('oneofakind',array('uses'=>'shop@kind'));
@@ -293,7 +294,8 @@ Route::get('mixandmatch',array('uses'=>'shop@mixmatch'));
 //Route::get('about',array('uses'=>'reader@article(about)'));
 
 Route::get('about',function(){
-    Redirect::to('reader/article/about');
+    //Redirect::to('reader/article/about');
+    return Route::forward('get','reader/article/about');
 });
 
 Route::post('exhibitor/login', function()

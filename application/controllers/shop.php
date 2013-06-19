@@ -231,8 +231,41 @@ class Shop_Controller extends Base_Controller {
 			->with('mixmatch',$mixmatch);
 	}
 
-	public function get_collection($category = 'all',$page = 0,$search = null)
+	public function get_collections($category = 'all',$page = 0,$search = null)
 	{
+
+		$products = new Product();
+
+		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
+
+		$pagelength= 3;
+		$pagestart = 0;
+
+		$limit = array($pagelength, $pagestart);
+		
+		$new = array();
+		$featured = array();
+
+		$today = new MongoDate();
+
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
+
+		$online = array(
+			'publishStatus'=>'online',
+		);
+
+
+		$query = array(
+			'section'=>'pow',
+			'$or'=>array($scheduled,$online)
+		);
+
+		$collections = $products->find($query,array(),array('createdDate'=>-1),$limit);
+
 		$new = array();
 		$featured = array();
 		$mixmatch = array();
@@ -240,7 +273,8 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
-			->with('mixmatch',$mixmatch);
+			->with('mixmatch',$mixmatch)
+			->with('products',$collections);
 	}
 
 
@@ -280,7 +314,7 @@ class Shop_Controller extends Base_Controller {
 
 		
 		
-		return View::make('shop.collection')
+		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
 			->with('products',$pow);
@@ -318,7 +352,7 @@ class Shop_Controller extends Base_Controller {
 
 		$otb = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
-		return View::make('shop.collection')
+		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
 			->with('products',$otb);
@@ -359,7 +393,7 @@ class Shop_Controller extends Base_Controller {
 
 		$mixmatch = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
-		return View::make('shop.collection')
+		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
 			->with('products',$mixmatch);
@@ -397,7 +431,7 @@ class Shop_Controller extends Base_Controller {
 
 		$kind = $products->find($query,array(),array('createdDate'=>-1),$limit);
 		
-		return View::make('shop.collection')
+		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
 			->with('products',$kind);

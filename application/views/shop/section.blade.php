@@ -2,11 +2,6 @@
 
 @section('content')
 
-<div class="row">
-	<div class="span12">
-	{{ Form::select('category',Config::get('shoplite.search_categories')) }}
-	</div>
-</div>
 <div class="row productlist">
 
 	@foreach($products as $m)

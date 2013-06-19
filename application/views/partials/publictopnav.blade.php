@@ -19,31 +19,41 @@
                   <span id="nocart">, you have no shopping cart, would you like to <span id="createcart">create one</span> ?</span>
                 @endif
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
+                  | {{ HTML::link('logout','Logout')}}
               @else
                 {{ HTML::link('shop/confirm','Confirm Payment')}}
-              @endif          
+                | {{ HTML::link('signup','Sign Up')}}
+                | {{ HTML::link('signin','Sign In')}}
+              @endif
+
             </div>
 
           <div class="nav-collapse collapse navmainp2b">
             <ul class="nav">
-    		      <li>{{ HTML::link('mixandmatch','Mix & Match')}}</li>
-              <li>{{ HTML::link('pickoftheweek','Pick of The Week')}}</li>
-              <li>{{ HTML::link('outofthebox','Out of The Box')}}</li>
-              <li>{{ HTML::link('oneofakind','One of A Kind')}}</li>
-              <li>{{ HTML::link('/','Home')}}</li>
-              <li>{{ HTML::link('article/about','About Us')}}</li>
-
-              @if(Auth::shoppercheck())
-                    <li>{{ HTML::link('logout','Logout')}}</li>
-              @else
-                    <li>{{ HTML::link('signup','Sign Up')}}</li>
-                    <li>{{ HTML::link('signin','Sign In')}}</li>
-              @endif          
+              <li>{{ HTML::link('collections','Collections',array('class'=>is_active('collections')) )}}</li>
+    		      <li>{{ HTML::link('mixandmatch','Mix & Match',array('class'=>is_active('mixandmatch')) )}}</li>
+              <li>{{ HTML::link('pickoftheweek','Pick of The Week',array('class'=>is_active('pickoftheweek')) )}}</li>
+              <li>{{ HTML::link('outofthebox','Out of The Box',array('class'=>is_active('outofthebox')) ) }}</li>
+              <li>{{ HTML::link('oneofakind','One of A Kind',array('class'=>is_active('oneofakind')) ) }}</li>
+              <li>{{ HTML::link('/','Home',array('class'=>is_active('pickoftheweek')))}}</li>
+              <li>{{ HTML::link('about','About Us',array('class'=>is_active('about')) )}}</li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
+
+<?php
+
+function is_active($r){
+  $active = (Request::route()->uri == $r)?true:false;
+
+  //print_r(Request::route());
+
+  return ($active)?'active':'inactive';
+}
+
+?>
 
 <script type="text/javascript">
   $( document ).ready(function() {
