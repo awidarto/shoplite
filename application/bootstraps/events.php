@@ -28,14 +28,20 @@ Event::listen('commit.checkout',function($shopper,$cart){
     $shoppers = new Shopper();
 
     $s_id = new MongoId($shopper);
+    $c_id = new MongoId($cart);
 
-    $data = $shoppers->get(array('_id'=>$s_id));
+    $userdata = $shoppers->get(array('_id'=>$s_id));
 
     $carts = new Cart();
 
-    $body = View::make('email.checkout')->render();
+    $cartdata = $carts->get(array('_id'=>$c_id)); 
 
-    Message::to($data['email'])
+    $body = View::make('email.checkout')
+        ->with('user',$userdata)
+        ->with('cart',$cartdata)
+        ->render();
+
+    Message::to($userdata['email'])
         ->from(Config::get('shoplite.admin_email'), Config::get('shoplite.admin_name'))
         ->subject(Config::get('site.title'))
         ->body( $body )

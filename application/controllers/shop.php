@@ -979,6 +979,7 @@ class Shop_Controller extends Base_Controller {
 		$thecart['lastUpdate'] = new MongoDate();
 		$thecart['cartStatus'] = 'open';
 		$thecart['buyerDetail'] = Auth::shopper();
+		$thecart['confirmationCode'] = '';
 
 		$cart = new Cart();
 
@@ -1102,6 +1103,8 @@ class Shop_Controller extends Base_Controller {
 		$confirmcode = strtoupper(Str::random(8, 'alpha'));
 
 		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout','confirmationCode'=>$confirmcode, 'lastUpdate'=>new MongoDate() )));
+
+		$cart = $carts->get(array('_id'=>$active_cart));
 
 		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
 			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
