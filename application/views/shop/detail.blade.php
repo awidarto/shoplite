@@ -63,7 +63,22 @@
       <script type="text/javascript">
       $(document).ready(function(){
 
-        var cart_id = '{{ (Auth::guest())?'': Auth::shopper()->activeCart }}';
+        <?php
+
+          $acart = '';
+          if(Auth::guest()){
+            $acart = '';            
+          }else{
+            if(isset(Auth::shopper()->activeCart)){
+              $acart = Auth::shopper()->activeCart;
+            }else{
+              $acart = '';
+            }
+          } 
+
+        ?>
+
+        var cart_id = '{{ $acart }}';
 
         var product_id = '{{ $product['_id']}}';
 
