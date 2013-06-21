@@ -204,17 +204,39 @@ class Shop_Controller extends Base_Controller {
 
 		$limit = array($pagelength, $pagestart);
 
-		$mixmatch = $products->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+		$today = new MongoDate();
 
-		$pow = $products->find(array('section'=>'pow'),array(),array('createdDate'=>-1),$limit);
+		$scheduled = array(
+			'publishStatus'=>'scheduled',
+			'publishFrom'=>array('$lte'=>$today),
+			'publishUntil'=>array('$gte'=>$today)
+		);
 
-		$otb = $products->find(array('section'=>'otb'),array(),array('createdDate'=>-1),$limit);
+		$online = array(
+			'publishStatus'=>'online',
+		);
 
-		$kind = $products->find(array('section'=>'kind'),array(),array('createdDate'=>-1),$limit);
+
+		$query = array(
+			'section'=>'pow',
+			'$or'=>array($scheduled,$online)
+		);
+
+
+		$mixmatch = $products->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+
+		$pow = $products->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+
+		$otb = $products->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+
+		$kind = $products->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
 		
-		$mixmatchartikel = $articles->find(array('section'=>'mixmatch'),array(),array('createdDate'=>-1),$limit);
+		$mixmatcharticle = $articles->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(2,0));
+		$powarticle = $articles->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(2,0));
+		$otbarticle = $articles->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(1,0));
+		$kindarticle= $articles->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(1,0));
 
-		
+		$homearticles = array_merge($mixmatcharticle,$powarticle,$otbarticle,$kindarticle);
 
 		// /$mixandmact
 		$new = array();
@@ -225,10 +247,10 @@ class Shop_Controller extends Base_Controller {
 			->with('pow',$pow)
 			->with('otb',$otb)
 			->with('kind',$kind)
+			->with('mixmatch',$mixmatch)
 			->with('featured',$featured)
-			->with('pow',$pow)
-			// /->with('otb',$otb)
-			->with('mixmatch',$mixmatch);
+
+			->with('articles',$homearticles) ;
 	}
 
 	public function get_collections($category = 'all',$page = 0,$search = null)

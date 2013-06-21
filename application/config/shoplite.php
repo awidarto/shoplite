@@ -66,6 +66,7 @@ return array(
 		array('prefix'=>'sm_','w'=>50,'h'=>90,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'med_','w'=>333,'h'=>324,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'lar_','w'=>666,'h'=>629,'opt'=>'fit','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'lar_port_','w'=>423,'h'=>800,'opt'=>'portrait','ext'=>'.jpg','q'=>90),
 	),
 
 	'auction_run'=>array(
