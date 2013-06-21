@@ -1,4 +1,46 @@
 <?php
+/*
+* set var to empty string '', if null, not set, or empty array
+* return default value if specified
+*/
+function se($val, $def = null){
+
+	$def = (is_null($def))?'':$def;
+
+	// $val not set
+	if(isset($val)){
+
+		if(is_null($val)){
+			// null value
+			$val = $def;
+		
+		}else{
+
+			if(is_array($val)){
+				// empty array
+				if(empty($val) || count($val) == 0){
+					$val = $def;
+				}
+
+			}else{
+				// empty string
+				if($val == ''){
+					$val = $def;
+				}
+
+			}
+
+		}
+
+	}else{
+
+		$val = $def;
+
+	}
+
+	return $val;
+
+}
 
 function getvariantinventory($prod_id,$variantparams)
 {	

@@ -574,12 +574,21 @@ class Shop_Controller extends Base_Controller {
 		$ca = array_unique($ca);
 
 		$html = '';
-		$opt = '<option value="%s">%s</option>';
+		$opt = '<option value="%s" %s >%s</option>';
+
+
+		$sel = '';
+		$cnt = 0;
+		$defsel = '-';
 		foreach($ca as $c){
-			$html .= sprintf($opt,$c,$c);
+			$sel = ($cnt == 0)?'selected':'';
+			$cnt++;
+
+			$defsel = ($sel == 'selected')?$c:'-';
+			$html .= sprintf($opt , $c , $sel , $c);
 		}
 
-		return Response::json(array('colors'=>$ca,'html'=>$html));
+		return Response::json(array('colors'=>$ca,'html'=>$html, 'defsel'=>$defsel));
 
 	}
 
@@ -595,12 +604,19 @@ class Shop_Controller extends Base_Controller {
 
 		$html = '';
 
-		$opt = '<option value="%s">%s</option>';
+		$opt = '<option value="%s" %s >%s</option>';
+
+		$sel = '';
+		$cnt = 0;
 		for($i = 1; $i <= $count; $i++){
-			$html .= sprintf($opt,$i,$i);
+			$sel = ($cnt == 0)?'selected':'';
+			$cnt++;
+
+			$defsel = ($sel == 'selected')?$i:'';
+			$html .= sprintf($opt,$i, $sel,$i);
 		}
 
-		return Response::json(array('qty'=>$count,'html'=>$html));
+		return Response::json(array('qty'=>$count,'html'=>$html, 'defsel'=>$defsel));
 
 	}
 

@@ -42,6 +42,7 @@
       {{$product['bodycopy']}}
     </div>
 
+
     <div class="optionselectproduct detailproduct clearfix row-fluid">
       <div class="span2">
         <span class="titleselectbox">SELECT SIZE</span><br/>        
@@ -87,6 +88,11 @@
               $('select[name="color"]').html(data.html)
                 .simplecolorpicker('destroy')
                 .simplecolorpicker();
+
+              $.post('{{ URL::to('shop/qty')}}',{ color: data.defsel, size: $('select[name="size"]').val(), _id:product_id },function(data){
+                  $('select[name="qty"]').html(data.html);
+              },'json');
+
           },'json');
         });
 

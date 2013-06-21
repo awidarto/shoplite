@@ -423,4 +423,11 @@ input.total-prices, .subtotal{
 	text-align: center;
 }
 
+.simplecolorpicker div{
+    border: 1px dotted #222;
+}
+
+.simplecolorpicker div:hover, .simplecolorpicker div.selected{
+    border: 2px solid #F5C1AC;
+}
 

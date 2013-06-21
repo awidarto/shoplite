@@ -12,9 +12,11 @@
     {{ HTML::style('css/select2.css') }}
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
     {{ HTML::style('css/smart_wizard.css') }}
-    {{ HTML::style('css/shopfront.css') }}
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/jquery.simplecolorpicker.css') }}
+
+    {{ HTML::style('css/shopfront.css') }}
+
 
     {{ HTML::script('js/jquery-1.8.3.min.js') }}
     {{ HTML::script('js/jquery.elevateZoom-2.5.5.min.js') }}

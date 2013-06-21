@@ -12,7 +12,7 @@
             
             <div id="logged-in">
               @if(Auth::shoppercheck())
-                Welcome {{ HTML::link('myprofile',Auth::shopper()->firstname.' '.Auth::shopper()->lastname) }} 
+                Welcome {{ HTML::link('myprofile',se(Auth::shopper()->firstname).' '.se(Auth::shopper()->lastname)) }} 
                 @if(isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != '')
                   | <i class="icon-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}}
                 <?php
@@ -25,7 +25,8 @@
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
                   | {{ HTML::link('logout','Logout')}}
               @else
-                {{ HTML::link('shop/confirm','Confirm Payment')}}
+                Hello, what would you like to do ?  
+                &nbsp;{{ HTML::link('shop/confirm','Confirm Payment')}}
                 | {{ HTML::link('signup','Sign Up')}}
                 | {{ HTML::link('signin','Sign In')}}
               @endif
@@ -39,7 +40,7 @@
               <li>{{ HTML::link('pickoftheweek','Pick of The Week',array('class'=>is_active('pickoftheweek')) )}}</li>
               <li>{{ HTML::link('outofthebox','Out of The Box',array('class'=>is_active('outofthebox')) ) }}</li>
               <li>{{ HTML::link('oneofakind','One of A Kind',array('class'=>is_active('oneofakind')) ) }}</li>
-              <li>{{ HTML::link('/','Home',array('class'=>is_active('pickoftheweek')))}}</li>
+              <li>{{ HTML::link('/','Home',array('class'=>is_active('/')))}}</li>
               <li>{{ HTML::link('about','About Us',array('class'=>is_active('about')) )}}</li>
             </ul>
           </div><!--/.nav-collapse -->
