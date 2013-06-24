@@ -433,3 +433,7 @@ input.total-prices, .subtotal{
     border: 2px solid #F5C1AC;
 }
 
+.container{
+	width:1037px;
+}
+

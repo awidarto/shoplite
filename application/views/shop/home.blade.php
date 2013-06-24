@@ -1,7 +1,15 @@
 @layout('public')
 
 @section('content')
-<div class="row">
+
+<style type="text/css">
+	.row .home-row .span4{
+
+	}
+
+</style>
+
+<div class="row home-row">
 	@foreach($mixmatch as $m)
 	<div class="span4">
 		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_port_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
@@ -10,7 +18,7 @@
 	@endforeach
 </div>
 
-<div class="row">
+<div class="row home-row">
 	@foreach($pow as $m)
 	<div class="span4">
 		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_sq_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
@@ -19,7 +27,7 @@
 	@endforeach
 </div>
 
-<div class="row">
+<div class="row home-row">
 
 	@for($i = 0;$i < 3;$i++)
 
