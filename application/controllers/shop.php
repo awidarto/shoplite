@@ -570,12 +570,6 @@ class Shop_Controller extends Base_Controller {
 			->with('product',$product);
 	}
 
-	public function post_size()
-	{
-
-
-	}
-
 	public function post_color()
 	{
 		$in = Input::get();

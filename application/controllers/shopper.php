@@ -358,6 +358,7 @@ class Shopper_Controller extends Base_Controller {
 			$data['createdDate'] = new MongoDate();
 			$data['lastUpdate'] = new MongoDate();
 			$data['role'] = 'shopper';
+			$data['activeCart'] = '';
 
 			$data['agreetnc'] = (isset($data['agreetnc']) && $data['agreetnc'] == 'Yes')?'Yes':'No';
 			$data['saveinfo'] = (isset($data['saveinfo']) && $data['saveinfo'] == 'Yes')?'Yes':'No';
@@ -373,60 +374,6 @@ class Shopper_Controller extends Base_Controller {
 			$user = new Shopper();
 
 			if($obj = $user->insert($data)){
-
-				/*
-				//log message 
-				$message = new Logmessage();
-
-				$messagedata['user'] = $data['_id'];
-				$messagedata['type'] = 'email.regsuccess';
-				$messagedata['emailto'] = $data['email'];
-				$messagedata['emailfrom'] = Config::get('eventreg.reg_admin_email');
-				$messagedata['emailfromname'] = Config::get('eventreg.reg_admin_name');
-				$messagedata['passwordRandom'] = $password;
-				$messagedata['emailcc1'] = Config::get('eventreg.reg_dyandra_admin_email');
-				$messagedata['emailcc1name'] = Config::get('eventreg.reg_dyandra_admin_name');
-				$messagedata['emailcc2'] = '';
-				$messagedata['emailcc2name'] = '';
-				$messagedata['emailsubject'] = 'Indonesia Petroleum Association – 37th Convention & Exhibition (Registration – '.$data['registrationnumber'].')';
-				$messagedata['createdDate'] = new MongoDate();
-				
-				if($message->insert($messagedata)){
-
-
-					$body = View::make('email.regsuccess')
-						->with('data',$data)
-						->with('fromadmin','yes')
-						->with('passwordRandom',$password)
-						->render();
-
-					Message::to($data['email'])
-					    ->from(Config::get('eventreg.reg_admin_email'), Config::get('eventreg.reg_admin_name'))
-					    ->cc(Config::get('eventreg.reg_dyandra_admin_email'), Config::get('eventreg.reg_dyandra_admin_name'))
-					    ->subject('Indonesia Petroleum Association – 37th Convention & Exhibition (Registration – '.$data['registrationnumber'].')')
-					    ->body( $body )
-					    ->html(true)
-					    ->send();
-
-					//saveto outbox
-					$outbox = new Outbox();
-
-					$outboxdata['from'] = Config::get('eventreg.reg_admin_email');
-					$outboxdata['to'] = $data['email'];
-					$outboxdata['cc'] = Config::get('eventreg.reg_admin_email');
-					$outboxdata['bcc'] = '';
-					$outboxdata['subject'] = 'Indonesia Petroleum Association – 37th Convention & Exhibition (Registration – '.$data['registrationnumber'].')';
-					$outboxdata['body'] = $body;
-					$outboxdata['status'] = 'unsent';
-
-					$outboxdata['createdDate'] = new MongoDate();
-					$outboxdata['lastUpdate'] = new MongoDate();
-
-					$outbox->insert($outboxdata);
-					
-				}
-
-			*/
 		    	return Redirect::to('register-success')->with('notify_success',Config::get('site.register_success'));
 			}else{
 		    	return Redirect::to('register')->with('notify_result',Config::get('site.register_failed'));
