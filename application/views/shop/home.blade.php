@@ -1,33 +1,44 @@
-@layout('public')
+@layout('publichome')
 
 @section('content')
 
-<style type="text/css">
-	.row .home-row .span4{
+<div class="row-fluid">
+	@for($idx = 0;$idx < 3;$idx++)
+		<?php
+			$mm = array_pop($mixmatch);
+		?>
+		<div class="span4">
+			@if(isset($mm))
+				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_port_pic0'.$mm['defaultpic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
+			@else
+				<a href="#"><img src="http://placehold.it/335x632&text=Placeholder Image" /></a>
+			@endif
+		</div>
 
-	}
+	@endfor
+</div>
+<div class="clear"></div>
+<div class="row-fluid" style="margin-top:8px;">
 
-</style>
+	@for($idx = 0;$idx < 3;$idx++)
+		<?php
+			$mm = array_pop($pow);
+		?>
+		<div class="span4">
+			@if(isset($mm))
+				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['defaultpic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
+			@else
+				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
+			@endif
+		</div>
 
-<div class="row home-row">
-	@foreach($mixmatch as $m)
-	<div class="span4">
-		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_port_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
-	</div>
+	@endfor
 
-	@endforeach
 </div>
 
-<div class="row home-row">
-	@foreach($pow as $m)
-	<div class="span4">
-		<a href="{{ URL::base() }}/shop/detail/{{$m['_id']}}"><img src="{{ URL::base().'/storage/products/'.$m['_id'].'/lar_sq_pic0'.$m['defaultpic'].'.jpg' }}" alt="{{ $m['name']}}" class="mixmatch"  /></a>
-	</div>
-	
-	@endforeach
-</div>
+<div class="clear"></div>
 
-<div class="row home-row">
+<div class="row-fluid">
 
 	@for($i = 0;$i < 3;$i++)
 

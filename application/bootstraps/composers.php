@@ -12,6 +12,11 @@ View::composer('public',function($view){
 
 });
 
+View::composer('publichome',function($view){
+
+    $view->nest('publictopnav','partials.publictopnav');
+
+});
 
 View::composer('master',function($view){
 
