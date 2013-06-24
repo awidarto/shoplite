@@ -145,8 +145,14 @@
                     <div class="span4">
                       @if($i == 1)
                         {{ $form->radio('defaultpic','Default',$i,true)}}
+                        {{ $form->radio('homepic','Home',$i,true)}}
+                        {{ $form->radio('vthumbnail','Portrait Thumb',$i,true)}}
+                        {{ $form->radio('hthumbnail','Landscape Thumb',$i,true)}}
                       @else
                         {{ $form->radio('defaultpic','Default',$i)}}
+                        {{ $form->radio('homepic','Home',$i)}}
+                        {{ $form->radio('vthumbnail','Portrait Thumb',$i)}}
+                        {{ $form->radio('hthumbnail','Landscape Thumb',$i)}}
                       @endif
                     </div>
                   </div>

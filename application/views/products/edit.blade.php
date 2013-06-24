@@ -160,6 +160,9 @@
                    </div>
                     <div class="span3">
                       {{ $form->radio('defaultpic','Default',$i)}}
+                      {{ $form->radio('homepic','Home',$i)}}
+                      {{ $form->radio('vthumbnail','Portrait Thumb',$i)}}
+                      {{ $form->radio('hthumbnail','Landscape Thumb',$i)}}
                     </div>
                   </div>
               @endfor

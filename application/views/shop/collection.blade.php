@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-	<div class="span12">
+	<div class="span3 pull-right">
 	{{ Form::select('category',Config::get('shoplite.search_categories')) }}
 	</div>
 </div>

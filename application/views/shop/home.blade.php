@@ -26,7 +26,7 @@
 		?>
 		<div class="span4">
 			@if(isset($mm))
-				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['defaultpic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
+				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
 			@else
 				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
 			@endif
