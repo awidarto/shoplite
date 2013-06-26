@@ -35,7 +35,7 @@
         <fieldset>
             <legend>Publishing</legend>
 
-                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),'online',array('id'=>'publishStatus'))}}<br />
+                {{ $form->select('publishStatus','Publish Status',Config::get('kickstart.publishstatus'),null,array('id'=>'publishStatus'))}}<br />
 
                 {{ $form->text('publishFrom','','',array('class'=>'text codePhone date','id'=>'publishFrom','placeholder'=>'From')) }}
                 {{ $form->text('publishUntil','','',array('class'=>'text codePhone date','id'=>'publishUntil','placeholder'=>'To')) }}
@@ -43,7 +43,7 @@
         </fieldset>
         <fieldset>
             <legend>Details</legend>
-                {{ $form->select('section','Default Section',Config::get('content.articles.sections'),'all',array('id'=>'section'))}}
+                {{ $form->select('section','Default Section',Config::get('content.articles.sections'),null,array('id'=>'section'))}}
 
                 {{ $form->select('category','Category',Config::get('content.articles.categories'),null,array('id'=>'category'))}}<br />
 
