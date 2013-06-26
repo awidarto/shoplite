@@ -23,7 +23,7 @@
 			<?php
 				$mm = array_pop($pow);
 			?>
-			@if(isset($mm))
+			@if(isset($mm)  && isset($mm['homepic']) )
 				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
 			@else
 				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
@@ -33,7 +33,7 @@
 			<?php
 				$mm = array_pop($otb);
 			?>
-			@if(isset($mm))
+			@if(isset($mm) && isset($mm['homepic']) )
 				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
 			@else
 				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
@@ -43,7 +43,7 @@
 			<?php
 				$mm = array_pop($kind);
 			?>
-			@if(isset($mm))
+			@if(isset($mm) && isset($mm['homepic']) )
 				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
 			@else
 				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
