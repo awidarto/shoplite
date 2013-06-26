@@ -231,10 +231,10 @@ class Shop_Controller extends Base_Controller {
 
 		$kind = $products->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
 		
-		$mixmatcharticle = $articles->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(2,0));
-		$powarticle = $articles->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(2,0));
-		$otbarticle = $articles->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(1,0));
-		$kindarticle= $articles->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array(1,0));
+		$mixmatcharticle = $articles->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
+		$powarticle = $articles->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
+		$otbarticle = $articles->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
+		$kindarticle= $articles->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
 
 		$homearticles = array_merge($mixmatcharticle,$powarticle,$otbarticle,$kindarticle);
 
