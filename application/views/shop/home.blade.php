@@ -19,20 +19,36 @@
 </div>
 <div class="clear"></div>
 <div class="row-fluid" style="margin-top:8px;">
-
-	@for($idx = 0;$idx < 3;$idx++)
-		<?php
-			$mm = array_pop($pow);
-		?>
 		<div class="span4">
+			<?php
+				$mm = array_pop($pow);
+			?>
 			@if(isset($mm))
 				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
 			@else
 				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
 			@endif
 		</div>
-
-	@endfor
+		<div class="span4">
+			<?php
+				$mm = array_pop($otb);
+			?>
+			@if(isset($mm))
+				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
+			@else
+				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
+			@endif
+		</div>
+		<div class="span4">
+			<?php
+				$mm = array_pop($kind);
+			?>
+			@if(isset($mm))
+				<a href="{{ URL::base() }}/shop/detail/{{$mm['_id']}}"><img src="{{ URL::base().'/storage/products/'.$mm['_id'].'/lar_sq_pic0'.$mm['homepic'].'.jpg' }}" alt="{{ $mm['name']}}"  /></a>
+			@else
+				<a href="#"><img src="http://placehold.it/335x335&text=Placeholder Image" /></a>
+			@endif
+		</div>
 
 </div>
 
