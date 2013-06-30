@@ -133,7 +133,7 @@ Route::post('signin', function()
 
 });
 
-Route::get('collections',array('uses'=>'shop@collections'));
+Route::get('collections/(:any?)/(:any?)/(:any?)/(:any?)',array('uses'=>'shop@collections'));
 Route::get('outofthebox',array('uses'=>'shop@otb'));
 Route::get('pickoftheweek',array('uses'=>'shop@pow'));
 Route::get('oneofakind',array('uses'=>'shop@kind'));

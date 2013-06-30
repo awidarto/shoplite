@@ -15,6 +15,7 @@
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/jquery.simplecolorpicker.css') }}
 
+    {{ HTML::style('css/fontcard.css') }}
     {{ HTML::style('css/shopfront.css') }}
 
 

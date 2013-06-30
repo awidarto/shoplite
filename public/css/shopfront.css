@@ -4,7 +4,12 @@
 html,
 body {
 	height: 100%;
+	font-family: 'proxima_nova_rgregular';
 	/* The html and body elements cannot have any padding or margin. */
+}
+
+h1,h2,h3,h4,h5,h6,p,li{
+	font-family: 'proxima_nova_rgregular';	
 }
 
 /* Wrapper for page content to push down footer */
@@ -94,11 +99,11 @@ img.mixmatch{
 }
 .navmainp2b{
 	float: right;
-	width:663px;
+	width:670px;
 	margin-top: 1px;
 }
 .navbar-inverse .navmainp2b .nav > li > a{
-	font-size: 14px;
+	font-size: 12px;
 	padding:5px 10px 0px;
 	color: #1f271a;
 
@@ -337,6 +342,7 @@ a.continueshopping{
 	margin-bottom: 40px;
 }
 .productlist .span3 h3{
+	font-size: 18px;
 	margin:15px 0 0 0;
 	color: #1a3059;
 	line-height: 20px;
@@ -437,3 +443,23 @@ input.total-prices, .subtotal{
 	width:1037px;
 }
 
+.styled-select{
+	display: block;
+	border: 2px solid #cccccc;
+	padding: 0px;
+	height:27px;
+	margin-top: 20px;
+	background: url(../images/dk_arrows.png) no-repeat 95% 50% #fff;
+}
+
+.styled-select select{
+	margin:0px;
+	margin-left: 2px;
+	background: transparent;
+	font-size: 11px;
+	line-height: 1em;
+	height: 24px;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+}

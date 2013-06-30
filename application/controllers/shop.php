@@ -253,15 +253,15 @@ class Shop_Controller extends Base_Controller {
 			->with('articles',$homearticles) ;
 	}
 
-	public function get_collections($category = 'all',$page = 0,$search = null)
+	public function get_collections($page = 1,$category = 'all',$search = null)
 	{
 
 		$products = new Product();
 
 		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
 
-		$pagelength= 3;
-		$pagestart = 0;
+		$pagelength= Config::get('shoplite.item_per_page');
+		$pagestart = ($page - 1) * $pagelength;
 
 		$limit = array($pagelength, $pagestart);
 		
@@ -280,20 +280,47 @@ class Shop_Controller extends Base_Controller {
 			'publishStatus'=>'online',
 		);
 
-
-		$query = array(
-			'section'=>'pow',
-			'$or'=>array($scheduled,$online)
-		);
+		if($category == 'all'){
+			$query = array(
+				'$or'=>array($scheduled,$online)
+			);
+		}else{
+			$query = array(
+				'category'=>$category,
+				'$or'=>array($scheduled,$online)
+			);			
+		}
 
 		$collections = $products->find($query,array(),array('createdDate'=>-1),$limit);
 
 		$new = array();
 		$featured = array();
 		$mixmatch = array();
+
+		$total = $products->count();
+
+		$pagenum = $total / $pagelength;
+
+		$currenturl = URL::to('collections').'/'.$page.'/'.$category.'/'.$search;
+
+		$pagination = '<div class="pagination pull-right"><ul>';
+		$pagination .='<li><a href="'.URL::current().'">Prev</a></li>';
+
+		for($p = 0;$p < $pagenum; $p++){
+
+			$pageurl = URL::to('collections').'/'.$page.'/'.$category.'/'.$search;
+
+			$pagination .='<li><a href="'.$pageurl.'">'.($p + 1).'</a></li>';
+		}
+
+		$pagination .='<li><a href="'.URL::current().'">Next</a></li>';
+		$pagination .= '</ul></div>';
 		
 		return View::make('shop.collection')
 			->with('new',$new)
+			->with('page',$page)
+			->with('category',$category)
+			->with('pagination',$pagination)
 			->with('featured',$featured)
 			->with('mixmatch',$mixmatch)
 			->with('products',$collections);

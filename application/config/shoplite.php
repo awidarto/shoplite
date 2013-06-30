@@ -33,7 +33,8 @@ return array(
 			'jumpsuits'=>'Jumpsuits',
 			'accessories'=>'Accessories',
 			'tops'=>'Tops',
-			'dress'=>'Dress'
+			'dress'=>'Dress',
+			'nonclothing'=>'Non Clothing'
 		),
 	'search_categories'=>array(
 			''=>'All',
@@ -44,7 +45,8 @@ return array(
 			'jumpsuits'=>'Jumpsuits',
 			'accessories'=>'Accessories',
 			'tops'=>'Tops',
-			'dress'=>'Dress'
+			'dress'=>'Dress',
+			'nonclothing'=>'Non Clothing'
 		),
 	'cartstatus'=>array(
 			'open'=>'Regular',
@@ -68,6 +70,8 @@ return array(
 		array('prefix'=>'lar_','w'=>650,'h'=>610,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'lar_sq_','w'=>500,'h'=>500,'opt'=>'fit','ext'=>'.jpg','q'=>90),
 		array('prefix'=>'lar_port_','w'=>500,'h'=>650,'opt'=>'portrait','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'sm_port_','w'=>185,'h'=>250,'opt'=>'portrait','ext'=>'.jpg','q'=>90),
+		array('prefix'=>'sm_land_','w'=>250,'h'=>185,'opt'=>'landscape','ext'=>'.jpg','q'=>90),
 	),
 
 	'auction_run'=>array(
@@ -75,8 +79,9 @@ return array(
 		'auto'=>'Auto'
 	),
 	'admin_email'=>'admin@peachtoblack.com',
-	'admin_name'=>'Shopkeeper@PeachtoBlack'
+	'admin_name'=>'Shopkeeper@PeachtoBlack',
 
+	'item_per_page'=>6
 
 
 
