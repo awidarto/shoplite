@@ -313,18 +313,23 @@ class Shop_Controller extends Base_Controller {
 		$nexturl = URL::to('collections').'/'.$nextpage.'/'.$category.'/'.$search;
 
 		$pagination = '<div class="pagination pull-right"><ul>';
-		$pagination .='<li><a href="'.$prevurl.'">Prev</a></li>';
 
-		for($p = 1;$p <= $pagenum; $p++){
+		if($totalfound > $pagelength){
+			$pagination .='<li><a href="'.$prevurl.'">Prev</a></li>';
 
-			$pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+			for($p = 1;$p <= $pagenum; $p++){
 
-			$pagination .='<li><a href="'.$pageurl.'">'.$p.'</a></li>';
+				$pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+				$pagination .='<li><a href="'.$pageurl.'">'.$p.'</a></li>';
+			}
+
+			$pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
+
 		}
-
-		$pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
-		$pagination .= '</ul></div>';
 		
+		$pagination .= '</ul></div>';
+
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('page',$page)
