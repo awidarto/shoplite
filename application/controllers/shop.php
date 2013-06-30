@@ -305,8 +305,12 @@ class Shop_Controller extends Base_Controller {
 		$pagenum = $total / $pagelength;
 
 		$currenturl = URL::to('collections').'/'.$page.'/'.$category.'/'.$search;
-		$prevurl = URL::to('collections').'/'.($page - 1).'/'.$category.'/'.$search;
-		$nexturl = URL::to('collections').'/'.($page + 1).'/'.$category.'/'.$search;
+
+		$prevpage = (($page - 1) == 0)?$page:($page - 1);
+		$nextpage = (($page + 1) > $pagenum )?$page:($page + 1);
+
+		$prevurl = URL::to('collections').'/'.$prevpage.'/'.$category.'/'.$search;
+		$nexturl = URL::to('collections').'/'.$nextpage.'/'.$category.'/'.$search;
 
 		$pagination = '<div class="pagination pull-right"><ul>';
 		$pagination .='<li><a href="'.$prevurl.'">Prev</a></li>';
@@ -315,7 +319,7 @@ class Shop_Controller extends Base_Controller {
 
 			$pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
 
-			$pagination .='<li><a href="'.$pageurl.'">'.($p + 1).'</a></li>';
+			$pagination .='<li><a href="'.$pageurl.'">'.$p.'</a></li>';
 		}
 
 		$pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
