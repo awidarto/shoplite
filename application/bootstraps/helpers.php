@@ -3,6 +3,11 @@
 * set var to empty string '', if null, not set, or empty array
 * return default value if specified
 */
+
+function idr($in){
+	return number_format((double) $in,2,',','.');
+}
+
 function se($val, $def = null){
 
 	$def = (is_null($def))?'':$def;

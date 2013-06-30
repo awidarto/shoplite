@@ -340,7 +340,10 @@ a.continueshopping{
 }
 .productlist{
 	margin-bottom: 40px;
+	text-align: center;
+
 }
+
 .productlist .span3 h3{
 	font-size: 18px;
 	margin:15px 0 0 0;
