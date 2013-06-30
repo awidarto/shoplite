@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="span9">
-		 {{ $pagination }}
+		 Showing {{ $totalfound }} items of {{ $totalfound }} {{ $pagination }}
 	</div>
 	<div class="span3 pull-right">
 		<div class="styled-select">

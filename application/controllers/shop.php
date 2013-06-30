@@ -261,7 +261,7 @@ class Shop_Controller extends Base_Controller {
 		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
 
 		$pagelength= Config::get('shoplite.item_per_page');
-		$pagestart = ($page - 1) * $pagelength;
+		$pagestart = ($page - 1 ) * $pagelength;
 
 		$limit = array($pagelength, $pagestart);
 		
@@ -291,13 +291,16 @@ class Shop_Controller extends Base_Controller {
 			);			
 		}
 
+
 		$collections = $products->find($query,array(),array('createdDate'=>-1),$limit);
+
+		$totalfound = count($collections);
+
+		$total = $products->count();
 
 		$new = array();
 		$featured = array();
 		$mixmatch = array();
-
-		$total = $products->count();
 
 		$pagenum = $total / $pagelength;
 
@@ -306,9 +309,9 @@ class Shop_Controller extends Base_Controller {
 		$pagination = '<div class="pagination pull-right"><ul>';
 		$pagination .='<li><a href="'.URL::current().'">Prev</a></li>';
 
-		for($p = 0;$p < $pagenum; $p++){
+		for($p = 1;$p < $pagenum; $p++){
 
-			$pageurl = URL::to('collections').'/'.$page.'/'.$category.'/'.$search;
+			$pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
 
 			$pagination .='<li><a href="'.$pageurl.'">'.($p + 1).'</a></li>';
 		}
@@ -319,6 +322,9 @@ class Shop_Controller extends Base_Controller {
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('page',$page)
+			->with('total',$total)
+			->with('totalfound',$totalfound)
+			->with('pagelength',$pagelength)
 			->with('category',$category)
 			->with('search',$search)
 			->with('pagination',$pagination)
