@@ -47,6 +47,30 @@ function se($val, $def = null){
 
 }
 
+function getparam($key,$default = null){
+	$params = new Param();
+
+	$val = $params->get(array('_id'=>$key));
+
+	if($val){
+		return $val['value'];
+	}else{
+		return $default;
+	}
+
+}
+
+function setparam($key,$val){
+	$params = new Param();
+
+	if($res = $param->update(array('_id'=>$key), array('$set'=>array('value'=>$val)), array('upsert'=>true) )){
+		return true;	
+	}else{
+		return false;
+	}
+
+}
+
 function getvariantinventory($prod_id,$variantparams)
 {	
 	$inv = new Inventory();

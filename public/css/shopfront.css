@@ -344,13 +344,22 @@ a.continueshopping{
 
 }
 
-.productlist .span3 h3{
+.productlist .productpanel{
+	width:250px;
+	margin:2px;
+	float:left;
+	display: block;
+	min-height: 320px;
+	border: thin solid #d0d0d0;
+}
+
+.productlist .productpanel h3{
 	font-size: 18px;
 	margin:15px 0 0 0;
 	color: #1a3059;
 	line-height: 20px;
 }
-.productlist .span3 p{
+.productlist .productpanel p{
 	margin: 0;
 }
 
