@@ -29,7 +29,7 @@
 	$(document).ready(function(){
 		$('#cat-select').change(function(){
 
-			window.location.assign('{{ URL::to('collections').'/'.$page }}/' + $('#cat-select').val());
+			window.location.assign('{{ URL::to('collections').'/'.$page }}/' + $('#cat-select').val() + '/{{ $search }}');
 		});
 	});
 

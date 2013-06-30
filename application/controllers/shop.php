@@ -320,6 +320,7 @@ class Shop_Controller extends Base_Controller {
 			->with('new',$new)
 			->with('page',$page)
 			->with('category',$category)
+			->with('search',$search)
 			->with('pagination',$pagination)
 			->with('featured',$featured)
 			->with('mixmatch',$mixmatch)
