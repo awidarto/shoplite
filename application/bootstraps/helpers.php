@@ -63,7 +63,7 @@ function getparam($key,$default = null){
 function setparam($key,$val){
 	$params = new Param();
 
-	if($res = $param->update(array('_id'=>$key), array('$set'=>array('value'=>$val)), array('upsert'=>true) )){
+	if($res = $params->update(array('_id'=>$key), array('$set'=>array('value'=>$val)), array('upsert'=>true) )){
 		return true;	
 	}else{
 		return false;

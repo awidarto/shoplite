@@ -7,20 +7,26 @@
 {{ $form->open('shop/confirm','POST',array('class'=>'horizontal','id'=>'shoppingcartform'))}}
   <div class="span12">
     <h3>Confirm Payment</h3>
-    <div class="paymentmethod span12">
-      <div class="method1 span6">
+    <div class="confirm-form span12">
+      {{ $form->text('confirmationCode','Confirmation Code','')}}<br />
 
-        {{ $form->text('confirmationCode','Confirmation Code','')}}<br />
-          <a class="btn primary" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Confirm</a>
-          <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Cancel</a>
-      </div>
+      {{ $form->text('email','Email','')}}<br />
 
-      <div class="method3 span5">
+      {{ $form->select('destinationBank','Transfer to ',Config::get('shoplite.banks'))}}<br />
 
-        <p class="buttonshopcart">
-        </p>
-      </div>
-      
+      {{ $form->text('transferDate','Date of Transfer','', array('class'=>'date') )}}<br />
+
+      {{ $form->text('transferAmount','Amount of Transfer','', array('class'=>'currency-display') )}}<br />
+
+      {{ $form->text('sourceBank','Bank Name','')}}<br />
+
+      {{ $form->text('sourceAcc','Transfer from Account Number','')}}<br />
+
+      {{ $form->text('sourceAccName','Account Holder Name','')}}<br />
+
+        <a class="btn primary" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Confirm</a>
+        <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Cancel</a>
+
     </div>
   
   </div>
@@ -28,6 +34,11 @@
 </div>
 
 <style type="text/css">
+
+.confirm-form input[type=text]{
+  width:350px;
+}
+
 input.currency-display{
   text-align: right;
 

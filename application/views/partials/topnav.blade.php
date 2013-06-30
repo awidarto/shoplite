@@ -35,6 +35,7 @@
             <li class="has-dropdown">
               <a href="#">Sys Admin</a>
               <ul class="dropdown">
+                <li>{{ HTML::link('seo', 'SEO Dashboard' ) }}</li>
                 <li>{{ HTML::link('articles', 'Article Manager' ) }}</li>
                 <li>{{ HTML::link('news', 'News Room' ) }}</li>
                 <li>{{ HTML::link('users', 'User Manager' ) }}</li>

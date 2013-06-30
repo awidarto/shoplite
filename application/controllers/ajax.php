@@ -408,5 +408,20 @@ class Ajax_Controller extends Base_Controller {
 		return Response::json($result);		
 	}
 
+	public function post_param()
+	{
+		$in = Input::get();
+
+		$key = $in['key'];
+		$value = $in['value'];
+
+		if(setparam($key,$value)){
+			return Response::json(array('result'=>'OK'));
+		}else{
+			return Response::json(array('result'=>'ERR'));
+		}
+
+	}
+
 
 }

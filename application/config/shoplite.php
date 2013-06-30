@@ -81,6 +81,11 @@ return array(
 	'admin_email'=>'admin@peachtoblack.com',
 	'admin_name'=>'Shopkeeper@PeachtoBlack',
 
+	'banks'=>array(
+		'mandiri'=>'Bank Mandiri',
+		'bca'=>'BCA'
+	),
+
 	'item_per_page'=>6
 
 

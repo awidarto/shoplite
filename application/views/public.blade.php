@@ -15,10 +15,14 @@
     {{ HTML::style('content/css/icomoon.css') }}
     {{ HTML::style('css/jquery.simplecolorpicker.css') }}
 
+
     {{ HTML::style('css/fontcard.css') }}
 
     {{ HTML::style('css/shopfront.css') }}
 
+    {{ HTML::style('css/bootstrap-timepicker.css') }}
+
+    {{ HTML::style('css/bootstrap-datetimepicker.min.css') }}
 
     {{ HTML::script('js/jquery-1.8.3.min.js') }}
     {{ HTML::script('js/jquery.elevateZoom-2.5.5.min.js') }}
@@ -71,15 +75,27 @@
       </div>
     </div>
 
+<script type="text/javascript">
+  base = '{{ URL::base() }}/';
+</script>
+
+
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js') }}
   
     {{ HTML::script('js/jquery.dataTables.min.js') }}
 
     {{ HTML::script('bootstrap/js/bootstrap.js') }}
 
-    {{ HTML::script('js/jquery.smartWizard-2.0.js') }}
+
+    {{ HTML::script('js/bootstrap-timepicker.js') }}   
+    {{ HTML::script('js/bootstrap-datetimepicker.min.js') }}   
+
 
     {{ HTML::script('js/jquery.simplecolorpicker.js') }}
+
+    {{ HTML::script('js/jquery.tagsinput.min.js') }}
+
+    {{ HTML::script('js/pnu.js') }}
 
   </body>
 </html>

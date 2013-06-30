@@ -49,6 +49,8 @@
 
                 {{ $form->text('tags','Tags.req','',array('class'=>'text tag_keyword span6','id'=>'tags')) }}
 
+                {{ $form->text('seokeywords','SEO Keywords','',array('class'=>'text span6 tag_keyword','id'=>'tags')) }}
+
         </fieldset>
 
         <fieldset>

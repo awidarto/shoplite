@@ -32,7 +32,7 @@
 |
 */
 
-Route::controller(array('register','shop','shoppers','shopper','merchants','reader','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
+Route::controller(array('register','shop','seo','shoppers','shopper','merchants','reader','sponsors','news','articles','carts','auctions','promotions','products','report','import','export','dashboard','user','users','message','search','activity','category','content','ajax'));
 
 Route::get('shop',array('uses'=>'shop@home'));
 
