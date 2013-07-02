@@ -88,7 +88,7 @@ return array(
 		'bca'=>'BCA'
 	),
 
-	'item_per_page'=>3
+	'item_per_page'=>16
 
 
 
