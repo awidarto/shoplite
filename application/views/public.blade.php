@@ -64,7 +64,7 @@
     <div id="footer">
       <div class="container">
         <p class="social-footer">
-          <i class="icon-facebook"></i>
+          <i class="icon-facebook-2"></i>
           <i class="icon-twitter"></i>
           <i class="icon-pinterest"></i>
           <i class="icon-google-plus-3"></i>

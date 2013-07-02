@@ -3,8 +3,11 @@
 @section('content')
 
 <div class="row">
-	<div class="span9">
-		 Showing {{ $totalfound }} items of {{ $totalfound }} {{ $pagination }}
+	<div class="span4">
+		<h5 style="margin-left:60px;margin-top:26px;">Showing {{ $showcount }} items of {{ $totalfound }}</h5>
+	</div>
+	<div class="span5" style="text-align:right">
+		 {{ $pagination }}
 	</div>
 	<div class="span3 pull-right">
 		<div class="styled-select">

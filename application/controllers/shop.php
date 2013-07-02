@@ -282,6 +282,7 @@ class Shop_Controller extends Base_Controller {
 
 		if($category == 'all'){
 			$query = array(
+				'category'=>array('$ne'=>'none'),
 				'$or'=>array($scheduled,$online)
 			);
 		}else{
@@ -294,7 +295,9 @@ class Shop_Controller extends Base_Controller {
 
 		$collections = $products->find($query,array(),array('createdDate'=>-1),$limit);
 
-		$totalfound = count($collections);
+		$showcount = count($collections);
+
+		$totalfound = $products->count($query);
 
 		$total = $products->count();
 
@@ -335,6 +338,7 @@ class Shop_Controller extends Base_Controller {
 			->with('page',$page)
 			->with('total',$total)
 			->with('totalfound',$totalfound)
+			->with('showcount',$showcount)
 			->with('pagelength',$pagelength)
 			->with('category',$category)
 			->with('search',$search)

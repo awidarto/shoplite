@@ -474,3 +474,9 @@ input.total-prices, .subtotal{
 	border-radius: 0;
 	-webkit-appearance: none;
 }
+
+p.social-footer i{ 
+	font-size: 28px;
+	padding-right: 20px;
+}
+

@@ -214,6 +214,45 @@
 
   </div>
   <div class="clear"></div>
+
+    @if($product['groupParent'] == true && is_array($product['componentProducts']) && count($product['componentProducts']) > 0)
+      <div class="otherproducts span12 productlist">
+
+        <h3>Composition</h3>
+        @foreach($product['componentProducts'] as $r)
+
+          @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+            <div class="productpanel">
+              <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+            </div>
+          @endif
+
+        @endforeach
+
+      </div>
+
+    @endif
+
+
+    @if(is_array($product['relatedProducts']) && count($product['relatedProducts']) > 0)
+      <div class="otherproducts span12 productlist">
+
+        <h3>We also recomend</h3>
+        @foreach($product['relatedProducts'] as $r)
+
+          @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+            <div class="productpanel">
+              <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+            </div>
+          @endif
+
+        @endforeach
+
+      </div>
+
+    @endif
+
+  <div class="clear"></div>
   <div class="commentlist span12">
     <h4 class="commentlisttitle">what other costumers saying about this product:</h4>
     <table>
@@ -262,34 +301,8 @@
       </tr>
     </table>
   </div>
-  <div class="clear"></div>
-
-  <div class="otherproducts span12">
-    @if($product['groupParent'] == true && $product['section'] == 'mixmatch')
-
-      <h3>Composition</h3>
-      @foreach($product['componentProducts'] as $r)
-
-            @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
-                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
-            @endif
-
-      @endforeach
-
-    @else
-
-      <h3>We also recomend</h3>
-      @foreach($product['relatedProducts'] as $r)
-
-            @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
-                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
-            @endif
-
-      @endforeach
 
 
-    @endif
-  </div>
 
 </div>
 

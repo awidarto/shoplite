@@ -26,6 +26,7 @@ return array(
 			'kind'=> 'One of A Kind'
 		),
 	'categories'=>array(
+			'none'=>'None',
 			'skirts'=>'Skirts',
 			'pants'=>'Pants',
 			'outer'=>'Outer',
@@ -38,6 +39,7 @@ return array(
 		),
 	'search_categories'=>array(
 			''=>'All',
+			'none'=>'None',
 			'skirts'=>'Skirts',
 			'pants'=>'Pants',
 			'outer'=>'Outer',
@@ -86,7 +88,7 @@ return array(
 		'bca'=>'BCA'
 	),
 
-	'item_per_page'=>6
+	'item_per_page'=>3
 
 
 
