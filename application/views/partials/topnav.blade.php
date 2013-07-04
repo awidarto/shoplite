@@ -39,6 +39,7 @@
                 <li>{{ HTML::link('articles', 'Article Manager' ) }}</li>
                 <li>{{ HTML::link('news', 'News Room' ) }}</li>
                 <li>{{ HTML::link('users', 'User Manager' ) }}</li>
+                <li>{{ HTML::link('shopinfo', 'Shop Info' ) }}</li>
               </ul>
             </li>
         @elseif(Auth::user()->role == 'exhibitionadmin')

@@ -1,6 +1,6 @@
 <?php
 
-class Seo_Controller extends Base_Controller {
+class Shopinfo_Controller extends Base_Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -42,22 +42,12 @@ class Seo_Controller extends Base_Controller {
 	{
 		$seoglobalkeyword = getparam('seokey','');
 
-		$data['googleanalytics'] = getparam('googleanalytics','');
-		$data['seokeywords'] = getparam('seokeywords','');
-
-		$params = new Param();
-
-		$pars = $params->find(array(),array('_id'=>true,'value'=>true));
-
-		$data = array();
-
-		foreach($pars as $key=>$val){
-			$data[$val['_id']] = $val['value'];
-		}
+		$data['bankaccount1'] = getparam('bankaccount1','');
+		$data['bankaccount2'] = getparam('bankaccount2','');
 
 		$form = Formly::make($data);
 
-		return View::make('seo.dashboard')
+		return View::make('shopinfo.dashboard')
 			->with('title','SEO & Analytics')
 			->with('form',$form)
 	        ->with('crumb',$this->crumb);

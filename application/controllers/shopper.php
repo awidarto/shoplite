@@ -374,6 +374,9 @@ class Shopper_Controller extends Base_Controller {
 			$user = new Shopper();
 
 			if($obj = $user->insert($data)){
+
+				Event::fire('shopper.signup',array($obj['_id']->__toString() ));
+
 		    	return Redirect::to('register-success')->with('notify_success',Config::get('site.register_success'));
 			}else{
 		    	return Redirect::to('register')->with('notify_result',Config::get('site.register_failed'));

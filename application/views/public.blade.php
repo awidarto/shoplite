@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ Config::get('site.title')}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>{{ getparam('sitetitle') }}</title>
 
+    <!-- {{ getparam('alexaid') }} -->
+    <meta name="alexaVerifyID" content="{{ getparam('alexaid') }}" />
+    <meta name="google-site-verification" content="{{ getparam('googlesiteverification') }}" />
+    <meta name="keywords" content="{{ getparam('seokeywords')}}" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ getparam('seodescriptions') }}">
+    <meta name="author" content="{{ getparam('seoauthor') }}">
 
     {{ HTML::style('bootstrap/css/bootstrap.css') }}
 
@@ -97,5 +102,8 @@
 
     {{ HTML::script('js/pnu.js') }}
 
+
+    {{ getparam('googleanalytics')}}
+  
   </body>
 </html>
