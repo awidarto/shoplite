@@ -167,7 +167,14 @@
 
                       $('select[name="qty"]').html(qtyopt);
 
+                      if(data.cartcount == 0){
+                        $('#shopping-badge').html('');
+                      }else{
+                        $('#shopping-badge').html(data.cartcount);
+                      }
+
                       alert(data.message);
+
                     }
 
 
@@ -237,7 +244,7 @@
     @if(is_array($product['relatedProducts']) && count($product['relatedProducts']) > 0)
       <div class="otherproducts span12 productlist">
 
-        <h3>We also recomend</h3>
+        <h3>We also recommend</h3>
         @foreach($product['relatedProducts'] as $r)
 
           @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))

@@ -722,11 +722,23 @@ class Shop_Controller extends Base_Controller {
 
 			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'])),array('upsert'=>true));
 
+			$mycart = $carts->get(array('_id'=>$result['_id']));
+
+			$qty = 0;
+
+			foreach($mycart['items'] as $key=>$val){
+				foreach($val as $k=>$v){
+					$qty += $v['actual'];
+				}
+			}
+
+			$counter = $qty;
+
 			//return Response::json(array('result'=>'PRODUCTNOTAVAIL','message'=>'Product no longer available'));
 
 			//return Response::json(array('result'=>'PRODUCTLESSQTY','message'=>'Available quantity is less than you ordered'));
 
-			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Product added into Shopping Cart','data'=>$result));
+			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Product added into Shopping Cart','data'=>$result,'cartcount'=>$counter));
 		}
 
 	}
@@ -753,6 +765,8 @@ class Shop_Controller extends Base_Controller {
 
 		//print_r($cart);
 
+		$prices = $this->recalculate($cart);
+		
 		$carts = new Cart();
 
 		$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'])),array('upsert'=>true));
@@ -779,7 +793,20 @@ class Shop_Controller extends Base_Controller {
 			}
 
 			$id = str_replace('#', '', $id);
-			return Response::json(array('result'=>'OK','message'=>'Item removed','row'=>$id.'_row' ));
+
+			$mycart = $carts->get(array('_id'=>$cart['_id']));
+
+			$qty = 0;
+
+			foreach($mycart['items'] as $key=>$val){
+				foreach($val as $k=>$v){
+					$qty += $v['actual'];
+				}
+			}
+
+			$counter = $qty;			
+
+			return Response::json(array('result'=>'OK','message'=>'Item removed', 'prices'=>$prices,'row'=>$id.'_row','cartcount'=>$counter ));
 		}else{
 			return Response::json(array('result'=>'ERR','message'=>'Failed to remove item'));
 		}
@@ -862,7 +889,20 @@ class Shop_Controller extends Base_Controller {
 			$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'],'prices'=>$prices)),array('upsert'=>true));
 			
 			if($upcart){
-				return Response::json(array('result'=>'OK:ITEMREMOVED','message'=>$removed.' items removed from current order','prices'=>$prices));
+
+				$mycart = $carts->get(array('_id'=>$cart['_id']));
+
+				$qty = 0;
+
+				foreach($mycart['items'] as $key=>$val){
+					foreach($val as $k=>$v){
+						$qty += $v['actual'];
+					}
+				}
+
+				$counter = $qty;
+
+				return Response::json(array('result'=>'OK:ITEMREMOVED','message'=>$removed.' items removed from current order','prices'=>$prices,'cartcount'=>$counter));
 			}else{
 				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
 			}
@@ -890,7 +930,20 @@ class Shop_Controller extends Base_Controller {
 			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'],'prices'=>$prices)),array('upsert'=>true));
 
 			if($upcart){
-				return Response::json(array('result'=>'OK:ITEMADDED','message'=>$added.' items added to current order','prices'=>$prices));
+
+				$mycart = $carts->get(array('_id'=>$cart['_id']));
+
+				$qty = 0;
+
+				foreach($mycart['items'] as $key=>$val){
+					foreach($val as $k=>$v){
+						$qty += $v['actual'];
+					}
+				}
+
+				$counter = $qty;
+
+				return Response::json(array('result'=>'OK:ITEMADDED','message'=>$added.' items added to current order','prices'=>$prices,'cartcount'=>$counter));
 			}else{
 				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
 			}
@@ -1094,18 +1147,36 @@ class Shop_Controller extends Base_Controller {
 
 		$cart = $carts->get(array('_id'=>$active_cart));
 
-		$or = array();
-		foreach($cart['items'] as $key=>$val){
-			$or[] = array('_id'=>new MongoId($key));
+		if( is_array($cart) && count($cart['items']) > 0){
+			$or = array();
+
+			$qty = 0;
+
+			foreach($cart['items'] as $key=>$val){
+				$or[] = array('_id'=>new MongoId($key));
+
+				foreach($val as $k=>$v){
+					$qty += $v['actual'];
+				}
+
+			}
+
+			$prods = new Product();
+
+			$products = $prods->find(array('$or'=>$or));
+
+			$prices = $this->recalculate($cart);
+
+			$carts->update(array('_id'=>$active_cart),array('$set'=>array('prices'=>$prices)));		
+
+			if($qty == 0){
+				$cart = null;
+			}
+		}else{
+			$cart = null;
+			$prices = null;
+			$products = null;
 		}
-
-		$prods = new Product();
-
-		$products = $prods->find(array('$or'=>$or));
-
-		$prices = $this->recalculate($cart);
-
-		$carts->update(array('_id'=>$active_cart),array('$set'=>array('prices'=>$prices)));		
 
 		return View::make('shop.cart')
 			->with('ajaxsource',URL::to('shop/cartloader'))

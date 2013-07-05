@@ -13,15 +13,7 @@
             <div id="logged-in">
               @if(Auth::shoppercheck())
                 Welcome {{ HTML::link('myprofile',se(Auth::shopper()->firstname).' '.se(Auth::shopper()->lastname)) }} 
-                @if(isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != '')
-                  | <i class="icon-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}}
-                <?php
-                  /*
-                  @else
-                    <span id="nocart">, you have no shopping cart, would you like to <span id="createcart">create one</span> ?</span>
-                  */
-                ?>
-                @endif
+                  | <i class="icon-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}} <span id="shopping-badge">{{ $cartcount }}</span>
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
                   | {{ HTML::link('logout','Logout')}}
               @else

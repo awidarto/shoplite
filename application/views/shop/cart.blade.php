@@ -1,13 +1,26 @@
 @layout('public')
 
 @section('content')
-<div class="row">
+<div class="row-fluid">
   
   {{-- print_r($cart['items'])}}
 {{ $form->open('shop/checkout','POST',array('id'=>'shoppingcartform','class'=>'horizontal'))}}
+
+@if(is_null($cart))
+    <div class="span12">
+        <h3>shopping cart</h3>
+        <p>
+            Belum ada barang di shopping cart anda, silakan lihat {{ HTML::link('collections','koleksi')}} kami untuk berbelanja.
+        </p>
+    </div>
+@else
+
   <div class="span12">
     <h3>shopping cart</h3>
     {{ $form->hidden('cartId',$cart['_id'])}}
+
+
+
     <table class='dataTable' id="shoppingcart">
       <thead>
         <tr class="headshoppingcart">
@@ -22,48 +35,49 @@
         </tr>
       </thead>
       <tbody>
-      @foreach($cart['items'] as $key=>$val)
 
-          <?php
-            $i = $products[$key]['defaultpic'];
-            $product_prefix = $key;
-          ?>
+          @foreach($cart['items'] as $key=>$val)
 
-          @foreach($val as $k=>$v)
-            <?php
-              $kx = str_replace('#', '', $k);
-            ?>
-            <tr id="{{$product_prefix.'_'.$kx.'_del_row'}}">
-              <td class="span2 image">
-                  @if(file_exists(realpath('public/storage/products/'.$key).'/sm_pic0'.$i.'.jpg'))
-                      {{ HTML::image(URL::base().'/storage/products/'.$key.'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $key)) }}
-                  @endif
-              </td>
-              <td class="span4"><h5>{{ $products[$key]['name'];}}</h5>{{ $products[$key]['description'];}}</td>
+              <?php
+                $i = $products[$key]['defaultpic'];
+                $product_prefix = $key;
+              ?>
+
+              @foreach($val as $k=>$v)
                 <?php
-                    $qty = 0;
-                    $vx = explode('_',$k);
-                    $size = $vx[0];
-                    $color = $vx[1];
+                  $kx = str_replace('#', '', $k);
                 ?>
-              <td class="span1 central" >
-                {{ $size }}
-              </td>
-              <td class="span1 central" >
-                <span class="color-chip" style="background-color: {{ $color }}; ">&nbsp;</span>
-              </td>
-              <td class="span2 central">
-                <?php $qty += $v['ordered'];?>
-                {{ Form::text($product_prefix.'_'.$k.'_qty',$v['actual'],array('class'=>'qty-box', 'style'=>'margin-bottom:0px' ,'id'=>$product_prefix.'_'.$k.'_qty')) }}
-                &nbsp;&nbsp;<i class="icon-reload-CW refresh-qty" style="font-size:20px;font-weight:bold;" data-toggle="tooltip" title="update quantity" ></i>
-              </td>
-              <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
-              <td class="span2 subtotal" id="{{$product_prefix.'_'.$kx.'_sub'}}">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
-              <td class="span1 removebox"><i class="icon-remove remove-item" id="{{$product_prefix.'_'.$k.'_del'}}" ></i></td>
-            </tr>
+                <tr id="{{$product_prefix.'_'.$kx.'_del_row'}}">
+                  <td class="span2 image">
+                      @if(file_exists(realpath('public/storage/products/'.$key).'/sm_pic0'.$i.'.jpg'))
+                          {{ HTML::image(URL::base().'/storage/products/'.$key.'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $key)) }}
+                      @endif
+                  </td>
+                  <td class="span4"><h5>{{ $products[$key]['name'];}}</h5>{{ $products[$key]['description'];}}</td>
+                    <?php
+                        $qty = 0;
+                        $vx = explode('_',$k);
+                        $size = $vx[0];
+                        $color = $vx[1];
+                    ?>
+                  <td class="span1 central" >
+                    {{ $size }}
+                  </td>
+                  <td class="span1 central" >
+                    <span class="color-chip" style="background-color: {{ $color }}; ">&nbsp;</span>
+                  </td>
+                  <td class="span2 central">
+                    <?php $qty += $v['ordered'];?>
+                    {{ Form::text($product_prefix.'_'.$k.'_qty',$v['actual'],array('class'=>'qty-box', 'style'=>'margin-bottom:0px' ,'id'=>$product_prefix.'_'.$k.'_qty')) }}
+                    &nbsp;&nbsp;<i class="icon-reload-CW refresh-qty" style="font-size:20px;font-weight:bold;" data-toggle="tooltip" title="update quantity" ></i>
+                  </td>
+                  <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
+                  <td class="span2 subtotal" id="{{$product_prefix.'_'.$kx.'_sub'}}">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
+                  <td class="span1 removebox"><i class="icon-remove remove-item" id="{{$product_prefix.'_'.$k.'_del'}}" ></i></td>
+                </tr>
 
-        @endforeach
-      @endforeach
+            @endforeach
+          @endforeach
 
       </tbody>
     </table>
@@ -99,8 +113,12 @@
     </div>
   
   </div>
+
+
 {{ $form->close() }}  
 </div>
+
+@endif
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -120,7 +138,28 @@ $(document).ready(function(){
             $('#'+data.row).remove();
             //$('#'+data.row).parent().parent().remove();
             console.log($('#'+data.row));
-            console.log($('#'+data.row).parent().parent());    
+            console.log($('#'+data.row).parent().parent());  
+
+            $('.subtotal').each(function(i){
+                //console.log(this.id);
+                var si = this.id;
+                var subt = data.prices[si];
+                console.log(subt.sub_total_price_fmt);
+                $(this).html(subt.sub_total_price_fmt);
+            });
+
+            $('#total_due').val(data.prices.total_due_fmt);
+            $('#shipping').val(data.prices.shipping_fmt);
+            $('#total_billing').val(data.prices.total_billing_fmt);
+
+
+            if(data.cartcount == 0){
+                $('#shopping-badge').html('');
+            }else{
+                $('#shopping-badge').html(data.cartcount);
+            }
+
+
           }
         },'json');
 
@@ -151,6 +190,14 @@ $(document).ready(function(){
               $('#total_due').val(data.prices.total_due_fmt);
               $('#shipping').val(data.prices.shipping_fmt);
               $('#total_billing').val(data.prices.total_billing_fmt);
+
+                if(data.cartcount == 0){
+                    $('#shopping-badge').html('');
+                }else{
+                    $('#shopping-badge').html(data.cartcount);
+                }
+
+
           }
         },'json');
 

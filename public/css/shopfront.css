@@ -18,15 +18,15 @@ h1,h2,h3,h4,h5,h6,p,li{
 	height: auto !important;
 	height: 100%;
 	/* Negative indent footer by it's height */
-	margin: 0 auto -170px;
+	margin: 0 auto -160px;
 }
 .clearfix:after
 {
-content:".";
-display:none;
-height:0;
-clear:both;
-visibility:hidden;
+	content:".";
+	display:none;
+	height:0;
+	clear:both;
+	visibility:hidden;
 }
 .clearfix
 {display:inline-block;}
@@ -36,11 +36,16 @@ visibility:hidden;
 	clear: both;
 }
 /* Set the fixed height of the footer here */
-#push,
+#push{
+	height:280px;
+}
+
+
 #footer {
 	margin-top: 10px;
 	height: 160px;
 }
+
 #footer {
 	background-color: #fedfcd;
 }
@@ -478,5 +483,11 @@ input.total-prices, .subtotal{
 p.social-footer i{ 
 	font-size: 28px;
 	padding-right: 20px;
+}
+
+span#shopping-badge{
+	color:white;
+	background-color: maroon;
+	padding: 4px;
 }
 
