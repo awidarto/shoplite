@@ -155,6 +155,7 @@ $(document).ready(function(){
 
             if(data.cartcount == 0){
                 $('#shopping-badge').html('');
+                window.location = '{{ URL::to('shop/cart') }}';
             }else{
                 $('#shopping-badge').html(data.cartcount);
             }
