@@ -48,7 +48,7 @@
     <div id="wrap">
       @yield('publictopnav')
 
-      <div class="container">
+      <div class="container" id="home">
         <div class="row-fluid">
           <div class="span12">
             @yield('content')

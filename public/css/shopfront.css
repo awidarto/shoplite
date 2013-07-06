@@ -455,7 +455,7 @@ input.total-prices, .subtotal{
     border: 2px solid #F5C1AC;
 }
 
-.container, .container#main-head{
+.container#home, .container#main-head{
 	width:1037px;
 }
 

@@ -317,7 +317,7 @@ class Shopper_Controller extends Base_Controller {
 		$attendee = new Shopper();
 
 
-		return View::make('register.new')
+		return View::make('shopper.new')
 					->with('form',$form)
 					->with('crumb',$this->crumb)
 					->with('title','Member Registration');
@@ -1167,19 +1167,18 @@ class Shopper_Controller extends Base_Controller {
 		$this->crumb->add('project/profile','Profile',false);
 		$this->crumb->add('project/profile',$user_profile['firstname'].' '.$user_profile['lastname']);
 
-		return View::make('register.profile')
+		return View::make('shopper.profile')
 			->with('crumb',$this->crumb)
 			->with('profile',$user_profile);
-			//->with('type',$this->user_type);
 	}
 
 	public function get_edit(){
 
 		$this->crumb->add('user/edit','Edit',false);
 
-		$user = new Attendee();
+		$user = new Shopper();
 
-		$id = Auth::attendee()->id;
+		$id = Auth::shopper()->id;
 
 		$id = new MongoId($id);
 
@@ -1189,9 +1188,7 @@ class Shopper_Controller extends Base_Controller {
 
 		$form = Formly::make($user_profile);
 
-		$form->framework = 'zurb';
-
-		return View::make('register.edit')
+		return View::make('shopper.edit')
 					->with('user',$user_profile)
 					->with('form',$form)
 					->with('crumb',$this->crumb)
@@ -1205,13 +1202,12 @@ class Shopper_Controller extends Base_Controller {
 		//print_r(Session::get('permission'));
 
 	    $rules = array(
-	    	'position' => 'required',
-	        'email' => 'required|email',
-	        'company' => 'required',
-	        'companyphone' => 'required',
+	    	'firstname' => 'required',
+	    	'lastname' => 'required',
+	        'address_1' => 'required',
 	        'city' => 'required',
 	        'zip' => 'required',
-	        
+	        'country' => 'required'
 	    );
 
 	    $validation = Validator::make($input = Input::all(), $rules);
@@ -1230,53 +1226,9 @@ class Shopper_Controller extends Base_Controller {
 			unset($data['csrf_token']);
 			unset($data['id']);
 
-			$user = new Attendee();
-
-			if(isset($data['registrationnumber']) && $data['registrationnumber'] != ''){
-				$reg_number = explode('-',$data['registrationnumber']);
-
-				$reg_number[0] = 'C';
-				$reg_number[1] = $data['regtype'];
-				$reg_number[2] = ($data['attenddinner'] == 'Yes')?str_pad(Config::get('eventreg.galadinner'), 2,'0',STR_PAD_LEFT):'00';
-
-
-			}else if($data['registrationnumber'] == ''){
-				$reg_number = array();
-				$seq = new Sequence();
-				$rseq = $seq->find_and_modify(array('_id'=>'attendee'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true));
-
-				$reg_number[0] = 'C';
-				$reg_number[1] = $data['regtype'];
-				$reg_number[2] = ($data['attenddinner'] == 'Yes')?str_pad(Config::get('eventreg.galadinner'), 2,'0',STR_PAD_LEFT):'00';
-
-				$reg_number[3] = str_pad($rseq['seq'], 6, '0',STR_PAD_LEFT);
-			}
-
-			//golf sequencer
-			/*$data['golfSequence'] = 0;
-
-			if($data['golf'] == 'Yes'){
-				$gseq = $seq->find_and_modify(array('_id'=>'golf'),array('$inc'=>array('seq'=>1)),array('seq'=>1),array('new'=>true,'upsert'=>true));
-				$data['golfSequence'] = $gseq['seq'];
-			}*/
-
-			$data['registrationnumber'] = implode('-',$reg_number);
+			$user = new Shopper();
 
 			if($user->update(array('_id'=>$id),array('$set'=>$data))){
-
-				$ex = $user->get(array('_id'=>$id));
-
-				$body = View::make('email.regupdate')
-					->with('data',$ex)
-					->render();
-
-				Message::to($data['email'])
-				    ->from(Config::get('eventreg.reg_admin_email'), Config::get('eventreg.reg_admin_name'))
-				    ->cc(Config::get('eventreg.reg_dyandra_admin_email'), Config::get('eventreg.reg_dyandra_admin_name'))
-				    ->subject('Indonesia Petroleum Association – 37th Convention & Exhibition (Profile Updated – '.$data['registrationnumber'].')')
-				    ->body( $body )
-				    ->html(true)
-				    ->send();
 
 		    	return Redirect::to('myprofile')->with('notify_success','Attendee saved successfully');
 

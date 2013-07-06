@@ -24,7 +24,7 @@
 
       {{ $form->text('sourceAccName','Account Holder Name','')}}<br />
 
-        <a class="btn primary" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Confirm</a>
+        <button class="btn primary" ><i class="icon-checkmark"></i> Confirm</button>
         <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Cancel</a>
 
     </div>
