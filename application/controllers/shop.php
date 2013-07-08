@@ -36,7 +36,7 @@ class Shop_Controller extends Base_Controller {
 		//$this->filter('before','auth');
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add('shop','Shop');
-		$this->filter('before', 'auth')->only(array('cart'))->on('get');
+		$this->filter('before', 'memberauth')->only(array('cart'))->on('get');
 
 	}
 
@@ -762,6 +762,10 @@ class Shop_Controller extends Base_Controller {
 
 		if($cart){
 			unset($cart['items'][$productId][$size.'_'.$color]);
+
+			if(count($cart['items'][$productId]) == 0){
+				unset($cart['items'][$productId]);
+			}
 		}
 
 		//print_r($cart);
@@ -962,36 +966,56 @@ class Shop_Controller extends Base_Controller {
 		$prices = array();
 
 		$total_due = 0;
-		foreach ($cart['items'] as $key => $val) {
 
-			$prod = $product->get(array('_id'=>new MongoId($key)));
+		if(count($cart['items']) > 0){
 
-			foreach($val as $k=>$v){
-				$kx = str_replace('#', '', $k);
-				$prices[$key][$k]['unit_price'] = $prod['retailPrice'];
-				$prices[$key][$k]['unit_price_fmt'] = $prod['priceCurrency'].' '.number_format($prod['retailPrice'],2,',','.');
+			foreach ($cart['items'] as $key => $val) {
 
-				$subtotal = $prod['retailPrice']*$v['actual'];
+				$prod = $product->get(array('_id'=>new MongoId($key)));
 
-				$prices[$key][$k]['sub_total_price'] = $subtotal;
-				$prices[$key][$k]['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.');
-				$prices[$key.'_'.$kx.'_sub']['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.'); 
+				foreach($val as $k=>$v){
+					$kx = str_replace('#', '', $k);
+					$prices[$key][$k]['unit_price'] = $prod['retailPrice'];
+					$prices[$key][$k]['unit_price_fmt'] = $prod['priceCurrency'].' '.number_format($prod['retailPrice'],2,',','.');
 
-				$total_due += $subtotal;
+					$subtotal = $prod['retailPrice']*$v['actual'];
+
+					$prices[$key][$k]['sub_total_price'] = $subtotal;
+					$prices[$key][$k]['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.');
+					$prices[$key.'_'.$kx.'_sub']['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.'); 
+
+					$total_due += $subtotal;
+				}
+
 			}
+
+			$prices['total_due'] = $total_due;
+			$prices['total_due_fmt'] = $prod['priceCurrency'].' '.number_format($total_due,2,',','.');
+
+			$shipping = 0;
+			$prices['shipping'] = $shipping;
+			$prices['shipping_fmt'] = $prod['priceCurrency'].' '.number_format($shipping,2,',','.');
+
+			$total_billing = $total_due + $shipping;
+			$prices['total_billing'] = $total_billing;
+			$prices['total_billing_fmt'] = $prod['priceCurrency'].' '.number_format($total_billing,2,',','.');
+
+
+		}else{
+
+			$prices['total_due'] = 0;
+			$prices['total_due_fmt'] = '-';
+
+			$shipping = 0;
+			$prices['shipping'] = $shipping;
+			$prices['shipping_fmt'] = '-';
+
+			$total_billing = $total_due + $shipping;
+			$prices['total_billing'] = $total_billing;
+			$prices['total_billing_fmt'] = '-';
 
 		}
 
-		$prices['total_due'] = $total_due;
-		$prices['total_due_fmt'] = $prod['priceCurrency'].' '.number_format($total_due,2,',','.');
-
-		$shipping = 30000;
-		$prices['shipping'] = $shipping;
-		$prices['shipping_fmt'] = $prod['priceCurrency'].' '.number_format($shipping,2,',','.');
-
-		$total_billing = $total_due + $shipping;
-		$prices['total_billing'] = $total_billing;
-		$prices['total_billing_fmt'] = $prod['priceCurrency'].' '.number_format($total_billing,2,',','.');
 
 
 		return $prices;
@@ -1281,8 +1305,6 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_confirm(){
 
-		//$this->filter('before','auth');
-
 		$form = new Formly();
 
 		return View::make('shop.confirm')
@@ -1291,15 +1313,14 @@ class Shop_Controller extends Base_Controller {
 
 	public function post_confirm(){
 
-		//$this->filter('before','auth');
 
 		$form = new Formly();
 
 		$in = Input::get();
 
-		$shoppers = new Shopper();
+		print_r($in);
 
-		$active_cart = new MongoId($in['cartId']);
+		exit();
 
 		$carts = new Cart();
 

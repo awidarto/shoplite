@@ -31,7 +31,7 @@
           <th class="span1">QTY</th>
           <th class="span2">UNIT PRICE</th>
           <th class="span2">PRICE TOTAL</th>
-          <th class="span1">&nbsp;</th>
+          <th class="span1" style="min-width:35px;">&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -48,7 +48,7 @@
                   $kx = str_replace('#', '', $k);
                 ?>
                 <tr id="{{$product_prefix.'_'.$kx.'_del_row'}}">
-                  <td class="span2 image">
+                  <td class="span2 image" style="padding-top:0px;">
                       @if(file_exists(realpath('public/storage/products/'.$key).'/sm_pic0'.$i.'.jpg'))
                           {{ HTML::image(URL::base().'/storage/products/'.$key.'/sm_pic0'.$i.'.jpg?'.time(), 'sm_pic0'.$i.'.jpg', array('id' => $key)) }}
                       @endif
@@ -78,40 +78,20 @@
 
             @endforeach
           @endforeach
-
+          <tr>
+            <td colspan="6" style="text-align:right;padding-top:4px;"><h4 class="titleselectbox">total</h4></td>
+            <td id='total_billing' class="span2 subtotal" >{{ $prices['total_billing_fmt'] }}</td>
+            <td></td>
+          </tr>
+          <tr style="border:none">
+            <td colspan="8" style="text-align:right;padding-top:4px;">
+                <a class="btn primary" href="{{ URL::base()}}"><i class="icon-shopping"></i> Continue Shopping</a>
+                <a class="btn primary" id="checkoutnow" href="{{ URL::to('shop/checkout')}}" ><i class="icon-checkmark"></i> Go To Check Out</a>
+            </td>
+          </tr>
       </tbody>
     </table>
-    <div class="clear"></div>
-    <div class="paymentmethod span12">
-      <div class="method1 span3">
-        <h4>payment method</p>  
-        <input id="field_daterange" checked="checked" type="radio" name="paymentmethod" value="bca">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/bca.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="paymentmethod" value="mandiri">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/mandiri.png"><br/>
-      </div>
-
-      <div class="method2 span3">
-        <h4>shipping method</p>  
-        <input id="field_daterange" checked="checked" type="radio" name="shippingmethod" value="jex">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/jexcod.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="shippingmethod" value="jne">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/jne.png"><br/><br/>
-        <input id="field_daterange"  type="radio" name="shippingmethod" value="gojek">&nbsp;&nbsp;<img src="{{ URL::base() }}/images/gojek.png"><br/><br/>
-      </div>
-
-      <div class="method3 span5">
-        <!--
-          <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Update Cart</a>
-        -->
-
-        <p><h4 class="titleselectbox">sub-total</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="total_due" type="text" name="fromDate" value="{{ $prices['total_due_fmt'] }}"></p>
-        <p><h4 class="titleselectbox">shipping</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="shipping" type="text" name="fromDate" value="{{ $prices['shipping_fmt'] }}"></p>
-        <p><h4 class="titleselectbox">total</h4>&nbsp;&nbsp; <input class="total-prices" disabled="disabled" id="total_billing" type="text" name="fromDate" value="{{ $prices['total_billing_fmt'] }}"></p>
-
-          <a class="btn primary" id="checkoutnow" href="{{ URL::to('shop/checkout')}}" ><i class="icon-checkmark"></i> Go To Check Out</a><br /><br />
-
-          <a class="btn primary" href="{{ URL::base()}}"><i class="icon-shopping"></i> Continue Shopping</a></p>
-      </div>
       
-    </div>
-  
   </div>
 
 
@@ -150,7 +130,7 @@ $(document).ready(function(){
 
             $('#total_due').val(data.prices.total_due_fmt);
             $('#shipping').val(data.prices.shipping_fmt);
-            $('#total_billing').val(data.prices.total_billing_fmt);
+            $('#total_billing').html(data.prices.total_billing_fmt);
 
 
             if(data.cartcount == 0){
@@ -190,7 +170,7 @@ $(document).ready(function(){
 
               $('#total_due').val(data.prices.total_due_fmt);
               $('#shipping').val(data.prices.shipping_fmt);
-              $('#total_billing').val(data.prices.total_billing_fmt);
+              $('#total_billing').html(data.prices.total_billing_fmt);
 
                 if(data.cartcount == 0){
                     $('#shopping-badge').html('');

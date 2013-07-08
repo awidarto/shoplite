@@ -45,6 +45,22 @@ Route::filter('csrf', function()
 Route::filter('auth', function()
 {
 
+    if (Auth::guest()){
+        Session::put('redirect',URL::full());
+        return Redirect::to('signin');
+    }
+    
+    if($redirect = Session::get('redirect')){
+        Session::forget('redirect');
+        return Redirect::to($redirect);
+    }
+
+    //if (Auth::guest()) return Redirect::to('login');
+});
+
+Route::filter('memberauth', function()
+{
+
     if (Auth::shoppercheck() == false){
         Session::put('redirect',URL::full());
         return Redirect::to('signin');
@@ -57,6 +73,7 @@ Route::filter('auth', function()
 
     //if (Auth::guest()) return Redirect::to('login');
 });
+
 
 Route::filter('adminauth', function()
 {

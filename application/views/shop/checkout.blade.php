@@ -85,6 +85,8 @@
             $totalPrice += $qty * (double) $products[$key]['retailPrice'];
           ?>
       @endforeach
+
+      <!--
           <tr>
             <td colspan="5"></td>
             <td class="span2 price">
@@ -95,7 +97,6 @@
               <input name="totalPrice" type="hidden" value="{{ $cart['prices']['total_due'] }}" />
             </td>
           </tr>
-
           <tr>
             <td colspan="5"></td>
             <td class="span2 price">
@@ -106,7 +107,7 @@
               <input name="shippingFee" type="hidden" value="{{ $cart['prices']['shipping'] }}" />
             </td>
           </tr>
-
+      -->
           <tr>
             <td colspan="5"></td>
             <td class="span2 price">
@@ -117,39 +118,27 @@
               <input name="totalDue" type="hidden" value="{{ $cart['prices']['total_billing'] }}" />
             </td>
           </tr>
+          <tr style="border:none">
+            <td colspan="7" style="text-align:right;padding-top:4px;">
+                <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Continue Shopping</a>
+                <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Go Back & Update Cart</a>
+                <a class="btn primary" id="commitnow" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a>
 
+            </td>
+          </tr>
       </tbody>
     </table>
     <div class="clear"></div>
     <div class="paymentmethod span12">
       <div class="method1 span3">
-        <h4>payment method</p>  
-        @if($postdata['paymentmethod'] == 'mandiri')
-          <img src="{{ URL::base() }}/images/mandiri.png">
-        @elseif($postdata['paymentmethod'] == 'bca')
-          <img src="{{ URL::base() }}/images/bca.png">
-        @endif
-        <input type="hidden" value="{{$postdata['paymentmethod']}}" name="paymentmethod">
       </div>
 
       <div class="method2 span3">
-        <h4>shipping method</p>
-        @if($postdata['shippingmethod'] == 'jex')
-          <img src="{{ URL::base() }}/images/jexcod.png">
-        @elseif( $postdata['shippingmethod'] == 'jne')
-          <img src="{{ URL::base() }}/images/jne.png">
-        @elseif($postdata['shippingmethod'] == 'gojek')
-          <img src="{{ URL::base() }}/images/gojek.png">
-        @endif
-        <input type="hidden" value="{{$postdata['shippingmethod']}}" name="shippingmethod">
       </div>
 
       <div class="method3 span5">
         
-        <p class="buttonshopcart">
-          <a class="btn primary" id="commitnow" href="{{ URL::to('shop/commit')}}" ><i class="icon-checkmark"></i> Check Out Now</a><br /><br />
-          <a class="btn primary" href="{{ URL::to('shop/cart')}}" ><i class="icon-cart"></i> Go Back & Update Cart</a><br /><br />
-          <a class="btn primary" href="{{ URL::base();}}"><i class="icon-shopping"></i> Continue Shopping</a></p>
+
       </div>
       
     </div>
