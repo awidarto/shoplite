@@ -36,7 +36,8 @@ class Shop_Controller extends Base_Controller {
 		//$this->filter('before','auth');
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add('shop','Shop');
-		//$this->filter('before', 'auth')->only(array('confirm'));
+		$this->filter('before', 'auth')->only(array('cart'))->on('get');
+
 	}
 
 	public function get_index()
@@ -1137,7 +1138,12 @@ class Shop_Controller extends Base_Controller {
 
 	public function get_cart(){
 
-		$this->filter('before','auth');
+		//$this->filter('before','auth');
+		/*
+		if(Auth::shoppercheck() == false){
+			return Redirect::to('signin');
+		}
+		*/
 
 		$form = new Formly();
 

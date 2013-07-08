@@ -45,7 +45,7 @@ Route::filter('csrf', function()
 Route::filter('auth', function()
 {
 
-    if (Auth::guest()){
+    if (Auth::shoppercheck() == false){
         Session::put('redirect',URL::full());
         return Redirect::to('signin');
     }
