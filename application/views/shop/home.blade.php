@@ -70,7 +70,7 @@
 							<p>
 								{{ $article['shorts']}}						
 							</p>
-							<a class="readmore" href="{{ URL::to('reader/article/'.$article['slug']) }}" >readmore ></a>
+							<a class="readmore" href="{{ URL::to('reader/article/'.$article['slug']) }}" >read more &raquo;</a>
 						</div>
 					@else
 						<div class="articlehome">
