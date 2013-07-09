@@ -10,10 +10,10 @@ View::composer('public',function($view){
 
 	$cartcount = '';
 
-	if(Auth::guest()){
+	if(Auth::shoppercheck() == false){
 		$cartcount = '';
 	}else{
-		if(Auth::shopper()->activeCart != ''){
+		if( isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != ''){
 			$cart = new Cart();
 			$c_id = new MongoId(Auth::shopper()->activeCart);
 
@@ -44,10 +44,10 @@ View::composer('publichome',function($view){
 
 	$cartcount = '';
 
-	if(Auth::guest()){
+	if(Auth::shoppercheck() == false){
 		$cartcount = '';
 	}else{
-		if(Auth::shopper()->activeCart != ''){
+		if( isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != ''){
 			$cart = new Cart();
 			$c_id = new MongoId(Auth::shopper()->activeCart);
 
