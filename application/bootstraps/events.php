@@ -77,7 +77,7 @@ Event::listen('shopper.signup',function($id){
 
 Event::listen('payment.confirm',function($confirmcode){
 
-    $body = View::make('email.signupsuccess')
+    $body = View::make('email.paymentconfirmed')
         ->with('user',$userdata)
         ->render();
 

@@ -85,7 +85,7 @@ return array(
 
 	'banks'=>array(
 		'mandiri'=>'Bank Mandiri',
-		'permata'=>'bank Permata'
+		'permata'=>'Bank Permata'
 	),
 
 	'item_per_page'=>16

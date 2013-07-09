@@ -1346,39 +1346,54 @@ class Shop_Controller extends Base_Controller {
 
 		$in = Input::get();
 
-		print_r($in);
+		//print_r($in);
 
-		exit();
+		//exit();
 
 		$carts = new Cart();
 
-		$cart = $carts->get(array('_id'=>$active_cart));
+		$cart = $carts->get(array( 'confirmationCode'=>strtoupper($in['confirmationCode']) ));
 
-		$or = array();
-		foreach($cart['items'] as $key=>$val){
-			$or[] = array('_id'=>new MongoId($key));
+		
+		if($cart){
+
+			if($cart['cartStatus'] != 'confirmed'){
+
+				$carts->update(array('_id'=>$cart['_id']),array('$set'=>array( 'cartStatus'=>'confirmed', 'lastUpdate'=>new MongoDate() )));
+
+				$confirmations = new Confirmation();
+
+				$in['createdDate'] = new MongoDate();
+
+				$confirmations->insert($in);
+
+			/*
+				$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
+					array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
+					array('upsert'=>true) );
+			*/
+				//Event::fire('payment.confirm',array($cart['_id']));
+
+				return View::make('shop.confirmed')
+					->with('title','Konfirmasi Berhasil');
+
+			}else if($cart['cartStatus'] == 'confirmed'){
+
+				return View::make('shop.alreadyconfirmed')
+					->with('title','Pembayaran Telah Terkonfirmasi');
+
+			}
+
+
+		}else{
+			return View::make('shop.confirmfail')
+				->with('title','Konfirmasi Gagal');
+
 		}
 
-		$prods = new Product();
 
-		$products = $prods->find(array('$or'=>$or));
 
-		$shippingFee = 30000;
 
-		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
-
-		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout', 'lastUpdate'=>new MongoDate() )));
-
-		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
-			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
-			array('upsert'=>true) );
-
-		return View::make('shop.confirm')
-			->with('postdata',$in)
-			->with('products',$products)
-			->with('shippingFee',$shippingFee)
-			->with('cart',$cart)
-			->with('form',$form);
 	}
 
 }
