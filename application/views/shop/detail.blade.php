@@ -126,8 +126,14 @@
                   $('#signInModal').modal('close');
                 }
 
-                if(data.result == 'PRODUCTADDED'){
+                if(data.result == 'OK:ITEMADDED'){
+                      if(data.cartcount == 0){
+                        $('#shopping-badge').html('');
+                      }else{
+                        $('#shopping-badge').html(data.cartcount);
+                      }
                   alert(data.message);
+                  $('#signInModal').modal('close');
                 }
 
             },'json');          
@@ -201,11 +207,12 @@
       </div>
 
       <div class="span2">
-        <span class="titleselectbox">ADD TO CART</span><br/>        
+        <span class="titleselectbox" style="cursor:pointer" >ADD TO CART<br/>
+           <img src="{{ URL::base() }}/images/trolly.png" id="addtocart" />
+        </span>        
         
         <!-- Button to trigger modal -->
-        <img src="{{ URL::base() }}/images/trolly.png" id="addtocart" />
-
+ 
       </div>
   </div>
   <div class="clear"></div>

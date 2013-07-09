@@ -1047,7 +1047,35 @@ class Shop_Controller extends Base_Controller {
 
 			//print_r($result);
 
-			return Response::json(array('result'=>'PRODUCTADDED','message'=>'Successfully Signed In and Product Added','data'=>$cart));
+
+			$prices = $this->recalculate($result);
+	    	//print_r($result);
+
+			$carts = new Cart();
+
+			$upcart = $carts->update(array('_id'=>$result['_id']),array('$set'=>array('items'=>$result['items'],'prices'=>$prices)),array('upsert'=>true));
+
+			if($upcart){
+
+				$mycart = $carts->get(array('_id'=>$cart['_id']));
+
+				$qty = 0;
+
+				foreach($mycart['items'] as $key=>$val){
+					foreach($val as $k=>$v){
+						$qty += $v['actual'];
+					}
+				}
+
+				$counter = $qty;
+
+				return Response::json(array('result'=>'OK:ITEMADDED','message'=>'Successfully Signed In and Product Added','prices'=>$prices,'cartcount'=>$counter));
+			}else{
+				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
+			}
+
+
+		//	return Response::json(array('result'=>'PRODUCTADDED','message'=>'Successfully Signed In and Product Added','data'=>$cart));
 	    }
 	    else
 	    {
