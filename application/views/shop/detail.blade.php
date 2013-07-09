@@ -8,8 +8,16 @@
     <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" alt="{{ $product['name']}}" id="mainimageproduct" class="mixmatch" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" />
     
     <br/>
-    <a href="#"><img src="{{ URL::base() }}/images/roll-on.png"><span class="titlesectionnormal">ROLL ON TO ZOOM IN</span></a>
-    <a style="margin-left:30px;" href="#"><img src="{{ URL::base() }}/images/zoom.png"><span class="titlesectionnormal">VIEW LARGER</span></a>
+    <img src="{{ URL::base() }}/images/roll-on.png"><span class="titlesectionnormal">ROLL ON TO ZOOM IN</span>
+<?php
+    /*
+    <a href="#">
+    </a>
+    <a style="margin-left:30px;" href="#"><img src="{{ URL::base() }}/images/zoom.png"><span class="titlesectionnormal">VIEW LARGER</span>
+    </a>
+    */
+?>
+
     <br/>
     <br/>
     <p>
@@ -17,23 +25,29 @@
       
       <div class="addimages" id="gal1">
         @for($i = 1;$i < 6;$i++)
-        @if($product['homepic'] != $i)
-        @if(file_exists(realpath('public/storage/products/'.$product['_id']).'/sm_pic0'.$i.'.jpg'))
-        <a href="#"  data-image="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$i.'.jpg' }}" id="{{ '0'.$i}}">
-          <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch addimage" id="{{ '0'.$i}}"/>
-      </a>
-      @endif
-      @endif
-      @endfor
+            @if($product['homepic'] != $i || $product['defaultpic'] != $i)
+                @if(file_exists(realpath('public/storage/products/'.$product['_id']).'/sm_pic0'.$i.'.jpg'))
+                <a href="#"  data-image="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$i.'.jpg' }}" id="{{ '0'.$i}}">
+                  <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch addimage" id="{{ '0'.$i}}"/>
+                </a>
+                @endif
+            @endif
+        @endfor
   </div>
 </p>
 </div>
 <div class="span8 clearfix">
     <div class="detailproduct">
       <h2 class="product-title">{{$product['name']}}</h2>
+
+    <?php
+    /*
       <a href="#" class="fblike"><img src="{{ URL::base() }}/images/fblike.gif"/></a>
       <a href="#" class="loves"><img src="{{ URL::base() }}/images/loves4.gif"/><br/><span>based on 196loves</span></a>
-      <div class="availablecont">
+
+    */
+    ?>
+    <div class="availablecont">
         <p>Available in:</p>
         @foreach($colors as $ac)
         <div class="coloravailableselect" style="background-color:{{$ac}}"></div>
