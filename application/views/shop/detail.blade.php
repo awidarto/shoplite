@@ -25,7 +25,7 @@
       
       <div class="addimages" id="gal1">
         @for($i = 1;$i < 6;$i++)
-            @if($product['homepic'] != $i || $product['defaultpic'] != $i)
+            @if($product['homepic'] != $i && $product['defaultpic'] != $i)
                 @if(file_exists(realpath('public/storage/products/'.$product['_id']).'/sm_pic0'.$i.'.jpg'))
                 <a href="#"  data-image="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$i.'.jpg' }}" id="{{ '0'.$i}}">
                   <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/sm_pic0'.$i.'.jpg' }}" alt="{{ $product['name']}}" class="mixmatch addimage" id="{{ '0'.$i}}"/>
