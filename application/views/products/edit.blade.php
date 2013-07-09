@@ -200,6 +200,9 @@
                             {{ $form->text('link','Link to Other Product','',array('id'=>'link_input','class'=>'input-large autocomplete_product_link'))}}
                         </th>
                         <th>
+                            {{ $form->text('avail','Available','',array('id'=>'link_input','class'=>'input-small','disable'=>true,'readonly'=>true)) }}
+                        </th>
+                        <th>
                             <span class="btn" id="add_btn" style="cursor:pointer" ><b class="icon-plus-alt"></b></span>
                         </th>
                     </tr>

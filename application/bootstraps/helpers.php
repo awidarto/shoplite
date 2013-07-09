@@ -91,6 +91,7 @@ function getvariantinventory($prod_id,$variantparams)
 
 }
 
+
 function makerows($in,$class = array(),$ro = array()){
 	$rows = array();
 

@@ -161,6 +161,7 @@ class Products_Controller extends Admin_Controller {
 		return parent::post_add($data);
 	}
 
+
 	public function post_edit($id,$data = null)
 	{
 		//print_r(Input::get());
@@ -313,7 +314,7 @@ class Products_Controller extends Admin_Controller {
 
 			$v = explode('_',$k);
 			$variant_params = array(
-					'size' => $v[0],                                                                                                                                                      
+					'size' => $v[0],                                                     
 	                'color' => $v[1]
 				);
 
@@ -324,6 +325,7 @@ class Products_Controller extends Admin_Controller {
             $pop['color'] = $v[1];
             $pop['qty'] = $variants['total'];
             $pop['link'] = $v[2];
+            $pop['avail'] = $variants['avail'];
 
             $vars[] = $pop;
 
@@ -382,6 +384,7 @@ class Products_Controller extends Admin_Controller {
 
 				unset($v['qty']);
 				unset($v['link']);
+				unset($v['avail']);
 
 				$avail = $inventory->count($v);
 
@@ -411,7 +414,7 @@ class Products_Controller extends Admin_Controller {
 
 					for($i = 0; $i < $qty;$i++)
 					{	
-						$inventory->deleteOne($v);
+						$inventory->deleteOne($d);
 					}
 
 				}
