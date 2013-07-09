@@ -252,14 +252,16 @@
     <div class="clear"></div>
 
         @if($product['groupParent'] == true && is_array($product['componentProducts']) && count($product['componentProducts']) > 0)
-            <div class="otherproducts span12 productlist">
+            <h3>Composition</h3>
+            <div class="row productlist">
 
-                <h3>Composition</h3>
             @foreach($product['componentProducts'] as $r)
 
                 @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
                     <div class="productpanel">
                         <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+                        <h3>{{$r['name']}}</h3>
+                        <p>{{$r['priceCurrency']}} {{idr($r['retailPrice'])}}</p>
                     </div>
                 @endif
 
@@ -271,16 +273,18 @@
 
 
     @if(is_array($product['relatedProducts']) && count($product['relatedProducts']) > 0)
-        <div class="otherproducts span12 productlist">
+        <h3>We also recommend</h3>
+        <div class="row productlist">
 
-            <h3>We also recommend</h3>
             @foreach($product['relatedProducts'] as $r)
 
             @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
             <div class="productpanel">
-              <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
-          </div>
-          @endif
+                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+                <h3>{{$r['name']}}</h3>
+                <p>{{$r['priceCurrency']}} {{idr($r['retailPrice'])}}</p>
+            </div>
+            @endif
 
           @endforeach
 
