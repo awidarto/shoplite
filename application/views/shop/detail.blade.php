@@ -50,7 +50,7 @@
     <div class="availablecont">
         <p>Available in:</p>
         @foreach($colors as $ac)
-        <div class="coloravailableselect" style="background-color:{{$ac}}"></div>
+        <div class="coloravailableselect" style="background-color:{{$ac}}; border:thin solid #ccc"></div>
         @endforeach
     </div>
     <p>Price: {{ $product['priceCurrency'].' '.number_format($product['retailPrice'],2,',','.')}}</p>
