@@ -83,7 +83,7 @@ font-size: 80%;
 	background-image: url(../images/p2bheadbg.png);
 	background-repeat: repeat-x;
 	border-bottom: none;
-	box-shadow:none;
+	box-shadow: 0px 0px 0px 0px #fff;
 }
 
 .navbar-inverse .nav .active > a, 
