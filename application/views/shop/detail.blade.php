@@ -21,8 +21,7 @@
     <br/>
     <br/>
     <p>
-      <span class="titlesection" style="text-align:center;width:100%;margin:0 auto;display:block;">ADDITIONAL IMAGES</span>
-      
+
       <div class="addimages" id="gal1">
         @for($i = 1;$i < 6;$i++)
             @if($product['homepic'] != $i && $product['defaultpic'] != $i)
@@ -252,7 +251,7 @@
     <div class="clear"></div>
 
         @if($product['groupParent'] == true && is_array($product['componentProducts']) && count($product['componentProducts']) > 0)
-            <h3>Composition</h3>
+            <h3 class="recommendation">COMPOSITION</h3>
             <div class="row productlist">
 
             @foreach($product['componentProducts'] as $r)
@@ -273,7 +272,8 @@
 
 
     @if(is_array($product['relatedProducts']) && count($product['relatedProducts']) > 0)
-        <h3>We also recommend</h3>
+        <h3 class="recommendation">WE ALSO RECOMMEND</h3>
+
         <div class="row productlist">
 
             @foreach($product['relatedProducts'] as $r)
