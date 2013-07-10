@@ -21,15 +21,18 @@ View::composer('public',function($view){
 
 			$qty = 0;
 
-			foreach($c['items'] as $key=>$val){
-				foreach($val as $k=>$v)
-				{
-					$qty += $v['actual'];
+			if(is_array($c['items'])){
+				foreach($c['items'] as $key=>$val){
+					foreach($val as $k=>$v)
+					{
+						$qty += $v['actual'];
+					}
 				}
-			}
-
-			$cartcount = $qty;
-			if($cartcount == 0){
+				$cartcount = $qty;
+				if($cartcount == 0){
+					$cartcount = '';
+				}
+			}else{
 				$cartcount = '';
 			}
 		}else{
@@ -55,17 +58,22 @@ View::composer('publichome',function($view){
 
 			$qty = 0;
 
-			foreach($c['items'] as $key=>$val){
-				foreach($val as $k=>$v)
-				{
-					$qty += $v['actual'];
+			if(is_array($c['items'])){
+				foreach($c['items'] as $key=>$val){
+					foreach($val as $k=>$v)
+					{
+						$qty += $v['actual'];
+					}
 				}
-			}
-
-			$cartcount = $qty;
-			if($cartcount == 0){
+				$cartcount = $qty;
+				if($cartcount == 0){
+					$cartcount = '';
+				}
+			}else{
 				$cartcount = '';
 			}
+
+
 		}else{
 			$cartcount = '';
 		}

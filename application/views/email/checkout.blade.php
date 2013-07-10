@@ -7,7 +7,7 @@
 
 		Terima kasih atas kepercayaan Anda untuk memilih Peachtoblack sebagai Media Belanja Online terpercaya.<br />
 		<br />
-		No. Order :<br />
+		No. Order : {{ $cart['confirmationCode'] }}<br />
 		Total Belanja : <br />
 		<br />
 		Langkah Selanjutnya :
