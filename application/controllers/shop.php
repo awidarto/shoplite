@@ -755,7 +755,7 @@ class Shop_Controller extends Base_Controller {
 		$size = $c[1];
 		$color = $c[2];
 
-		$size = str_replace('-', '', $size);
+		//$size = str_replace('-', ' ', $size);
 
 		$cart = $this->getCurrentCart();
 
