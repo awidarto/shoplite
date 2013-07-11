@@ -111,7 +111,7 @@ th.align-center{
 td a.icon-{
 	display: block;
 	width: 120px;
-	padding-bottom:9px; 
+	padding-bottom:9px;
 }
 td a.icon-:hover span{
 	text-decoration: underline;
@@ -123,7 +123,7 @@ td a.icon- i{
 	color: #717171;
 }
 td a.icon-:hover i{
-	color: #CD4900;	
+	color: #CD4900;
 }
 
 a.icon- span{
@@ -192,7 +192,7 @@ span.activity-list[rel="tooltip"]{
 }
 .attendeeDetails img.barcode2{
 	width: 150px;
-	
+
 	position: absolute;
 	top:140px;
 	right: 20px;
@@ -236,7 +236,7 @@ span.activity-list[rel="tooltip"]{
 	width: auto;
 	display: block;
 	float: left;
-	padding-right: 20px;	
+	padding-right: 20px;
 	margin-top: 0px;
 }
 .dataTables_length select{
@@ -252,7 +252,7 @@ span.activity-list[rel="tooltip"]{
 }
 .dataTables_filter input{
 	margin-top: 7px;
-	font-size: 11.5px;	
+	font-size: 11.5px;
 }
 .dataTables_filter label{
 	display: inline-block;
@@ -329,11 +329,11 @@ span.error{
 	height: 27px;
    	position: absolute;
    	left: 50%;
-   	top: 30%; 
+   	top: 30%;
    	margin-left: -60px;
    	margin-top: -25px;
 	display: inline-block;
-	
+
 	background: transparent url("../img/progress-indeterminate-ring-light-small.gif") no-repeat 10px 7px;
 	padding-left: 37px;
 	padding-top: 10px;
@@ -350,7 +350,7 @@ span.error{
 	position: relative;
 	padding: 20px;
 	margin-bottom: 20px;
-	
+
 }
 span.expander{
 	cursor: pointer;
@@ -362,10 +362,11 @@ span.expander{
 	border-right: 20px solid transparent;
 	height: 0;
 	position: absolute;
-	top: -20px;
-	left: 400px;
+	top: -15px;
+	left: 292px;
 	width: 0;
 }
+
 
 .paymentStatusTable{
 	text-transform: uppercase;
@@ -387,18 +388,18 @@ table.table thead .sorting_desc_disabled {
 	background-color: #f7f7f7;
 }
 .search_init {
-	width: 100px;	
+	width: 100px;
 }
 
 .search_init:focus {
-	width: 150px;	
+	width: 150px;
 }
 
 
 thead #searchinput td{
 	padding: 7px 5px;
 	min-height: 0;
-	
+
 }
 
 .icon- .pay,.icon- .del,.icon- .pbadge{
@@ -562,7 +563,7 @@ label.checkbox input[type=checkbox] ~ span.metro-checkbox{
 .areacodePhone{
 	width: 100px;
 	margin-right: 20px;
-	display: inline-block;	
+	display: inline-block;
 }*/
 
 .countrycodePhone{
@@ -581,12 +582,12 @@ label.checkbox input[type=checkbox] ~ span.metro-checkbox{
 	width: 200px;
 	margin-right: 10px;
 	display: inline-block;
-	float: left;	
+	float: left;
 }
 
 .selectionCommandList{
 	width: 600px;
-	
+
 	display: inline-block;
 }
 .selectionCommandList select{
@@ -614,7 +615,7 @@ label.checkbox input[type=checkbox] ~ span.metro-checkbox{
 	font-size: 12px;
 	font-weight: normal;
 	text-align: left;
-	
+
 }
 
 .metro .tile.square.text.reportBlock{
@@ -623,7 +624,7 @@ label.checkbox input[type=checkbox] ~ span.metro-checkbox{
 	padding: 10px;
 }
 .metro .tile.totalBlockReport.text{
-	
+
 }
 .metro .tile .texttotal{
 	font-size: 60px;
@@ -771,7 +772,7 @@ td.result span{
 }
 #boothcontractor input{
   display: inline-block;
-  float: left; 
+  float: left;
   width: 50%;
   font-size: 11px;
   padding: 2px 6px;
@@ -921,13 +922,13 @@ input.inputhightlights,.swMain ul.anchor li a.filledyes{
 	font-size: 13px;
 }
 .swMain ul.anchor li a{
-	padding:7px 13px; 
+	padding:7px 13px;
 }
 .swMain ul.anchor li a{
 	color: #5A5655;
 	font:normal 13px "Open Sans",Arial,Helvetica,Sans-Serif;
 	background-color: #d2d2d2;
-	
+
 }
 input.inputhightlights{
 	background-color: rgb(250, 255, 189);
@@ -1002,7 +1003,7 @@ color: #717171;
 
 table.onsite {
 	margin-top: 60px;
-} 
+}
 
 .companylist a.icon-{
 	float: right;
@@ -1033,7 +1034,7 @@ table.onsite {
 	font-size: 12px;
 	line-height: 20px;
 	margin-bottom: 20px;
-	
+
 	color: #333333;
 }
 
@@ -1076,7 +1077,7 @@ a.btn.uploader {
 }
 
 form h4{
-	margin-bottom: 8px;	
+	margin-bottom: 8px;
 }
 
 
@@ -1227,7 +1228,7 @@ span.btn.del{
 	-webkit-appearance: none;
 }
 
-.simplecolorpicker div:hover, 
+.simplecolorpicker div:hover,
 .simplecolorpicker div.selected{
 	border: 2px solid #222;
 }
@@ -1235,3 +1236,16 @@ span.btn.del{
 #addtocart{
 	cursor: pointer;
 }
+
+.color-chip{
+    padding:4px;
+    min-width:60px;
+    min-height:30px;
+    border:thin solid #ccc;
+}
+
+li.itemlist{
+    list-style-type: none;
+    line-height: 32px;
+}
+

@@ -71,7 +71,7 @@ class Admin_Controller extends Base_Controller {
 				'form_class'=>$this->form_class
 			);
 
-		$this->form = new Formly();		
+		$this->form = new Formly();
 		$this->form->set_options($form_options);
 	}
 
@@ -226,8 +226,13 @@ class Admin_Controller extends Base_Controller {
 
 		$fidx = ($fidx == -1 )?0:$fidx;
 
-		$sort_col = $fields[$fidx][0];
-		$sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
+        if($fidx == 0){
+            $sort_col = 'createdDate';
+            $sort_dir = -1;
+        }else{
+            $sort_col = $fields[$fidx][0];
+            $sort_dir = (Input::get('sSortDir_0') == 'asc')?1:-1;
+        }
 
 		$count_all = $model->count();
 
@@ -357,7 +362,7 @@ class Admin_Controller extends Base_Controller {
 	}
 
 	public function get_add(){
-		
+
 		$controller_name = strtolower($this->controller_name);
 
 		$this->crumb->add($controller_name.'/add','New '.Str::singular($this->controller_name));
@@ -406,7 +411,7 @@ class Admin_Controller extends Base_Controller {
 			$data['createdDate'] = new MongoDate();
 			$data['lastUpdate'] = new MongoDate();
 
-			
+
 			$model = $this->model;
 
 

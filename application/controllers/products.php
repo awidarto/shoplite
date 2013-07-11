@@ -9,7 +9,7 @@ class Products_Controller extends Admin_Controller {
 		$this->controller_name = str_replace('_Controller', '', get_class());
 
 		$this->title = $this->controller_name;
-		
+
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add(strtolower($this->controller_name),ucfirst($this->controller_name));
 
@@ -26,7 +26,7 @@ class Products_Controller extends Admin_Controller {
 			array('Permalink',array('search'=>true,'sort'=>true)),
 			array('Description',array('search'=>true,'sort'=>true)),
 			array('Section',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.search_sections'))),
-			//array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('content.news.categories'))),
+			array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.search_categories'))),
 			//array('Category',array('search'=>true,'sort'=>true)),
 			//array('Tags',array('search'=>true,'sort'=>true)),
 			array('Currency',array('search'=>true,'sort'=>true)),
@@ -51,7 +51,7 @@ class Products_Controller extends Admin_Controller {
 			array('permalink',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-			//array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+			array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			//array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('priceCurrency',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
 			array('retailPrice',array('kind'=>'currency','query'=>'like','pos'=>'both','show'=>true)),
@@ -69,7 +69,7 @@ class Products_Controller extends Admin_Controller {
 	public function post_add($data = null)
 	{
 		$this->validator = array(
-		    'name' => 'required', 
+		    'name' => 'required',
 		    'productcode' => 'required',
 		    'permalink' => 'required',
 		    'description' => 'required',
@@ -143,7 +143,7 @@ class Products_Controller extends Admin_Controller {
 		foreach($files as $key=>$val){
 			if($val['name'] != ''){
 				$productpic[$key] = $val;
-			}				
+			}
 		}
 
 		$data['productpic'] = $productpic;
@@ -168,7 +168,7 @@ class Products_Controller extends Admin_Controller {
 
 
 		$this->validator = array(
-		    'name' => 'required', 
+		    'name' => 'required',
 		    'productcode' => 'required',
 		    'permalink' => 'required',
 		    'description' => 'required',
@@ -225,7 +225,7 @@ class Products_Controller extends Admin_Controller {
 		foreach($files as $key=>$val){
 			if($val['name'] != ''){
 				$productpic[$key] = $val;
-			}				
+			}
 		}
 
 		$data['onsale'] = (isset($data['onsale']) && $data['onsale'] == 'Yes')?true:false;
@@ -314,7 +314,7 @@ class Products_Controller extends Admin_Controller {
 
 			$v = explode('_',$k);
 			$variant_params = array(
-					'size' => $v[0],                                                     
+					'size' => $v[0],
 	                'color' => $v[1]
 				);
 
@@ -363,16 +363,16 @@ class Products_Controller extends Admin_Controller {
 				foreach(Config::get('shoplite.picsizes') as $s){
 					$smsuccess = Resizer::open( $path )
 		        		->resize( $s['w'] , $s['h'] , $s['opt'] )
-		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
+		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );
 				}
 
-			}				
+			}
 		}
 
 		$inventory = new Inventory();
 
 		if(isset($data['variants']) && count($data['variants']) > 0){
-			
+
 			$o = array();
 
 			foreach($data['variants'] as $v){
@@ -390,16 +390,16 @@ class Products_Controller extends Admin_Controller {
 
 				//print $qty.' vs '.$avail;
 
-				
+
 				if($qty > $avail){
 					$qty = $qty - $avail;
 
 					$v['status'] = 'available';
-					$v['createdDate'] = new MongoDate();				
+					$v['createdDate'] = new MongoDate();
 					$v['cartId'] = '';
 
 					for($i = 0; $i < $qty;$i++)
-					{	
+					{
 						$v['_id'] = new MongoId(Str::random(24));
 						$inventory->insert($v,array('upsert'=>false));
 					}
@@ -413,7 +413,7 @@ class Products_Controller extends Admin_Controller {
 					$d['cartId'] = '';
 
 					for($i = 0; $i < $qty;$i++)
-					{	
+					{
 						$inventory->deleteOne($d);
 					}
 
@@ -463,16 +463,16 @@ class Products_Controller extends Admin_Controller {
 				foreach(Config::get('shoplite.picsizes') as $s){
 					$smsuccess = Resizer::open( $path )
 		        		->resize( $s['w'] , $s['h'] , $s['opt'] )
-		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
+		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );
 				}
 
-			}				
+			}
 		}
 
 		$inventory = new Inventory();
 
 		if(isset($obj['variants']) && count($obj['variants']) > 0){
-			
+
 			$o = array();
 
 			foreach($obj['variants'] as $v){
@@ -480,12 +480,12 @@ class Products_Controller extends Admin_Controller {
 				$qty = (int) $v['qty'];
 
 				$v['productId'] = $obj['_id']->__toString();
-				$v['createdDate'] = new MongoDate();				
+				$v['createdDate'] = new MongoDate();
 				$v['status'] = 'available';
 				$v['cartId'] = '';
 
 				for($i = 0; $i < $qty;$i++)
-				{	
+				{
 					$v['_id'] = new MongoId(Str::random(24));
 					$inventory->insert($v,array('upsert'=>false));
 				}

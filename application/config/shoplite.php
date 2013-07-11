@@ -54,7 +54,11 @@ return array(
 			'open'=>'Regular',
 			'checkedout'=>'Checked Out',
 			'pending'=>'Pending Payment',
-			'paid'=> 'Paid',
+            'confirmed'=>'Confirmed Payment',
+            'paid'=> 'Paid',
+            'shipped'=>'Shipped',
+            'received'=>'Received',
+            'return'=>'Returned',
 			'cancelled'=> 'Cancelled'
 		),
 	'search_cartstatus'=>array(
@@ -62,7 +66,11 @@ return array(
 			'open'=>'Regular',
 			'checkedout'=>'Checked Out',
 			'pending'=>'Pending Payment',
+            'confirmed'=>'Confirmed Payment',
 			'paid'=> 'Paid',
+            'shipped'=>'Shipped',
+            'received'=>'Received',
+            'return'=>'Returned',
 			'cancelled'=> 'Cancelled'
 		),
 
