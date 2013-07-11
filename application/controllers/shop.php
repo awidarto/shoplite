@@ -96,9 +96,9 @@ class Shop_Controller extends Base_Controller {
 							if($cond[$idx] == 'both'){
 								$sub[] = array($f=> new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i') );
 							}else if($cond[$idx] == 'before'){
-								$sub[] = array($f=> new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i') );						
+								$sub[] = array($f=> new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i') );
 							}else if($cond[$idx] == 'after'){
-								$sub[] = array($f=> new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i') );						
+								$sub[] = array($f=> new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i') );
 							}
 						}
 						$q['$or'] = $sub;
@@ -106,10 +106,10 @@ class Shop_Controller extends Base_Controller {
 						if($cond[$idx] == 'both'){
 							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
 						}else if($cond[$idx] == 'before'){
-							$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');						
+							$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
 						}else if($cond[$idx] == 'after'){
-							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');						
-						}						
+							$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
+						}
 					}
 				}else if($rel[$idx] == 'equ'){
 					$q[$field] = Input::get('sSearch_'.$idx);
@@ -124,7 +124,7 @@ class Shop_Controller extends Base_Controller {
 		/* first column is always sequence number, so must be omitted */
 		$fidx = Input::get('iSortCol_0');
 		if($fidx == 0){
-			$fidx = $defsort;			
+			$fidx = $defsort;
 			$sort_col = $fields[$fidx];
 			$sort_dir = $defdir;
 		}else{
@@ -180,7 +180,7 @@ class Shop_Controller extends Base_Controller {
 			$counter++;
 		}
 
-		
+
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),
 			'iTotalRecords'=>$count_all,
@@ -231,7 +231,7 @@ class Shop_Controller extends Base_Controller {
 		$otb = $products->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
 
 		$kind = $products->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
-		
+
 		$mixmatcharticle = $articles->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
 		$powarticle = $articles->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
 		$otbarticle = $articles->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
@@ -265,7 +265,7 @@ class Shop_Controller extends Base_Controller {
 		$pagestart = ($page - 1 ) * $pagelength;
 
 		$limit = array($pagelength, $pagestart);
-		
+
 		$new = array();
 		$featured = array();
 
@@ -290,7 +290,7 @@ class Shop_Controller extends Base_Controller {
 			$query = array(
 				'category'=>$category,
 				'$or'=>array($scheduled,$online)
-			);			
+			);
 		}
 
 
@@ -331,7 +331,7 @@ class Shop_Controller extends Base_Controller {
 			$pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
 
 		}
-		
+
 		$pagination .= '</ul></div>';
 
 		return View::make('shop.collection')
@@ -360,7 +360,7 @@ class Shop_Controller extends Base_Controller {
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
-		
+
 		$new = array();
 		$featured = array();
 
@@ -384,8 +384,8 @@ class Shop_Controller extends Base_Controller {
 
 		$pow = $products->find($query,array(),array('createdDate'=>-1),$limit);
 
-		
-		
+
+
 		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
@@ -400,7 +400,7 @@ class Shop_Controller extends Base_Controller {
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
-		
+
 		$new = array();
 		$featured = array();
 
@@ -423,7 +423,7 @@ class Shop_Controller extends Base_Controller {
 		);
 
 		$otb = $products->find($query,array(),array('createdDate'=>-1),$limit);
-		
+
 		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
@@ -464,7 +464,7 @@ class Shop_Controller extends Base_Controller {
 		);
 
 		$mixmatch = $products->find($query,array(),array('createdDate'=>-1),$limit);
-		
+
 		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
@@ -479,7 +479,7 @@ class Shop_Controller extends Base_Controller {
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
-		
+
 		$new = array();
 		$featured = array();
 
@@ -502,7 +502,7 @@ class Shop_Controller extends Base_Controller {
 		);
 
 		$kind = $products->find($query,array(),array('createdDate'=>-1),$limit);
-		
+
 		return View::make('shop.section')
 			->with('new',$new)
 			->with('featured',$featured)
@@ -515,7 +515,7 @@ class Shop_Controller extends Base_Controller {
 		$new = array();
 		$featured = array();
 		$mixmatch = array();
-		
+
 		return View::make('shop.collection')
 			->with('new',$new)
 			->with('featured',$featured)
@@ -771,7 +771,7 @@ class Shop_Controller extends Base_Controller {
 		//print_r($cart);
 
 		$prices = $this->recalculate($cart);
-		
+
 		$carts = new Cart();
 
 		$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'])),array('upsert'=>true));
@@ -809,7 +809,7 @@ class Shop_Controller extends Base_Controller {
 				}
 			}
 
-			$counter = $qty;			
+			$counter = $qty;
 
 			return Response::json(array('result'=>'OK','message'=>'Item removed', 'prices'=>$prices,'row'=>$id.'_row','cartcount'=>$counter ));
 		}else{
@@ -885,14 +885,14 @@ class Shop_Controller extends Base_Controller {
 				$cart['items'][$productId][$size.'_'.$color]['actual'] = $actual_count;
 			}
 
-			//print_r($cart);			
+			//print_r($cart);
 
 			$prices = $this->recalculate($cart);
 
 			$carts = new Cart();
 
 			$upcart = $carts->update(array('_id'=>$cart['_id']),array('$set'=>array('items'=>$cart['items'],'prices'=>$prices)),array('upsert'=>true));
-			
+
 			if($upcart){
 
 				$mycart = $carts->get(array('_id'=>$cart['_id']));
@@ -912,7 +912,7 @@ class Shop_Controller extends Base_Controller {
 				return Response::json(array('result'=>'ERR','message'=>'Fail to update quantity'));
 			}
 		}elseif($qty > $currentqty){
-			// check next available 
+			// check next available
 			$added = $qty - $currentqty;
 
 			//print $added;
@@ -982,7 +982,7 @@ class Shop_Controller extends Base_Controller {
 
 					$prices[$key][$k]['sub_total_price'] = $subtotal;
 					$prices[$key][$k]['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.');
-					$prices[$key.'_'.$kx.'_sub']['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.'); 
+					$prices[$key.'_'.$kx.'_sub']['sub_total_price_fmt'] = $prod['priceCurrency'].' '.number_format($subtotal,2,',','.');
 
 					$total_due += $subtotal;
 				}
@@ -1036,7 +1036,7 @@ class Shop_Controller extends Base_Controller {
 
 	    if ( $userdata = Auth::shopperattempt(array('username'=>$username, 'password'=>$password)) )
 	    {
-	    	
+
 	    	if(Auth::shopper()->activeCart == ''){
 	    		$cart = $this->newCart();
 	    	}else{
@@ -1097,7 +1097,7 @@ class Shop_Controller extends Base_Controller {
 
 		$pagelength = $qty;
 		$pagestart = 0;
-		
+
 		$limit = array($pagelength, $pagestart);
 
 		$invitem = $inventory->find($query,array(),array('createdDate'=>1),$limit);
@@ -1225,7 +1225,7 @@ class Shop_Controller extends Base_Controller {
 
 			$prices = $this->recalculate($cart);
 
-			$carts->update(array('_id'=>$active_cart),array('$set'=>array('prices'=>$prices)));		
+			$carts->update(array('_id'=>$active_cart),array('$set'=>array('prices'=>$prices)));
 
 			if($qty == 0){
 				$cart = null;
@@ -1300,6 +1300,7 @@ class Shop_Controller extends Base_Controller {
 		$cart = $carts->get(array('_id'=>$active_cart));
 
 		$or = array();
+
 		foreach($cart['items'] as $key=>$val){
 			$or[] = array('_id'=>new MongoId($key));
 		}
@@ -1312,12 +1313,17 @@ class Shop_Controller extends Base_Controller {
 
 		$confirmcode = strtoupper(Str::random(8, 'alpha'));
 
-		$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout','confirmationCode'=>$confirmcode, 'lastUpdate'=>new MongoDate() )));
+		if(isset($cart['confirmationCode']) && $cart['confirmationCode'] != ''){
+			$confirmcode = strtoupper($cart['confirmationCode']);
+		}else{
+			$carts->update(array('_id'=>$active_cart),array('$set'=>array( 'cartStatus'=>'checkedout','confirmationCode'=>$confirmcode, 'lastUpdate'=>new MongoDate() )));
+		}
+
 
 		$cart = $carts->get(array('_id'=>$active_cart));
 
 		$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
-			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
+			array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )),
 			array('upsert'=>true) );
 
 		Event::fire('commit.checkout',array(Auth::shopper()->id,$in['cartId']));
@@ -1341,58 +1347,75 @@ class Shop_Controller extends Base_Controller {
 
 	public function post_confirm(){
 
+		$validator = array(
+				'confirmationCode'=>'required',
+				'email'=>'required',
+				'destinationBank'=>'required',
+				'transferDate'=>'required',
+				'transferAmount'=>'required',
+				'sourceBank'=>'required',
+				'sourceAcc'=>'required',
+				'sourceAccName'=>'required'
+			);
 
-		$form = new Formly();
+	    $validation = Validator::make($input = Input::all(), $validator);
 
-		$in = Input::get();
+	    if($validation->fails()){
+	    	return Redirect::to('shop/confirm')->with_errors($validation)->with_input(Input::all());
+	    }else{
 
-		//print_r($in);
+			$form = new Formly();
 
-		//exit();
+			$in = Input::get();
 
-		$carts = new Cart();
+			//print_r($in);
 
-		$cart = $carts->get(array( 'confirmationCode'=>strtoupper($in['confirmationCode']) ));
+			//exit();
 
-		
-		if($cart){
+			$carts = new Cart();
 
-			if($cart['cartStatus'] != 'confirmed'){
+			$cart = $carts->get(array( 'confirmationCode'=>strtoupper($in['confirmationCode']) ));
 
-				$carts->update(array('_id'=>$cart['_id']),array('$set'=>array( 'cartStatus'=>'confirmed', 'lastUpdate'=>new MongoDate() )));
 
-				$confirmations = new Confirmation();
+			if($cart){
 
-				$in['createdDate'] = new MongoDate();
+				if($cart['cartStatus'] != 'confirmed'){
 
-				$confirmations->insert($in);
+					$carts->update(array('_id'=>$cart['_id']),array('$set'=>array( 'cartStatus'=>'confirmed', 'lastUpdate'=>new MongoDate() )));
 
-			/*
-				$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
-					array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )), 
-					array('upsert'=>true) );
-			*/
-				//Event::fire('payment.confirm',array($cart['_id']));
+					$confirmations = new Confirmation();
 
-				return View::make('shop.confirmed')
-					->with('title','Konfirmasi Berhasil');
+					$in['createdDate'] = new MongoDate();
 
-			}else if($cart['cartStatus'] == 'confirmed'){
+					$conobj = $confirmations->insert($in);
 
-				return View::make('shop.alreadyconfirmed')
-					->with('title','Pembayaran Telah Terkonfirmasi');
+				/*
+					$shoppers->update(array('_id'=>new MongoId(Auth::shopper()->id)),
+						array('$set'=>array('activeCart'=>'','prevCart'=>$in['cartId'] )),
+						array('upsert'=>true) );
+				*/
+					$confirmationCode = $in['confirmationCode'];
+
+					Event::fire('payment.confirm',array($confirmationCode));
+
+					return View::make('shop.confirmed')
+						->with('title','Konfirmasi Berhasil');
+
+				}else if($cart['cartStatus'] == 'confirmed'){
+
+					return View::make('shop.alreadyconfirmed')
+						->with('title','Pembayaran Telah Terkonfirmasi');
+
+				}
+
+
+			}else{
+				return View::make('shop.confirmfail')
+					->with('title','Konfirmasi Gagal');
 
 			}
 
-
-		}else{
-			return View::make('shop.confirmfail')
-				->with('title','Konfirmasi Gagal');
-
-		}
-
-
-
+	    }
 
 	}
 

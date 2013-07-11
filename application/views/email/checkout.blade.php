@@ -19,16 +19,17 @@
 			<p>
 				Pemesanan hanya akan diproses bila pembayaran dilakukan dalam waktu 1 hari / 24   jam ke salah satu akun bank kami dibawah ini :
 			</p>
+
 			<p>
-				BCA
-				Atas Nama: Fitria Anugraheni
-				No. Rek : 286.1571.388
-				Cabang : Kemang
+				<strong>BCA</strong><br />
+                Atas Nama : Karissa Habibie<br />
+                No Rek : 2861571388<br />
+                Cabang : Kemang
 			</p>
 			<p>
-				Permata Bank
-				Atas Nama: Khairunnisa
-				No Rek :975.420.760
+				<strong>Permata Bank</strong><br />
+				Atas Nama : Khairunnisa<br />
+				No Rek : 975.420.760<br />
 				Cabang : Pondok Indah
 			</p>
 			<p>
@@ -67,7 +68,7 @@
 	<p>
 		Ada pertanyaan?<br />
 
-		Silakan hubungi Customer Service PEACHTOBLACK di 021-xxxx xxx hari Senin - Jumat jam 09:00 - 17:00 WIB, atau kirim email ke help@peachtoblack.com
+		Silakan hubungi Customer Service PEACHTOBLACK , email ke help@peachtoblack.com
 
 	</p>
 

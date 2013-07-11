@@ -34,7 +34,7 @@ Event::listen('commit.checkout',function($shopper,$cart){
 
     $carts = new Cart();
 
-    $cartdata = $carts->get(array('_id'=>$c_id)); 
+    $cartdata = $carts->get(array('_id'=>$c_id));
 
     $body = View::make('email.checkout')
         ->with('user',$userdata)
@@ -49,7 +49,7 @@ Event::listen('commit.checkout',function($shopper,$cart){
         ->body( $body )
         ->html(true)
         ->send();
-    
+
 });
 
 Event::listen('shopper.signup',function($id){
@@ -77,13 +77,23 @@ Event::listen('shopper.signup',function($id){
 
 Event::listen('payment.confirm',function($confirmcode){
 
+    $confirms = new Confirmation();
+
+    $carts = new Cart();
+
+    $confirm = $confirms->get(array('confirmationCode'=>$confirmcode));
+
+    $cart = $carts->get(array('confirmationCode'=>$confirmcode));
+
     $body = View::make('email.paymentconfirmed')
-        ->with('user',$userdata)
+        ->with('cart',$cart)
+        ->with('confirmation',$confirm)
         ->render();
 
-    Message::to($userdata['email'])
+    Message::to($confirm['email'])
         ->from(Config::get('shoplite.admin_email'), Config::get('shoplite.admin_name'))
         ->subject(Config::get('site.title'))
+        ->cc($cart['buyerDetail']['email'])
         ->body( $body )
         ->html(true)
         ->send();
