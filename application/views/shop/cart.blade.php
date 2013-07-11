@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row-fluid">
-  
+
   {{-- print_r($cart['items'])}}
 {{ $form->open('shop/checkout','POST',array('id'=>'shoppingcartform','class'=>'horizontal'))}}
 
@@ -67,9 +67,14 @@
                     <span class="color-chip" style="background-color: {{ $color }}; ">&nbsp;</span>
                   </td>
                   <td class="span2 central">
-                    <?php $qty += $v['ordered'];?>
-                    {{ Form::text($product_prefix.'_'.$k.'_qty',$v['actual'],array('class'=>'qty-box', 'style'=>'margin-bottom:0px' ,'id'=>$product_prefix.'_'.$k.'_qty')) }}
-                    &nbsp;&nbsp;<i class="icon-reload-CW refresh-qty" style="font-size:20px;font-weight:bold;" data-toggle="tooltip" title="update quantity" ></i>
+                    {{ $v['actual'] }}
+
+                    <?php $qty += $v['ordered'];
+                        /*
+                            {{ Form::text($product_prefix.'_'.$k.'_qty',$v['actual'],array('class'=>'qty-box', 'style'=>'margin-bottom:0px' ,'id'=>$product_prefix.'_'.$k.'_qty')) }}
+                            &nbsp;&nbsp;<i class="icon-reload-CW refresh-qty" style="font-size:20px;font-weight:bold;" data-toggle="tooltip" title="update quantity" ></i>
+                        */
+                    ?>
                   </td>
                   <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
                   <td class="span2 subtotal" id="{{$product_prefix.'_'.$kx.'_sub'}}">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
@@ -91,11 +96,11 @@
           </tr>
       </tbody>
     </table>
-      
+
   </div>
 
 
-{{ $form->close() }}  
+{{ $form->close() }}
 </div>
 
 @endif
@@ -118,7 +123,7 @@ $(document).ready(function(){
             $('#'+data.row).remove();
             //$('#'+data.row).parent().parent().remove();
             console.log($('#'+data.row));
-            console.log($('#'+data.row).parent().parent());  
+            console.log($('#'+data.row).parent().parent());
 
             $('.subtotal').each(function(i){
                 //console.log(this.id);
