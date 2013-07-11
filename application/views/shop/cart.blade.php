@@ -46,6 +46,7 @@
               @foreach($val as $k=>$v)
                 <?php
                   $kx = str_replace('#', '', $k);
+                  $kx = str_replace(' ', '-', $kx);
                 ?>
                 <tr id="{{$product_prefix.'_'.$kx.'_del_row'}}">
                   <td class="span2 image" style="padding-top:0px;">
@@ -78,7 +79,7 @@
                   </td>
                   <td class="span2 price">{{ $products[$key]['priceCurrency'].' '.number_format($products[$key]['retailPrice'],2,',','.') ;}}</td>
                   <td class="span2 subtotal" id="{{$product_prefix.'_'.$kx.'_sub'}}">{{ $products[$key]['priceCurrency'].' '.number_format($qty * $products[$key]['retailPrice'],2,',','.') ;}}</td>
-                  <td class="span1 removebox"><i class="icon-remove remove-item" id="{{$product_prefix.'_'.$k.'_del'}}" ></i></td>
+                  <td class="span1 removebox"><i class="icon-remove remove-item" id="{{$product_prefix.'_'.$kx.'_del'}}" ></i></td>
                 </tr>
 
             @endforeach
