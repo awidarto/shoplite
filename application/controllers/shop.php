@@ -223,14 +223,15 @@ class Shop_Controller extends Base_Controller {
 			'$or'=>array($scheduled,$online)
 		);
 
+        $limitsingle = array(1,0);
 
 		$mixmatch = $products->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
 
-		$pow = $products->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+		$pow = $products->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limitsingle);
 
-		$otb = $products->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+		$otb = $products->find(array('section'=>'otb','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limitsingle);
 
-		$kind = $products->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limit);
+		$kind = $products->find(array('section'=>'kind','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),$limitsingle);
 
 		$mixmatcharticle = $articles->find(array('section'=>'mixmatch','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
 		$powarticle = $articles->find(array('section'=>'pow','$or'=>array($scheduled,$online)),array(),array('createdDate'=>-1),array());
