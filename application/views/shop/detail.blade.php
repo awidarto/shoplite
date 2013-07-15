@@ -6,7 +6,7 @@
   <div class="span4">
 
     <img src="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" alt="{{ $product['name']}}" id="mainimageproduct" class="mixmatch" data-zoom-image="{{ URL::base().'/storage/products/'.$product['_id'].'/lar_pic0'.$product['defaultpic'].'.jpg' }}" />
-    
+
     <br/>
     <img src="{{ URL::base() }}/images/roll-on.png"><span class="titlesectionnormal">ROLL ON TO ZOOM IN</span>
 <?php
@@ -39,6 +39,11 @@
     <div class="detailproduct">
       <h2 class="product-title">{{$product['name']}}</h2>
 
+        <iframe src="//www.facebook.com/plugins/like.php?href={{ urlencode( URL::full() ) }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font=verdana&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
+        <br />
+        <a href="https://twitter.com/share" class="twitter-share-button" data-via="peachtoblack" data-hashtags="peachtoblack">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
     <?php
     /*
       <a href="#" class="fblike"><img src="{{ URL::base() }}/images/fblike.gif"/></a>
@@ -60,7 +65,7 @@
 
     <div class="optionselectproduct detailproduct clearfix row-fluid">
       <div class="span2">
-        <span class="titleselectbox">SELECT SIZE</span><br/>        
+        <span class="titleselectbox">SELECT SIZE</span><br/>
         <select name="size" class="span12" >
           <option value="-" selected="selected">-</option>
           @foreach($sizes as $size)
@@ -70,12 +75,12 @@
     </div>
 
     <div class="span5">
-        <span class="titleselectbox">SELECT COLOR</span><br/>        
+        <span class="titleselectbox">SELECT COLOR</span><br/>
         <select name="color" disable="disable" >
         </select>
     </div>
 
-    {{ Form::hidden('pid',$product['_id'],array('id'=>'product_id'))}} 
+    {{ Form::hidden('pid',$product['_id'],array('id'=>'product_id'))}}
     <script type="text/javascript">
     $(document).ready(function(){
 
@@ -83,14 +88,14 @@
 
         $acart = '';
         if(Auth::guest()){
-            $acart = '';            
+            $acart = '';
         }else{
             if(isset(Auth::shopper()->activeCart)){
               $acart = Auth::shopper()->activeCart;
           }else{
               $acart = '';
           }
-      } 
+      }
 
       ?>
 
@@ -111,7 +116,7 @@
           },'json');
       });
 
-      $('select[name="color"]').simplecolorpicker().on('change',function(){  
+      $('select[name="color"]').simplecolorpicker().on('change',function(){
         $.post('{{ URL::to('shop/qty')}}',{ color: $(this).val(), size: $('select[name="size"]').val(), _id:product_id },function(data){
             $('select[name="qty"]').html(data.html);
         },'json');
@@ -149,7 +154,7 @@
             $('#signInModal').modal('close');
         }
 
-    },'json');          
+    },'json');
 
     });
 
@@ -197,7 +202,7 @@
             }
 
 
-        },'json');          
+        },'json');
 
 
 
@@ -213,7 +218,7 @@
     </script>
 
     <div class="span3">
-        <span class="titleselectbox">SELECT QUANTITY</span><br/>        
+        <span class="titleselectbox">SELECT QUANTITY</span><br/>
         <select class="span12" name="qty">
           <option value="-" selected="selected">-</option>
       </select>
@@ -222,26 +227,26 @@
     <div class="span2">
         <span class="titleselectbox" style="cursor:pointer" >ADD TO CART<br/>
          <img src="{{ URL::base() }}/images/trolly.png" id="addtocart" />
-     </span>        
+     </span>
 
      <!-- Button to trigger modal -->
-     
+
     </div>
 </div>
 
     <?php
         /*
           <div class="clear"></div>
-          
+
           <div class="detailproduct statcomment">
             <span>5 comments</span>
             <a href="#"><img src="{{ URL::base() }}/images/fbstat.gif"></a>
             <a href="#"><img src="{{ URL::base() }}/images/twittstat.gif"></a>
             <a href="#"><img src="{{ URL::base() }}/images/googlestat.gif"></a>
           </div>
-          
+
             <div class="clear"></div>
-            
+
 
         */
     ?>
@@ -352,10 +357,10 @@
 
 <script type="text/javascript">
 
-$("#mainimageproduct").elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active'}); 
+$("#mainimageproduct").elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active'});
 
-$("#mainimageproduct").bind("click", function(e) {  
-    //var ez =   $('#img_01').data('elevateZoom'); 
+$("#mainimageproduct").bind("click", function(e) {
+    //var ez =   $('#img_01').data('elevateZoom');
     //$.fancybox(ez.getGalleryList());
     return false;
 });
@@ -367,10 +372,10 @@ $('.addimage').on({
         var zoomimage = $(this).attr("data-zoom-image");
         var imagesource = "{{ URL::base().'/storage/products/'.$product['_id'] }}";
         var imageLoad = imagesource+'/lar_pic'+idimage+'.jpg';
-        
+
         $('#mainimageproduct').attr('src',imageLoad);
 
-        
+
         return false;
     }
 });
