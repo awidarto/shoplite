@@ -356,7 +356,7 @@ class Shop_Controller extends Base_Controller {
 
 		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
 
-		$pagelength= 3;
+        $pagelength= Config::get('shoplite.item_per_page');
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
@@ -396,7 +396,8 @@ class Shop_Controller extends Base_Controller {
 	public function get_otb($category = 'all',$page = 0,$search = null)
 	{
 		$products = new Product();
-		$pagelength= 3;
+
+        $pagelength= Config::get('shoplite.item_per_page');
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
@@ -437,7 +438,7 @@ class Shop_Controller extends Base_Controller {
 
 		//$results = $model->find(array(),array(),array($sort_col=>$sort_dir),$limit);
 
-		$pagelength= 3;
+        $pagelength= Config::get('shoplite.item_per_page');
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
@@ -475,7 +476,8 @@ class Shop_Controller extends Base_Controller {
 	public function get_kind($category = 'all',$page = 0,$search = null)
 	{
 		$products = new Product();
-		$pagelength= 3;
+
+        $pagelength= Config::get('shoplite.item_per_page');
 		$pagestart = 0;
 
 		$limit = array($pagelength, $pagestart);
