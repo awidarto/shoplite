@@ -18,7 +18,7 @@ function se($val, $def = null){
 		if(is_null($val)){
 			// null value
 			$val = $def;
-		
+
 		}else{
 
 			if(is_array($val)){
@@ -64,7 +64,7 @@ function setparam($key,$val){
 	$params = new Param();
 
 	if($res = $params->update(array('_id'=>$key), array('$set'=>array('value'=>$val)), array('upsert'=>true) )){
-		return true;	
+		return true;
 	}else{
 		return false;
 	}
@@ -72,7 +72,7 @@ function setparam($key,$val){
 }
 
 function getvariantinventory($prod_id,$variantparams)
-{	
+{
 	$inv = new Inventory();
 
 	$variantparams['productId'] = new MongoId($prod_id);
@@ -152,8 +152,8 @@ function combiner($in,$keys,$types){
 					$kc++;
 				}
 				$out[] = $item;
-			}			
-		}			
+			}
+		}
 	}
 
 	return $out;
@@ -161,7 +161,7 @@ function combiner($in,$keys,$types){
 
 
 function rand_string( $length ) {
-	$chars = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789";	
+	$chars = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ0123456789";
 
 	$size = strlen( $chars );
 	$str = '';
@@ -177,7 +177,7 @@ function getavatar($id,$alt = 'avatar-image',$class = 'avatar'){
 	if(file_exists(Config::get('kickstart.avatarstorage').$id.'/avatar.jpg')){
 		$photo = HTML::image('avatar/'.$id.'/avatar.jpg', $alt, array('class' => $class));
 	}else{
-		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));				
+		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));
 	}
 
 	return $photo;
@@ -193,7 +193,7 @@ function getavatarbyemail($email,$alt = 'avatar-image',$class = 'avatar'){
 	if(file_exists(Config::get('kickstart.avatarstorage').$id.'/avatar.jpg')){
 		$photo = HTML::image('avatar/'.$id.'/avatar.jpg', $alt, array('class' => $class));
 	}else{
-		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));				
+		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));
 	}
 
 	return $photo;
@@ -205,7 +205,7 @@ function getphoto($id,$alt = 'avatar-image',$class = 'avatar'){
 	if(file_exists(Config::get('kickstart.photostorage').$id.'/formal.jpg')){
 		$photo = HTML::image('employees/'.$id.'/formal.jpg', $alt, array('class' => $class));
 	}else{
-		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));				
+		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));
 	}
 
 	return $photo;
@@ -221,7 +221,7 @@ function getphotobyemail($email,$alt = 'avatar-image',$class = 'avatar'){
 	if(file_exists(Config::get('kickstart.photostorage').$id.'/avatar.jpg')){
 		$photo = HTML::image('employees/'.$id.'/formal.jpg', $alt, array('class' => $class));
 	}else{
-		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));				
+		$photo = HTML::image('images/no-avatar.jpg', 'no-avatar', array('class' => $class));
 	}
 
 	return $photo;
