@@ -24,7 +24,7 @@
 		<p>{{$m['priceCurrency']}} {{idr($m['retailPrice'])}}</p>
 	</div>
 	@endforeach
-	
+
 
 </div>
 
@@ -32,7 +32,7 @@
 	$(document).ready(function(){
 		$('#cat-select').change(function(){
 
-			window.location.assign('{{ URL::to('collections').'/'.$page }}/' + $('#cat-select').val() + '/{{ $search }}');
+			window.location.assign('{{ URL::to('collections')}}/1/' + $('#cat-select').val() + '/{{ $search }}');
 		});
 	});
 
