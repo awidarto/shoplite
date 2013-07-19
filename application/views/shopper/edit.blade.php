@@ -57,13 +57,15 @@
     <div class="span6">
 
         <fieldset>
-            <legend>Transfer Payment Information</legend>
+            <legend>Bank Transfer Payment Information</legend>
                 {{ $form->text('fullname','Full Name','',array('class'=>'text','id'=>'fullname')) }}
                 {{ $form->text('bankname','Bank Name','',array('class'=>'text','id'=>'bankname')) }}
                 {{ $form->text('branch','Branch','',array('class'=>'text','id'=>'branch')) }}
-                {{ $form->text('cardnumber','Card Number','',array('class'=>'text','id'=>'cardnumber')) }}
+                {{ $form->text('accountnumber','Account Number','',array('class'=>'text','id'=>'accountnumber')) }}
         </fieldset>
 
+        <?php
+        /*
         <fieldset>
             <legend>Credit Card</legend>
 
@@ -73,9 +75,10 @@
                 {{ $form->text('expiremonth','Expiration date','',array('class'=>'text','id'=>'cardnumber','placeholder'=>'mm')) }}
 
                 {{ $form->text('expireyear','','',array('class'=>'text','id'=>'cardnumber','placeholder'=>'yyyy')) }}
-
-
         </fieldset>
+
+        */
+        ?>
 
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Update Profile</button>
