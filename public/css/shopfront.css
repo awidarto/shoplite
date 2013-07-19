@@ -503,3 +503,10 @@ span#shopping-badge{
 	padding: 4px;
 }
 
+span#soldout-sign{
+    font-size: 18px;
+    font-weight: bold;
+    color: maroon;
+    border-top: thin solid maroon;
+    border-bottom: thin solid maroon;
+}

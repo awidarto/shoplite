@@ -99,116 +99,218 @@
 
       ?>
 
-      var cart_id = '{{ $acart }}';
+    var cart_id = '{{ $acart }}';
 
-      var product_id = '{{ $product['_id']}}';
+    var product_id = '{{ $product['_id']}}';
 
-      $('select[name="size"]').on('change',function(){
-          $.post('{{ URL::to('shop/color')}}',{ size: this.value, _id:product_id },function(data){
-              $('select[name="color"]').html(data.html)
-              .simplecolorpicker('destroy')
-              .simplecolorpicker();
+    $('select[name="size"]').on('change',function(){
 
-              $.post('{{ URL::to('shop/qty')}}',{ color: data.defsel, size: $('select[name="size"]').val(), _id:product_id },function(data){
-                  $('select[name="qty"]').html(data.html);
-              },'json');
+        if($('select[name="size"]').val() == '-'){
+            var soldout = '<option value="-" selected >-</option>';
+            $('select[name="qty"]').html(soldout);
 
-          },'json');
-      });
-
-      $('select[name="color"]').simplecolorpicker().on('change',function(){
-        $.post('{{ URL::to('shop/qty')}}',{ color: $(this).val(), size: $('select[name="size"]').val(), _id:product_id },function(data){
-            $('select[name="qty"]').html(data.html);
-        },'json');
-    });
-
-
-      @if(Auth::shoppercheck() == false)
-
-      $('#addtocart').click(function(){
-          $('#signInModal').modal();
-      })
-
-      $('#signInNow').on('click',function(){
-        var color = $('select[name="color"]').val();
-        var size = $('select[name="size"]').val();
-        var qty = $('select[name="qty"]').val();
-        var username = $('#signInUsername').val();
-        var password = $('#signInPassword').val();
-
-        $.post('{{ URL::to('shop/signin')}}',{ username: username, password: password, color: color, size: size, qty: qty, _id:product_id, cart_id: '' },
-          function(data){
-            console.log(data);
-            if(data.result == 'NOTSIGNEDIN'){
-              alert(data.message);
-              $('#signInModal').modal('close');
-          }
-
-          if(data.result == 'OK:ITEMADDED'){
-              if(data.cartcount == 0){
-                $('#shopping-badge').html('');
-            }else{
-                $('#shopping-badge').html(data.cartcount);
-            }
-            alert(data.message);
-            $('#signInModal').modal('close');
-        }
-
-    },'json');
-
-    });
-
-      @else
-
-      $('#addtocart').click(function(){
-        var color = $('select[name="color"]').val();
-        var size = $('select[name="size"]').val();
-        var qty = $('select[name="qty"]').val();
-
-        console.log(color);
-        console.log(size);
-        console.log(qty);
-
-
-
-        if(color != '' && size != '-' && qty >= 0){
-
-            $.post('{{ URL::to('shop/addtocart')}}',{ color: color, size: size, qty: qty, _id:product_id, cart_id: cart_id },function(data){
-                console.log(data);
-                if(data.result == 'NOTSIGNEDIN'){
-                  alert(data.message);
-              }
-
-              if(data.result == 'PRODUCTADDED'){
-                  var remaining = data.data.remaining;
-                  var qtyopt = '';
-
-                  for(i = 1; i <= remaining; i++){
-                    qtyopt += '<option value="' + i + '" >' + i + '</option>';
-                }
-
-                console.log(qtyopt);
-
-                $('select[name="qty"]').html(qtyopt);
-
-                if(data.cartcount == 0){
-                    $('#shopping-badge').html('');
-                }else{
-                    $('#shopping-badge').html(data.cartcount);
-                }
-
-                alert(data.message);
-
-            }
-
-
-        },'json');
-
-
+            $('select[name="color"]').html('')
+            .simplecolorpicker('destroy')
+            .simplecolorpicker();
 
         }else{
-          alert('Please specify size, color and quantity');
-      }
+
+            $.post('{{ URL::to('shop/color')}}',{ size: this.value, _id:product_id },function(data){
+                $('select[name="color"]').html(data.html)
+                .simplecolorpicker('destroy')
+                .simplecolorpicker();
+
+                $.post('{{ URL::to('shop/qty')}}',{ color: data.defsel, size: $('select[name="size"]').val(), _id:product_id },function(data){
+
+                    if(data.qty == 0){
+                        var soldout = '<option value="-" selected >SOLD OUT</option>';
+                        $('select[name="qty"]').html(soldout);
+                        $('select[name="qty"]').hide();
+                        $('#soldout-sign').show();
+                    }else{
+                        $('#soldout-sign').hide();
+                        $('select[name="qty"]').show();
+                        $('select[name="qty"]').html(data.html);
+                    }
+
+                },'json');
+
+            },'json');
+
+        }
+
+    });
+
+    $('select[name="color"]').simplecolorpicker().on('change',function(){
+
+        if($('select[name="size"]').val() == '-'){
+
+            var soldout = '<option value="-" selected >-</option>';
+            $('select[name="qty"]').html(soldout);
+
+            $('select[name="color"]').html('')
+            .simplecolorpicker('destroy')
+            .simplecolorpicker();
+
+        }else{
+
+            $.post('{{ URL::to('shop/qty')}}',{ color: $(this).val(), size: $('select[name="size"]').val(), _id:product_id },function(data){
+
+                if(data.qty == 0){
+                    var soldout = '<option value="-" selected >SOLD OUT</option>';
+                    $('select[name="qty"]').html(soldout);
+                    $('select[name="qty"]').hide();
+                    $('#soldout-sign').show();
+                }else{
+                    $('#soldout-sign').hide();
+                    $('select[name="qty"]').show();
+                    $('select[name="qty"]').html(data.html);
+                }
+
+
+            },'json');
+
+        }
+
+    });
+
+
+    @if(Auth::shoppercheck() == false)
+
+        $('#addtocart').click(function(){
+            var selqty = $('select[name="qty"]').val();
+
+            var color = $('select[name="color"]').val();
+            var size = $('select[name="size"]').val();
+            var qty = $('select[name="qty"]').val();
+
+            if( size == '-' || color == '-' || qty == '-'){
+
+                alert('Please specify size, color and quantity');
+
+            }else{
+
+                if(qty == 0 || qty == '-'){
+                    alert( 'This particular item is SOLD OUT, you may try select other color or size.');
+                }else{
+                    $('#signInModal').modal();
+                }
+
+            }
+
+
+
+        })
+
+        $('#signInNow').on('click',function(){
+            var color = $('select[name="color"]').val();
+            var size = $('select[name="size"]').val();
+            var qty = $('select[name="qty"]').val();
+            var username = $('#signInUsername').val();
+            var password = $('#signInPassword').val();
+
+
+            $.post('{{ URL::to('shop/signin')}}',{ username: username, password: password, color: color, size: size, qty: qty, _id:product_id, cart_id: '' },
+                function(data){
+                    console.log(data);
+                    if(data.result == 'NOTSIGNEDIN'){
+                        alert(data.message);
+                        $('#signInModal').modal('hide');
+                    }
+
+                    if(data.result == 'OK:ITEMADDED'){
+                        if(data.cartcount == 0){
+                            $('#shopping-badge').html('');
+                        }else{
+                            $('#shopping-badge').html(data.cartcount);
+                        }
+                        alert(data.message);
+                        $('#signInModal').modal('hide');
+                        window.location = '{{ URL::full() }}';
+                    }
+            },'json');
+
+        });
+
+    @else
+
+        $('#addtocart').click(function(){
+            var color = $('select[name="color"]').val();
+            var size = $('select[name="size"]').val();
+            var qty = $('select[name="qty"]').val();
+
+            if( size == '-' || color == '-'){
+
+                alert('Please specify size, color and quantity');
+
+            }else{
+
+                if(qty == 0 || qty == '-'){
+
+                    alert( 'This product and variant is SOLD OUT !');
+
+                    if(qty == 0){
+                        var soldout = '<option value="-" selected >SOLD OUT</option>';
+                        $('select[name="qty"]').html(soldout);
+                        $('select[name="qty"]').hide();
+                        $('#soldout-sign').show();
+                    }else{
+                        $('#soldout-sign').hide();
+                        $('select[name="qty"]').show();
+                        $('select[name="qty"]').html(data.html);
+                    }
+
+                }else{
+
+                    if(color != '' && size != '-' && qty >= 0){
+
+                        $.post('{{ URL::to('shop/addtocart')}}',{ color: color, size: size, qty: qty, _id:product_id, cart_id: cart_id },function(data){
+                            console.log(data);
+                            if(data.result == 'NOTSIGNEDIN'){
+                                alert(data.message);
+                            }
+
+                            if(data.result == 'PRODUCTADDED'){
+                                var remaining = data.data.remaining;
+
+                                if( remaining == 0){
+                                    var soldout = '<option value="-" selected >SOLD OUT</option>';
+                                    $('select[name="qty"]').html(soldout);
+                                    $('select[name="qty"]').hide();
+                                    $('#soldout-sign').show();
+                                }else{
+                                    var qtyopt = '';
+
+                                    for(i = 1; i <= remaining; i++){
+                                        qtyopt += '<option value="' + i + '" >' + i + '</option>';
+                                    }
+
+                                    $('select[name="qty"]').html(qtyopt);
+
+                                }
+
+                                if(data.cartcount == 0){
+                                    $('#shopping-badge').html('');
+                                }else{
+                                    $('#shopping-badge').html(data.cartcount);
+                                }
+
+                                alert(data.message);
+
+                            }
+
+
+                        },'json');
+
+                    }else{
+
+                        alert('Please specify size, color and quantity');
+                    }
+
+                }
+
+            }
+
 
     })
 
@@ -219,9 +321,10 @@
 
     <div class="span3">
         <span class="titleselectbox">SELECT QUANTITY</span><br/>
+        <span id="soldout-sign" style="display:none" >SOLD OUT</span>
         <select class="span12" name="qty">
-          <option value="-" selected="selected">-</option>
-      </select>
+            <option value="-" selected="selected">-</option>
+        </select>
     </div>
 
     <div class="span2">
@@ -261,7 +364,7 @@
 
             @foreach($product['componentProducts'] as $r)
 
-                @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+                @if( isset($r['_id']) && file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
                     <div class="productpanel">
                         <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
                         <h3>{{$r['name']}}</h3>
@@ -283,15 +386,16 @@
 
             @foreach($product['relatedProducts'] as $r)
 
-            @if(file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
-            <div class="productpanel">
-                <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
-                <h3>{{$r['name']}}</h3>
-                <p>{{$r['priceCurrency']}} {{idr($r['retailPrice'])}}</p>
-            </div>
-            @endif
 
-          @endforeach
+                @if( isset($r['_id']) && file_exists(realpath('public/storage/products/'.$r['_id']->__toString()).'/sm_pic0'.$r['defaultpic'].'.jpg'))
+                    <div class="productpanel">
+                        <a href="{{ URL::to('/shop/detail/'.$r['_id']->__toString()) }}"><img src="{{ URL::base().'/storage/products/'.$r['_id'].'/med_pic0'.$r['defaultpic'].'.jpg' }}"></a>
+                        <h3>{{$r['name']}}</h3>
+                        <p>{{$r['priceCurrency']}} {{idr($r['retailPrice'])}}</p>
+                    </div>
+                @endif
+
+            @endforeach
 
         </div>
     @endif

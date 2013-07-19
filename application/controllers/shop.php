@@ -649,6 +649,7 @@ class Shop_Controller extends Base_Controller {
 		$sel = '';
 		$cnt = 0;
 		$defsel = '-';
+
 		foreach($ca as $c){
 			$sel = ($cnt == 0)?'selected':'';
 			$cnt++;
@@ -677,6 +678,8 @@ class Shop_Controller extends Base_Controller {
 
 		$sel = '';
 		$cnt = 0;
+        $defsel = '-';
+
 		for($i = 1; $i <= $count; $i++){
 			$sel = ($cnt == 0)?'selected':'';
 			$cnt++;
