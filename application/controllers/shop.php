@@ -623,9 +623,17 @@ class Shop_Controller extends Base_Controller {
 
         //print_r($shoppercomment);
 
-        $my_id = new MongoId(Auth::shopper()->id);
+        if(Auth::shoppercheck() == true){
+            $my_id = new MongoId(Auth::shopper()->id);
 
-        $product['myreviews'] = $comments->count( array('shopper_id'=>$my_id));
+            $product['myreviews'] = $comments->count( array('shopper_id'=>$my_id));
+
+        }else{
+
+            $product['myreviews'] = 0;
+
+        }
+
 
         $cr = array();
 

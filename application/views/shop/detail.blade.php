@@ -431,7 +431,7 @@
 
                         if(data.result == 'OK'){
 
-                            var ins = '<tr class="span12" style="opacity:0.1">';
+                            var ins = '<tr class="span12" style="opacity:0.1;">';
                             ins +=     '<td class="comment userinfo span3">';
                             ins +=       '<p class="name titlesection">' + data.data.shopper_name + '</p>';
                             ins +=       '<p>' + data.data.shopper_city + '</p>';
@@ -448,6 +448,8 @@
                             ins +=         '<p>' + data.data.comment + '</p>';
                             ins +=     '</td>';
                             ins += '</tr>';
+
+                            $('#no-comment').hide();
 
                             $(ins).insertAfter( $('#comment-input') )
                                 .animate({
@@ -485,28 +487,37 @@
 
     @endif
 
-    @foreach( $product['comments'] as $com)
+    @if(count($product['comments']) > 0)
 
-    <tr class="span12">
-        <td class="comment userinfo span3">
-          <p class="name titlesection">{{ $com['shopper_name'] }}</p>
-          <p>{{ $com['shopper_city'] }}</p>
-          <p>( {{ $com['shopper_reviews'] }} Reviews)</p>
-        </td>
+        @foreach( $product['comments'] as $com)
 
-        <td class="love span3">
-            @for($s = 0; $s < $com['score']; $s++)
-                <img src="{{ URL::base() }}/images/love-on.png" alt="love" />
-            @endfor
-        </td>
-        <td class="span5">
-            <p>
-                {{ $com['comment'] }}
-            </p>
-        </td>
-    </tr>
+        <tr class="span12">
+            <td class="comment userinfo span3">
+              <p class="name titlesection">{{ $com['shopper_name'] }}</p>
+              <p>{{ $com['shopper_city'] }}</p>
+              <p>( {{ $com['shopper_reviews'] }} Reviews)</p>
+            </td>
 
-    @endforeach
+            <td class="love span3">
+                @for($s = 0; $s < $com['score']; $s++)
+                    <img src="{{ URL::base() }}/images/love-on.png" alt="love" />
+                @endfor
+            </td>
+            <td class="span5">
+                <p>
+                    {{ $com['comment'] }}
+                </p>
+            </td>
+        </tr>
+
+        @endforeach
+
+    @else
+        <tr id="no-comment">
+            <td colspan="3">No comments yet, sign up and be the first to send some love</td>
+        </tr>
+    @endif
+
 
 </table>
 </div>
