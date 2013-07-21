@@ -33,7 +33,7 @@ class Ajax_Controller extends Base_Controller {
 	public $restful = true;
 
 	public function __construct(){
-		$this->filter('before','auth');
+		//$this->filter('before','auth');
 	}
 
 	public function get_index()
@@ -42,7 +42,7 @@ class Ajax_Controller extends Base_Controller {
 
 	public function post_index()
 	{
-	
+
 	}
 
 	public function get_product()
@@ -61,7 +61,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name'],'link'=>$r['permalink'],'pic'=>$display,'description'=>$r['description'],'label'=>$r['name']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_productplain()
@@ -79,7 +79,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['permalink'],'description'=>$r['description'],'label'=>$r['name']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_email()
@@ -97,7 +97,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['email'],'name'=>$r['fullname'],'label'=>$r['fullname'].' ( '.$r['email'].' )');
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_user()
@@ -115,8 +115,8 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['fullname'],'email'=>$r['email'],'label'=>$r['fullname'].' ( '.$r['email'].' )');
 		}
 
-		return Response::json($result);		
-	}	
+		return Response::json($result);
+	}
 
 	public function get_group()
 	{
@@ -133,7 +133,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['groupname'],'email'=>$r['email'],'label'=>$r['groupname'].'<br />'.$r['firstname'].''.$r['lastname'].' ( '.$r['email'].' )<br />'.$r['company']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_hall()
@@ -151,7 +151,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 
@@ -159,24 +159,24 @@ class Ajax_Controller extends Base_Controller {
 	public function get_booth($id)
 	{
 		$q = Input::get('term');
-		
+
 		$booth = new Booth();
 		$qemail = new MongoRegex('/'.$q.'/i');
 
 		$res = $booth->find(array('boothno'=>$qemail,'hall_id'=>$id));
 
 		$result = array();
-		
-		
+
+
 		foreach($res as $r){
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['boothno']);
 		}
-			
-		
 
-		
 
-		return Response::json($result);		
+
+
+
+		return Response::json($result);
 	}
 
 	public function get_exhibitor()
@@ -194,7 +194,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['company']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_userdata()
@@ -212,8 +212,8 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['fullname'],'email'=>$r['email'],'label'=>$r['fullname'].' ( '.$r['email'].' )','userdata'=>$r);
 		}
 
-		return Response::json($result);		
-	}		
+		return Response::json($result);
+	}
 
 	public function get_userdatabyemail()
 	{
@@ -230,8 +230,8 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['email'],'email'=>$r['email'],'label'=>$r['fullname'].' ( '.$r['email'].' )','userdata'=>$r);
 		}
 
-		return Response::json($result);		
-	}		
+		return Response::json($result);
+	}
 
 	public function get_useridbyemail()
 	{
@@ -248,8 +248,8 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['_id']->__toString(),'email'=>$r['email'],'label'=>$r['fullname'].' ( '.$r['email'].' )');
 		}
 
-		return Response::json($result);		
-	}		
+		return Response::json($result);
+	}
 
 	public function get_rev()
 	{
@@ -266,7 +266,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['title'],'value'=>$r['_id']->__toString());
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_project()
@@ -284,7 +284,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['projectNumber'].' - '.$r['title'],'title'=>$r['title'],'value'=>$r['projectNumber']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_projectname()
@@ -302,7 +302,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['projectNumber'].' - '.$r['title'],'number'=>$r['projectNumber'],'value'=>$r['title']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 
@@ -321,7 +321,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['tenderNumber'].' - '.$r['title'],'title'=>$r['title'],'value'=>$r['tenderNumber']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_tendername()
@@ -339,7 +339,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['tenderNumber'].' - '.$r['title'],'number'=>$r['tenderNumber'],'value'=>$r['title']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_opportunity()
@@ -357,7 +357,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['opportunityNumber'].' - '.$r['title'],'title'=>$r['title'],'value'=>$r['opportunityNumber']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_opportunityname()
@@ -375,8 +375,8 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['_id']->__toString(),'label'=>$r['opportunityNumber'].' - '.$r['title'],'number'=>$r['opportunityNumber'],'value'=>$r['title']);
 		}
 
-		return Response::json($result);		
-	}	
+		return Response::json($result);
+	}
 
 	public function get_tag()
 	{
@@ -393,7 +393,7 @@ class Ajax_Controller extends Base_Controller {
 			$result[] = array('id'=>$r['tag'],'label'=>$r['tag'],'value'=>$r['tag']);
 		}
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function get_meta()
@@ -405,7 +405,7 @@ class Ajax_Controller extends Base_Controller {
 
 		$res = $doc->get(array('_id'=>$id));
 
-		return Response::json($result);		
+		return Response::json($result);
 	}
 
 	public function post_param()
@@ -422,6 +422,30 @@ class Ajax_Controller extends Base_Controller {
 		}
 
 	}
+
+    public function post_comment()
+    {
+        $in = Input::get();
+
+        $in['shopper_id'] = new MongoId(Auth::shopper()->id);
+
+        $in['shopper_name'] = Auth::shopper()->firstname.' '.Auth::shopper()->lastname;
+
+        $in['shopper_city'] = Auth::shopper()->city;
+
+        $in['score'] = (isset($in['score']))?$in['score']:0;
+
+        $in['product'] = new MongoId($in['product']);
+
+        $comments = new Comment();
+
+        if($comments->insert($in)){
+            return Response::json(array('result'=>'OK','message'=>'Comment added'));
+        }else{
+            return Response::json(array('result'=>'ERR','message'=>'Fail to add comment'));
+        }
+
+    }
 
 
 }

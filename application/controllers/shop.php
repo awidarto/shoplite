@@ -616,6 +616,27 @@ class Shop_Controller extends Base_Controller {
 		$sizes = array_unique($sa);
 		$colors = array_unique($ca);
 
+        $comments = new Comment();
+
+
+        $shoppercomment = $comments->find( array('product'=>$_id ) );
+
+        //print_r($shoppercomment);
+
+        $cr = array();
+
+        foreach($shoppercomment as $comm){
+            $comm['shopper_reviews'] = $comments->count( array('shopper_id'=>$comm['shopper_id']));
+
+            $cr[] = $comm;
+        }
+
+        $product['comments'] = $cr;
+
+        //print_r($cr);
+
+        //exit();
+
 		return View::make('shop.detail')
 			->with('sizes',$sizes)
 			->with('colors',$colors)

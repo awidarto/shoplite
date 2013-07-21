@@ -39,18 +39,16 @@
     <div class="detailproduct">
       <h2 class="product-title">{{$product['name']}}</h2>
 
-        <iframe src="//www.facebook.com/plugins/like.php?href={{ urlencode( URL::full() ) }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font=verdana&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
-        <br />
-        <a href="https://twitter.com/share" class="twitter-share-button" data-via="peachtoblack" data-hashtags="peachtoblack">Tweet</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-    <?php
-    /*
-      <a href="#" class="fblike"><img src="{{ URL::base() }}/images/fblike.gif"/></a>
-      <a href="#" class="loves"><img src="{{ URL::base() }}/images/loves4.gif"/><br/><span>based on 196loves</span></a>
+        @if($_SERVER['HTTP_HOST'] != 'localhost')
 
-    */
-    ?>
+            <iframe src="//www.facebook.com/plugins/like.php?href={{ urlencode( URL::full() ) }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font=verdana&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>
+            <br />
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="peachtoblack" data-hashtags="peachtoblack">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+        @endif
+
     <div class="availablecont">
         <p>Available in:</p>
         @foreach($colors as $ac)
@@ -402,58 +400,90 @@
 
 <div class="clear"></div>
 
-<?php
-/*
+
 <div class="commentlist span12">
     <h4 class="commentlisttitle">what other costumers saying about this product:</h4>
     <table>
-      <tr class="span12">
+
+    @if(Auth::shoppercheck() == true)
+        <tr>
+            <td colspan="3">We love feedback, add your comment here :</td>
+        </tr>
+        <tr class="span12">
+            <td class="comment userinfo span3" style="vertical-align:top" >
+                  <p class="name titlesection">{{ Auth::shopper()->firstname.' '.Auth::shopper()->lastname }}</p>
+                  <p>(23 Reviews)</p>
+            </td>
+            <td class="love span3" style="vertical-align:top">
+                <p>send some love</p>
+                <div id="star"></div>
+            </td>
+            <td class="span6" style="vertical-align:top">
+                <p>and say something</p>
+                <textarea id="my-comment" style="width:90%"></textarea>&nbsp;&nbsp;<button id="send-comment" >Send</button>
+            </td>
+        </tr>
+
+        <script type="text/javascript">
+
+        $(document).ready(function(){
+
+            $('#send-comment').on('click',function(){
+
+
+                if($('#star').raty('score') === 'undefined'){
+                    var score = 0;
+                }else{
+                    var score = $('#star').raty('score');
+                }
+
+                $.post('{{ URL::to('ajax/comment')}}',{
+                        product: '{{ $product['_id'] }}',
+                        score: score,
+                        comment: $('#my-comment').val()
+                    },function(data){
+
+                        if(data.result == 'OK'){
+                            alert(data.message);
+                        }else{
+                            alert(data.message);
+                        }
+
+                },'json');
+
+            });
+
+        });
+
+        </script>
+
+    @endif
+
+    @foreach( $product['comments'] as $com)
+
+    <tr class="span12">
         <td class="comment userinfo span3">
-          <p class="name titlesection"> Maya Hasan</p>
-          <p>DKI JAKARTA</p>
-          <p>(23 Reviews)</p>
-      </td>
+          <p class="name titlesection">{{ $com['shopper_name'] }}</p>
+          <p>{{ $com['shopper_city'] }}</p>
+          <p>( {{ $com['shopper_reviews'] }} Reviews)</p>
+        </td>
 
-      <td class="love span3">
-          <img src="{{ URL::base() }}/images/love2.gif">
-      </td>
-      <td class="span5">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec hendrerit odio. Nunc id aliquet elit. Ut ultrices luctus vestibulum. Suspendisse potenti. Sed ut faucibus magna. Donec semper congue placerat.
-      </td>
-  </tr>
+        <td class="love span3">
+            @for($s = 0; $s < $com['score']; $s++)
+                <img src="{{ URL::base() }}/images/love-on.png" alt="love" />
+            @endfor
+        </td>
+        <td class="span5">
+            <p>
+                {{ $com['comment'] }}
+            </p>
+        </td>
+    </tr>
 
-  <tr class="span12">
-    <td class="comment userinfo span3">
-      <p class="name titlesection"> Maya Hasan</p>
-      <p>DKI JAKARTA</p>
-      <p>(23 Reviews)</p>
-  </td>
+    @endforeach
 
-  <td class="love span3">
-      <img src="{{ URL::base() }}/images/love2.gif">
-  </td>
-  <td class="span5">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec hendrerit odio. Nunc id aliquet elit. Ut ultrices luctus vestibulum. Suspendisse potenti. Sed ut faucibus magna. Donec semper congue placerat.
-  </td>
-</tr>
-<tr class="span12">
-    <td class="comment userinfo span3">
-      <p class="name titlesection"> Maya Hasan</p>
-      <p>DKI JAKARTA</p>
-      <p>(23 Reviews)</p>
-  </td>
-
-  <td class="love span3">
-      <img src="{{ URL::base() }}/images/love5.gif">
-  </td>
-  <td class="span5">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec hendrerit odio. Nunc id aliquet elit. Ut ultrices luctus vestibulum. Suspendisse potenti. Sed ut faucibus magna. Donec semper congue placerat.
-  </td>
-</tr>
 </table>
 </div>
-*/
-?>
 
 
 </div>
@@ -461,28 +491,36 @@
 
 <script type="text/javascript">
 
-$("#mainimageproduct").elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active'});
+    $('#star').raty({
+        path :'{{ URL::base()}}/images/',
+        starHalf : 'love-half.png',
+        starOff : 'love-off.png',
+        starOn : 'love-on.png',
+        width: '150px'
+    });
 
-$("#mainimageproduct").bind("click", function(e) {
-    //var ez =   $('#img_01').data('elevateZoom');
-    //$.fancybox(ez.getGalleryList());
-    return false;
-});
+    $("#mainimageproduct").elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active'});
 
-$('.addimage').on({
-    'click': function(e){
-        //find rel
-        var idimage = $(this).attr("id");
-        var zoomimage = $(this).attr("data-zoom-image");
-        var imagesource = "{{ URL::base().'/storage/products/'.$product['_id'] }}";
-        var imageLoad = imagesource+'/lar_pic'+idimage+'.jpg';
-
-        $('#mainimageproduct').attr('src',imageLoad);
-
-
+    $("#mainimageproduct").bind("click", function(e) {
+        //var ez =   $('#img_01').data('elevateZoom');
+        //$.fancybox(ez.getGalleryList());
         return false;
-    }
-});
+    });
+
+    $('.addimage').on({
+        'click': function(e){
+            //find rel
+            var idimage = $(this).attr("id");
+            var zoomimage = $(this).attr("data-zoom-image");
+            var imagesource = "{{ URL::base().'/storage/products/'.$product['_id'] }}";
+            var imageLoad = imagesource+'/lar_pic'+idimage+'.jpg';
+
+            $('#mainimageproduct').attr('src',imageLoad);
+
+            return false;
+        }
+    });
+
 </script>
 
 <div id="signInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
