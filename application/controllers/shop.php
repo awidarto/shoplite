@@ -619,9 +619,13 @@ class Shop_Controller extends Base_Controller {
         $comments = new Comment();
 
 
-        $shoppercomment = $comments->find( array('product'=>$_id ) );
+        $shoppercomment = $comments->find( array('product'=>$_id ),array(),array('createdDate'=>-1) );
 
         //print_r($shoppercomment);
+
+        $my_id = new MongoId(Auth::shopper()->id);
+
+        $product['myreviews'] = $comments->count( array('shopper_id'=>$my_id));
 
         $cr = array();
 

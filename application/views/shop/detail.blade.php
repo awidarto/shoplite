@@ -409,20 +409,6 @@
         <tr>
             <td colspan="3">We love feedback, add your comment here :</td>
         </tr>
-        <tr class="span12">
-            <td class="comment userinfo span3" style="vertical-align:top" >
-                  <p class="name titlesection">{{ Auth::shopper()->firstname.' '.Auth::shopper()->lastname }}</p>
-                  <p>(23 Reviews)</p>
-            </td>
-            <td class="love span3" style="vertical-align:top">
-                <p>send some love</p>
-                <div id="star"></div>
-            </td>
-            <td class="span6" style="vertical-align:top">
-                <p>and say something</p>
-                <textarea id="my-comment" style="width:90%"></textarea>&nbsp;&nbsp;<button id="send-comment" >Send</button>
-            </td>
-        </tr>
 
         <script type="text/javascript">
 
@@ -444,7 +430,30 @@
                     },function(data){
 
                         if(data.result == 'OK'){
-                            alert(data.message);
+
+                            var ins = '<tr class="span12" style="opacity:0.1">';
+                            ins +=     '<td class="comment userinfo span3">';
+                            ins +=       '<p class="name titlesection">' + data.data.shopper_name + '</p>';
+                            ins +=       '<p>' + data.data.shopper_city + '</p>';
+                            ins +=       '<p>(' + data.data.shopper_reviews + ' Reviews)</p>';
+                            ins +=     '</td>';
+                            ins +=     '<td class="love span3">';
+
+                            for(s = 0; s < score ; s++){
+                                ins += '<img src="{{ URL::base() }}/images/love-on.png" alt="love" />';
+                            }
+
+                            ins +=     '</td>';
+                            ins +=     '<td class="span5">';
+                            ins +=         '<p>' + data.data.comment + '</p>';
+                            ins +=     '</td>';
+                            ins += '</tr>';
+
+                            $(ins).insertAfter( $('#comment-input') )
+                                .animate({
+                                opacity: 1
+                                }, 1500 );
+
                         }else{
                             alert(data.message);
                         }
@@ -456,6 +465,23 @@
         });
 
         </script>
+
+        <tr class="span12" id="comment-input">
+            <td class="comment userinfo span3" style="vertical-align:top" >
+                  <p class="name titlesection">{{ Auth::shopper()->firstname.' '.Auth::shopper()->lastname }}</p>
+                  <p>{{ Auth::shopper()->city }}</p>
+                  <p>({{ $product['myreviews']}} Reviews)</p>
+            </td>
+            <td class="love span3" style="vertical-align:top">
+                <p>send some love</p>
+                <div id="star"></div>
+            </td>
+            <td class="span6" style="vertical-align:top">
+                <p>and say something</p>
+                <textarea id="my-comment" style="width:90%"></textarea>&nbsp;&nbsp;<button id="send-comment" >Send</button>
+            </td>
+        </tr>
+
 
     @endif
 

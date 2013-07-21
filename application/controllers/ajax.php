@@ -437,10 +437,15 @@ class Ajax_Controller extends Base_Controller {
 
         $in['product'] = new MongoId($in['product']);
 
+        $in['createdDate'] = new MongoDate();
+
         $comments = new Comment();
 
         if($comments->insert($in)){
-            return Response::json(array('result'=>'OK','message'=>'Comment added'));
+
+            $in['shopper_reviews'] = $comments->count( array('shopper_id'=>$in['shopper_id']));
+
+            return Response::json(array('result'=>'OK','message'=>'Comment added','data'=>$in));
         }else{
             return Response::json(array('result'=>'ERR','message'=>'Fail to add comment'));
         }
