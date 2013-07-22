@@ -435,7 +435,6 @@
                             ins +=     '<td class="comment userinfo span3">';
                             ins +=       '<p class="name titlesection">' + data.data.shopper_name + '</p>';
                             ins +=       '<p>' + data.data.shopper_city + '</p>';
-                            ins +=       '<p>(' + data.data.shopper_reviews + ' Reviews)</p>';
                             ins +=     '</td>';
                             ins +=     '<td class="love span3">';
 
@@ -472,7 +471,6 @@
             <td class="comment userinfo span3" style="vertical-align:top" >
                   <p class="name titlesection">{{ Auth::shopper()->firstname.' '.Auth::shopper()->lastname }}</p>
                   <p>{{ Auth::shopper()->city }}</p>
-                  <p>({{ $product['myreviews']}} Reviews)</p>
             </td>
             <td class="love span3" style="vertical-align:top">
                 <p>send some love</p>
@@ -495,7 +493,6 @@
             <td class="comment userinfo span3">
               <p class="name titlesection">{{ $com['shopper_name'] }}</p>
               <p>{{ $com['shopper_city'] }}</p>
-              <p>( {{ $com['shopper_reviews'] }} Reviews)</p>
             </td>
 
             <td class="love span3">

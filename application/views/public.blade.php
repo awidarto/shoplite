@@ -71,7 +71,7 @@
     <div id="footer">
       <div class="container">
         <p class="social-footer">
-          <a href="http://www.facebook.com/peachtoblack" target="_blank" ><i class="icon-facebook-2"></i></a>
+          <a href="http://www.facebook.com/peachtoblackid" target="_blank" ><i class="icon-facebook-2"></i></a>
           <a href="http://www.twitter.com/peachtoblack" target="_blank" ><i class="icon-twitter-2"></i></a>
       <!--
           <i class="icon-pinterest"></i>
