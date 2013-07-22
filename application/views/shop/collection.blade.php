@@ -11,7 +11,7 @@
 	</div>
 	<div class="span3 pull-right">
 		<div class="styled-select">
-			{{ Form::select('category',Config::get('shoplite.search_categories'),$category,array('id'=>'cat-select')) }}
+			{{ Form::select('category',Config::get('shoplite.front_categories'),$category,array('id'=>'cat-select')) }}
 		</div>
 	</div>
 </div>

@@ -50,6 +50,18 @@ return array(
 			'dress'=>'Dress',
 			'nonclothing'=>'Non Clothing'
 		),
+    'front_categories'=>array(
+            ''=>'All',
+            'skirts'=>'Skirts',
+            'pants'=>'Pants',
+            'outer'=>'Outer',
+            'sets'=>'Sets',
+            'jumpsuits'=>'Jumpsuits',
+            'accessories'=>'Accessories',
+            'tops'=>'Tops',
+            'dress'=>'Dress',
+            'nonclothing'=>'Non Clothing'
+        ),
 	'cartstatus'=>array(
 			'open'=>'Regular',
 			'checkedout'=>'Checked Out',
