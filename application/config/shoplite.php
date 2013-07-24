@@ -100,7 +100,7 @@ return array(
 		'manual'=>'Manual',
 		'auto'=>'Auto'
 	),
-	'admin_email'=>'admin@peachtoblack.com',
+	'admin_email'=>'peachtoblack@gmail.com',
 	'admin_name'=>'Shopkeeper@PeachtoBlack',
 
 	'banks'=>array(
