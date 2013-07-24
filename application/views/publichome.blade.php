@@ -5,7 +5,7 @@
 
 <!-- TbQDdSY0djkAIKBKAVenw_M6SwY -->
     <meta name="alexaVerifyID" content="TbQDdSY0djkAIKBKAVenw_M6SwY" />
-    <meta name="google-site-verification" content="lXCoLLmKkr6WOeLaZOwbDwBMfP5_WoUcqK5NIy6eXns" />
+    <meta name="google-site-verification" content="{{ getparam('googlesiteverification') }}" />
     <meta name="keywords" content="{{ getparam('seokeywords')}}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
