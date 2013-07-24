@@ -7,7 +7,7 @@ class Shoppers_Controller extends Admin_Controller {
 		parent::__construct();
 
 		$this->controller_name = str_replace('_Controller', '', get_class());
-		
+
 		$this->crumb = new Breadcrumb();
 		$this->crumb->add(strtolower($this->controller_name),ucfirst($this->controller_name));
 
@@ -44,7 +44,7 @@ class Shoppers_Controller extends Admin_Controller {
    "saveinfo": "",
    "shippingphone": "",
    "shopperseq": "0000000002",
-   "zip": "11640" 
+   "zip": "11640"
 */
 
 		$this->heads = array(
@@ -152,6 +152,22 @@ class Shoppers_Controller extends Admin_Controller {
 		return $display;
 	}
 
+    public function beforeSave($data)
+    {
+        $data['pass'] = Hash::make($data['pass']);
+        unset($data['repass']);
+
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+        $data['pass'] = Hash::make($data['pass']);
+        unset($data['repass']);
+
+        return $data;
+    }
+
 	public function afterUpdate($id,$data = null)
 	{
 
@@ -178,10 +194,10 @@ class Shoppers_Controller extends Admin_Controller {
 				foreach(Config::get('shoplite.picsizes') as $s){
 					$smsuccess = Resizer::open( $path )
 		        		->resize( $s['w'] , $s['h'] , $s['opt'] )
-		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
+		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );
 				}
 
-			}				
+			}
 		}
 
 		return $id;
@@ -214,10 +230,10 @@ class Shoppers_Controller extends Admin_Controller {
 				foreach(Config::get('shoplite.picsizes') as $s){
 					$smsuccess = Resizer::open( $path )
 		        		->resize( $s['w'] , $s['h'] , $s['opt'] )
-		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );					
+		        		->save( Config::get('kickstart.storage').'/products/'.$newid.'/'.$s['prefix'].$key.$s['ext'] , $s['q'] );
 				}
 
-			}				
+			}
 		}
 
 		return $obj;
@@ -278,7 +294,7 @@ class Shoppers_Controller extends Admin_Controller {
 
 			Input::upload('picupload',$newdir,$picupload['name']);
 
-			
+
 		}
 
 		$model = $this->model;
@@ -287,9 +303,9 @@ class Shoppers_Controller extends Admin_Controller {
 		$data['lastUpdate'] = new MongoDate();
 
 		unset($data['csrf_token']);
-		unset($data['id']);		
+		unset($data['id']);
 
-		
+
 		if($model->update(array('_id'=>$_id),array('$set'=>$data))){
 	    	return Redirect::to($controller_name)->with('notify_success','Picture saved successfully');
 		}else{
@@ -322,7 +338,8 @@ class Shoppers_Controller extends Admin_Controller {
 		$this->crumb->add($controller_name.'/pass',$formdata['fullname'],false);
 
 		return View::make($controller_name.'.pass')
-					->with('submit',$controller_name.'/add')
+                    ->with('back',$controller_name)
+					->with('submit',$controller_name.'/pass')
 					->with('form',$form)
 					->with('doc',$formdata)
 					->with('crumb',$this->crumb)
@@ -348,7 +365,7 @@ class Shoppers_Controller extends Admin_Controller {
 	    }else{
 
 			$data = Input::get();
-	    	
+
 
 			$data['pass'] = Hash::make($data['pass']);
 
@@ -365,9 +382,9 @@ class Shoppers_Controller extends Admin_Controller {
 			}else{
 		    	return Redirect::to($controller_name)->with('notify_success','Password change failed');
 			}
-			
 
-	    }		
+
+	    }
 
 	}
 

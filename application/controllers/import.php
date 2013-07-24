@@ -39,7 +39,7 @@ class Import_Controller extends Base_Controller {
 		$this->crumb = new Breadcrumb();
 
 		date_default_timezone_set('Asia/Jakarta');
-		$this->filter('before','auth');
+		//$this->filter('before','auth');
 
 		$this->crumb->add('import','Import Data');
 	}
@@ -50,6 +50,7 @@ class Import_Controller extends Base_Controller {
 		$form = new Formly();
 
 		return View::make('import.import')
+            ->with('back','export')
 			->with('title','Import Data')
 			->with('form',$form)
 			->with('crumb',$this->crumb);
@@ -84,7 +85,7 @@ class Import_Controller extends Base_Controller {
 		$this->crumb->add('import/preview','Preview');
 
 		if($type == 'exhibitor'){
-			
+
 			$import = new Import();
 
 			$_importid = new MongoId($id);
@@ -380,7 +381,7 @@ class Import_Controller extends Base_Controller {
 			'aaData'=>$aadata,
 			'qrs'=>$q
 		);
-		
+
 		return Response::json($result);
 	}
 
@@ -388,8 +389,8 @@ class Import_Controller extends Base_Controller {
 
 		$conventionrate = Config::get('eventreg.conventionrate');
 		$golfrate = Config::get('eventreg.golffee');
-		$dateA = date('Y-m-d G:i'); 
-		$earlybirddate = Config::get('eventreg.earlybirdconventiondate'); 
+		$dateA = date('Y-m-d G:i');
+		$earlybirddate = Config::get('eventreg.earlybirdconventiondate');
 
 		$data = Input::all();
 
@@ -485,7 +486,7 @@ class Import_Controller extends Base_Controller {
 
 
 					if($type == 'attendee'){
-						
+
 						$attobj = $attendee->get(array('email'=>$tocommit['email']));
 
 						$tocommit['lastUpdate'] = new MongoDate();
@@ -503,7 +504,7 @@ class Import_Controller extends Base_Controller {
 
 						$cleangolf = preg_replace('/\s+/', '', $tocommit['golf']);
 						$tocommit['golf'] = $cleangolf;
-						
+
 
 						if(isset($tocommit['conventionPaymentStatus'])){
 							$tocommit['conventionPaymentStatus'] = $attobj['conventionPaymentStatus'];
@@ -562,7 +563,7 @@ class Import_Controller extends Base_Controller {
 							$plainpass = 'nochange';
 						}
 
-						if( $attobj['golfPaymentStatus']=='paid' || $attobj['conventionPaymentStatus']=='paid'){						
+						if( $attobj['golfPaymentStatus']=='paid' || $attobj['conventionPaymentStatus']=='paid'){
 
 							$tocommit['regtype'] == $attobj['regtype'];
 							$tocommit['golf'] == $attobj['golf'];
@@ -571,7 +572,7 @@ class Import_Controller extends Base_Controller {
 							if(strtotime($dateA) > strtotime($earlybirddate)){
 
 								if($data['foc']=='Yes'){
-								
+
 									$tocommit['totalIDR'] = '-';
 									$tocommit['totalUSD'] = '-';
 									$tocommit['regPD'] = '';
@@ -629,7 +630,7 @@ class Import_Controller extends Base_Controller {
 										$tocommit['regSO'] = $conventionrate['SO'];
 									}
 
-									
+
 
 								}else{
 
@@ -765,10 +766,10 @@ class Import_Controller extends Base_Controller {
 						}
 
 					}
-					
+
 				}else if($existing == false){
-					
-					
+
+
 					if($type == 'attendee'){
 
 						$tocommit['createdDate'] = new MongoDate();
@@ -848,7 +849,7 @@ class Import_Controller extends Base_Controller {
 								$tocommit['golfPaymentStatus'] = 'free';
 
 							}elseif($data['earlybird'] == 'No'){
-								
+
 								$tocommit['overrideratenormal'] = 'no';
 								//normalrate valid
 								if($tocommit['regtype'] == 'PD' && $tocommit['golf'] == 'No'){
@@ -894,7 +895,7 @@ class Import_Controller extends Base_Controller {
 									$tocommit['regSD'] = '';
 									$tocommit['regSO'] = $conventionrate['SO'];
 								}
-									
+
 
 							}else{
 
@@ -947,7 +948,7 @@ class Import_Controller extends Base_Controller {
 							}
 
 						}else{
-							
+
 							if($tocommit['regtype'] == 'PD' && $tocommit['golf'] == 'No'){
 								$tocommit['totalIDR'] = $conventionrate['PD-earlybird'];
 								$tocommit['totalUSD'] = '';
@@ -1003,13 +1004,13 @@ class Import_Controller extends Base_Controller {
 
 					}
 
-					
-						
 
-					
+
+
+
 					//$attendeeDB = new Worker();
-						
-					
+
+
 					if($obj = $attendee->insert($tocommit)){
 
 						//if($data['sendattendee'] == 'Yes'){
@@ -1075,7 +1076,7 @@ class Import_Controller extends Base_Controller {
 
 			//if($data['sendpic'] == 'Yes'){
 
-				
+
 			//}
 
 			return Redirect::to('import/preview/'.$importid.'/'.$type)->with('notify_success','Committing '.$commit_count.' record(s)');
@@ -1098,14 +1099,14 @@ class Import_Controller extends Base_Controller {
 		        'lastname'  => 'required',
 		        'position' => 'required',
 		        'groupName' => 'required'
-		    );			
+		    );
 		}else{
 			if($type == 'exhibitor'){
 			    $rules = array(
 			        'email'  => 'required',
 			        'firstname'  => 'required',
 			        'lastname'  => 'required'
-			    );			
+			    );
 
 			}
 		}
@@ -1309,7 +1310,7 @@ class Import_Controller extends Base_Controller {
 
 							if(is_null($type)){
 								$ins['groupId'] =   $newobj['groupId'];
-								$ins['groupName'] = $newobj['groupName'];								
+								$ins['groupName'] = $newobj['groupName'];
 							}
 
 							//print_r($ins);
@@ -1369,14 +1370,14 @@ class Import_Controller extends Base_Controller {
 		//print_r(Session::get('permission'));
 		$back = 'import/previewimportexhbitorpass';
 
-		
-			
-	    $rules = array(
-	        
-	    );			
 
-			
-		
+
+	    $rules = array(
+
+	    );
+
+
+
 	    $validation = Validator::make($input = Input::all(), $rules);
 
 	    if($validation->fails()){
@@ -1398,7 +1399,7 @@ class Import_Controller extends Base_Controller {
 			$data['creatorName'] = Auth::user()->fullname;
 			$data['creatorId'] = Auth::user()->id;
 
-			
+
 
 
 			$docupload = Input::file('docupload');
@@ -1425,9 +1426,9 @@ class Import_Controller extends Base_Controller {
 
 					$newid = $newobj['_id']->__toString();
 
-					
+
 					$newdir = realpath(Config::get('kickstart.storage')).'/imports/boothass/'.$newid;
-					
+
 
 
 					Input::upload('docupload',$newdir,$docupload['name']);
@@ -1440,15 +1441,15 @@ class Import_Controller extends Base_Controller {
 
 					$c_id = $newobj['_id']->__toString();
 
-					
+
 					$filepath = Config::get('kickstart.storage').'/imports/boothass/'.$c_id.'/'.$newobj['docFilename'];
-					
+
 
 					$excel = new Excel();
 
 					$extension = File::extension($filepath);
 
-					
+
 					//EXHIBITOR PASS (FREE)
 					$xls = $excel->loadboothass($filepath,$extension,'Exhibitor Pass');
 
@@ -1457,9 +1458,9 @@ class Import_Controller extends Base_Controller {
 
 					$rows = $xls['cells'];
 
-					
+
 					$heads = $rows[1];
-					
+
 
 					//print_r($heads);
 
@@ -1476,9 +1477,9 @@ class Import_Controller extends Base_Controller {
 					//print_r($heads);
 
 					//remove first two lines
-					
+
 					$headindex = 1;
-					
+
 
 					for($i = 0;$i <= $headindex;$i++){
 						array_shift($rows);
@@ -1550,7 +1551,7 @@ class Import_Controller extends Base_Controller {
 							$ins['cache_commit'] = false;
 							$ins['typebooth'] = 'freepassname';
 							$ins['typeboothid'] = $countrow;
-							
+
 
 							//print_r($ins);
 
@@ -1563,13 +1564,13 @@ class Import_Controller extends Base_Controller {
 					//ADDITIONAL EXHIBITOR PASS FREE
 
 					$xls2 = $excel->loadboothass($filepath,$extension,'Additional Exhibitor Pass');
-					
+
 
 					$rows2 = $xls2['cells'];
 
-					
+
 					$heads2 = $rows2[1];
-					
+
 
 					//print_r($heads);
 
@@ -1586,9 +1587,9 @@ class Import_Controller extends Base_Controller {
 					//print_r($heads);
 
 					//remove first two lines
-					
+
 					$headindex2 = 1;
-					
+
 
 					for($i = 0;$i <= $headindex2;$i++){
 						array_shift($rows2);
@@ -1661,7 +1662,7 @@ class Import_Controller extends Base_Controller {
 							$ins2['cache_commit'] = false;
 							$ins2['typebooth'] = 'boothassistant';
 							$ins2['typeboothid'] = $countrow2;
-							
+
 
 							//print_r($ins);
 
@@ -1674,13 +1675,13 @@ class Import_Controller extends Base_Controller {
 					//ADDITIONAL EXHIBITOR PASS PAY
 
 					$xls3 = $excel->loadboothass($filepath,$extension,'Additional Payable');
-					
+
 
 					$rows3 = $xls3['cells'];
 
-					
+
 					$heads3 = $rows3[1];
-					
+
 
 					//print_r($heads);
 
@@ -1697,14 +1698,14 @@ class Import_Controller extends Base_Controller {
 					//print_r($heads);
 
 					//remove first two lines
-					
+
 					$headindex3 = 1;
-					
+
 
 					for($i = 0;$i <= $headindex3;$i++){
 						array_shift($rows3);
 					}
-					
+
 
 					$trows3 = array();
 
@@ -1767,7 +1768,7 @@ class Import_Controller extends Base_Controller {
 							$ins3['cache_commit'] = false;
 							$ins3['typebooth'] = 'addboothname';
 							$ins3['typeboothid'] = $countrow3;
-							
+
 
 							//print_r($ins);
 
@@ -1780,9 +1781,9 @@ class Import_Controller extends Base_Controller {
 
 				Event::fire('import.create',array('id'=>$newobj['_id'],'result'=>'OK','department'=>Auth::user()->department,'creator'=>Auth::user()->id));
 
-				
+
 				$back = $back.'/'.$newobj['_id'].'/'.$exid;
-				
+
 
 		    	return Redirect::to($back)->with('notify_success','Document uploaded successfully');
 			}else{
@@ -1799,10 +1800,10 @@ class Import_Controller extends Base_Controller {
 	public function get_previewimportexhbitorpass($id,$exid)
 	{
 
-		
 
-		
-			
+
+
+
 		$import = new Import();
 
 		$_importid = new MongoId($id);
@@ -1820,7 +1821,7 @@ class Import_Controller extends Base_Controller {
 
 		$this->crumb->add('exhibitor/importbothassistant/'.$exid,$exhibitordata['company']);
 
-		
+
 
 		$imp = new Importcache();
 
@@ -1841,10 +1842,10 @@ class Import_Controller extends Base_Controller {
 
 		$override_all = $form->checkbox('override_all','','',false,array('id'=>'override_all'));
 
-		
+
 		$valid_heads = 'eventreg.boothpass_valid_heads';
 		$valid_heads_select = 'eventreg.boothpass_valid_head_selects';
-		
+
 
 		foreach ($ihead['head_labels'] as $h) {
 
@@ -1872,11 +1873,11 @@ class Import_Controller extends Base_Controller {
 
 		$heads = array_merge(array('Select','Override'),$heads);
 
-		
+
 		$ajaxsource = URL::to('import/loaderexhbitorpass/'.$id);
 		$commiturl = 'import/commit/'.$id.'/exhbitorpass';
 		$disablesort = '0,1';
-		
+
 
 		return View::make('tables.importboothass')
 			->with('title','Data Preview')
@@ -1898,7 +1899,7 @@ class Import_Controller extends Base_Controller {
 			->with('type','exhibitorpass')
 			->with('exhibitor',$exhibitor)
 			->with('exhibitordata',$exhibitordata)
-			
+
 			->nest('row','attendee.rowdetail');
 	}
 
@@ -1987,10 +1988,10 @@ class Import_Controller extends Base_Controller {
 			$count_display_all = $attendee->count();
 		}
 
-		
-		
+
+
 		$attending = new Official();
-		
+
 
 		$email_arrays = array();
 
@@ -2045,10 +2046,10 @@ class Import_Controller extends Base_Controller {
 
 			$select = $form->checkbox('sel[]','',$doc['_id'],false,array('id'=>$doc['_id'],'class'=>'selector'));
 
-			
-				
+
+
 			$compindex = 'fullname';
-				
+
 
 			if(in_array($doc[$compindex], $email_arrays)){
 				$override = $form->checkbox('over[]','',$doc['_id'],'',array('id'=>'over_'.$doc['_id'],'class'=>'overselector'));
@@ -2091,10 +2092,10 @@ class Import_Controller extends Base_Controller {
 
 			$select = $form->checkbox('sel[]','',$doc['_id'],false,array('id'=>$doc['_id'],'class'=>'selector'));
 
-			
-				
+
+
 			$compindex = 'fullname';
-				
+
 
 			if(in_array($doc[$compindex], $email_arrays)){
 				$override = $form->checkbox('over[]','',$doc['_id'],'',array('id'=>'over_'.$doc['_id'],'class'=>'overselector'));
@@ -2138,10 +2139,10 @@ class Import_Controller extends Base_Controller {
 
 			$select = $form->checkbox('sel[]','',$doc['_id'],false,array('id'=>$doc['_id'],'class'=>'selector'));
 
-			
-				
+
+
 			$compindex = 'fullname';
-				
+
 
 			if(in_array($doc[$compindex], $email_arrays)){
 				$override = $form->checkbox('over[]','',$doc['_id'],'',array('id'=>'over_'.$doc['_id'],'class'=>'overselector'));
@@ -2167,7 +2168,7 @@ class Import_Controller extends Base_Controller {
 			'aaData'=>$aadata,
 			'qrs'=>$q
 		);
-		
+
 		return Response::json($result);
 	}
 
@@ -2175,11 +2176,11 @@ class Import_Controller extends Base_Controller {
 
 	public function post_commitboothass($importid){
 
-		
+
 
 		$data = Input::all();
 
-		
+
 
 		$importsession = new Import();
 
@@ -2203,13 +2204,13 @@ class Import_Controller extends Base_Controller {
 			$commitobj = $icache->find(array('$or'=>$idvals));
 
 			//print_r($commitobj);
-			
+
 			$ba = new Boothassistant();
 
 			//check first if has data booth ass
 
 			$datafind = $ba->get(array('exhibitorid'=>$data['exhibitorid']));
-			
+
 
 			//print_r($i2o);
 
@@ -2227,9 +2228,9 @@ class Import_Controller extends Base_Controller {
 				if($obj = $ba->insert($tocommit)){
 
 					foreach($commitobj as $comobj){
-						
+
 						$passname = $comobj['fullname'];
-						
+
 						$cacheid = $comobj['cache_id'];
 						$cacheobj = $comobj['_id'];
 						$type = $comobj['typebooth'];
@@ -2259,10 +2260,10 @@ class Import_Controller extends Base_Controller {
 
 						$comobj['regnumberall'] = implode('-',$reg_number[1]);
 
-						
+
 						//$tocommitobj['createdDate'] = new MongoDate();
-							
-						
+
+
 						if($objs = $ba->update(array('_id'=>$obj['_id']),array('$set'=>array($type.$typeid=>$passname,$type.$typeid.'regnumber'=>$comobj['regnumberall'],$type.$typeid.'timestamp'=>new MongoDate(),$type.$typeid.'cache_id'=>$cacheid,$type.$typeid.'cache_obj'=>$cacheobj ))) ){
 
 							$commitedobj[] = $tocommit;
@@ -2281,20 +2282,20 @@ class Import_Controller extends Base_Controller {
 				$countregnumber = 0;
 
 				foreach($commitobj as $comobj){
-						
+
 						$passname = $comobj['fullname'];
-						
+
 						$cacheid = $comobj['cache_id'];
 						$cacheobj = $comobj['_id'];
 						$type = $comobj['typebooth'];
 						$typeid = $comobj['no'];
 
 						//check first if has data
-						
+
 
 						if(!isset($datafind[$type.$typeid])){
 
-						
+
 							if($type == 'freepassname'){
 								$role = 'BA1';
 							}else{
@@ -2319,8 +2320,8 @@ class Import_Controller extends Base_Controller {
 
 							$comobj['regnumberall'] = implode('-',$reg_number[1]);
 
-								
-							
+
+
 							if($objs = $ba->update(array('_id'=>$_id),array('$set'=>array($type.$typeid=>$passname,$type.$typeid.'regnumber'=>$comobj['regnumberall'],$type.$typeid.'timestamp'=>new MongoDate(),$type.$typeid.'cache_id'=>$cacheid,$type.$typeid.'cache_obj'=>$cacheobj ))) ){
 
 								//$commitedobj[] = $tocommit;
@@ -2344,7 +2345,7 @@ class Import_Controller extends Base_Controller {
 					}
 			}
 
-			
+
 
 			return Redirect::to('import/previewimportexhbitorpass/'.$importid.'/'.$data['exhibitorid'])->with('notify_success','Committing '.$commit_count.' record(s)');
 		}else{

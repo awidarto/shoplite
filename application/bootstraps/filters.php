@@ -49,7 +49,7 @@ Route::filter('auth', function()
         Session::put('redirect',URL::full());
         return Redirect::to('signin');
     }
-    
+
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');
         return Redirect::to($redirect);
@@ -65,7 +65,7 @@ Route::filter('memberauth', function()
         Session::put('redirect',URL::full());
         return Redirect::to('signin');
     }
-    
+
     if($redirect = Session::get('redirect')){
         Session::forget('redirect');
         return Redirect::to($redirect);
@@ -78,7 +78,7 @@ Route::filter('memberauth', function()
 Route::filter('adminauth', function()
 {
 
-    if (Auth::guest()){
+    if (Auth::check() == false){
         Session::put('redirect',URL::full());
         return Redirect::to('commander/login');
     }

@@ -40,7 +40,7 @@ class Dashboard_Controller extends Base_Controller {
 		$this->crumb->add('document','Document');
 
 		date_default_timezone_set('Asia/Jakarta');
-		$this->filter('before','auth');
+		//$this->filter('before','adminauth');
 	}
 
 	public function get_index()
@@ -65,7 +65,7 @@ class Dashboard_Controller extends Base_Controller {
 				->with('heads',$heads);
 		}else{
 			return View::make('document.restricted')
-							->with('title',$title);			
+							->with('title',$title);
 		}*/
 
 		$attendee = new Attendee();
@@ -147,9 +147,9 @@ class Dashboard_Controller extends Base_Controller {
 					if($cond[$idx] == 'both'){
 						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
 					}else if($cond[$idx] == 'before'){
-						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');						
+						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
 					}else if($cond[$idx] == 'after'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');						
+						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
 					}
 				}else if($rel[$idx] == 'equ'){
 					$q[$field] = Input::get('sSearch_'.$idx);
@@ -165,7 +165,7 @@ class Dashboard_Controller extends Base_Controller {
 		/* first column is always sequence number, so must be omitted */
 		$fidx = Input::get('iSortCol_0');
 		if($fidx == 0){
-			$fidx = $defsort;			
+			$fidx = $defsort;
 			$sort_col = $fields[$fidx];
 			$sort_dir = $defdir;
 		}else{
@@ -219,7 +219,7 @@ class Dashboard_Controller extends Base_Controller {
 			$counter++;
 		}
 
-		
+
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),
 			'iTotalRecords'=>$count_all,
@@ -248,7 +248,7 @@ class Dashboard_Controller extends Base_Controller {
 				$result = array('status'=>'OK','data'=>'CONTENTDELETED');
 			}else{
 				Event::fire('document.delete',array('id'=>$id,'result'=>'FAILED'));
-				$result = array('status'=>'ERR','data'=>'DELETEFAILED');				
+				$result = array('status'=>'ERR','data'=>'DELETEFAILED');
 			}
 		}
 
@@ -301,7 +301,7 @@ class Dashboard_Controller extends Base_Controller {
 	    }else{
 
 			$data = Input::get();
-	    	
+
 	    	//print_r($data);
 
 			//pre save transform
@@ -341,7 +341,7 @@ class Dashboard_Controller extends Base_Controller {
 				$data['approvalRequestEmails'] = $approvallist ;
 				$data['approvalRequestIds'] = array_values($approval_ids) ;
 			}
-			
+
 			$docupload = Input::file('docupload');
 
 			$docupload['uploadTime'] = new MongoDate();
@@ -369,7 +369,7 @@ class Dashboard_Controller extends Base_Controller {
 					$newdir = realpath(Config::get('kickstart.storage')).'/'.$newid;
 
 					Input::upload('docupload',$newdir,$docupload['name']);
-					
+
 				}
 
 				if(count($data['tags']) > 0){
@@ -405,7 +405,7 @@ class Dashboard_Controller extends Base_Controller {
 
 	    }
 
-		
+
 	}
 
 	public function get_edit($id = null,$type = null){
@@ -476,7 +476,7 @@ class Dashboard_Controller extends Base_Controller {
 	    }else{
 
 			$data = Input::get();
-	    	
+
 			$id = new MongoId($data['id']);
 
 			$data['effectiveDate'] = new MongoDate(strtotime($data['effectiveDate']." 00:00:00"));
@@ -590,7 +590,7 @@ class Dashboard_Controller extends Base_Controller {
 					foreach($approvalby as $to){
 						Event::fire('request.approval',array('id'=>$id,'approvalby'=>$to));
 					}
-				}				
+				}
 
 		    	return Redirect::to($back)->with('notify_success','Document saved successfully');
 			}else{
@@ -602,7 +602,7 @@ class Dashboard_Controller extends Base_Controller {
 
 	    }
 
-		
+
 	}
 
 
@@ -632,9 +632,9 @@ class Dashboard_Controller extends Base_Controller {
 
 		$can_open = false;
 
-		if(	Auth::user()->role == 'root' || 
-			Auth::user()->role == 'super' || 
-			Auth::user()->department == $title || 
+		if(	Auth::user()->role == 'root' ||
+			Auth::user()->role == 'super' ||
+			Auth::user()->department == $title ||
 			$permissions->{$type}->read == true ||
 			$shared > 0 ||
 			$created > 0
@@ -660,7 +660,7 @@ class Dashboard_Controller extends Base_Controller {
 				->with('ajaxsource',URL::to('document/type/'.$type))
 				->with('ajaxdel',URL::to('document/del'))
 				->with('crumb',$this->crumb)
-				->with('heads',$heads);			
+				->with('heads',$heads);
 		}else{
 			return View::make('document.restricted')
 				->with('crumb',$this->crumb)
@@ -704,9 +704,9 @@ class Dashboard_Controller extends Base_Controller {
 					if($cond[$idx] == 'both'){
 						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
 					}else if($cond[$idx] == 'before'){
-						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');						
+						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
 					}else if($cond[$idx] == 'after'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');						
+						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
 					}
 				}else if($rel[$idx] == 'equ'){
 					$q[$field] = Input::get('sSearch_'.$idx);
@@ -721,7 +721,7 @@ class Dashboard_Controller extends Base_Controller {
 		}
 
 		$sharecriteria = new MongoRegex('/'.Auth::user()->email.'/i');
-		
+
 		if(Auth::user()->department == $type){
 			$q['$or'] = array(
 				array('access'=>'general'),
@@ -738,7 +738,7 @@ class Dashboard_Controller extends Base_Controller {
 		/* first column is always sequence number, so must be omitted */
 		$fidx = Input::get('iSortCol_0');
 		if($fidx == 0){
-			$fidx = $defsort;			
+			$fidx = $defsort;
 			$sort_col = $fields[$fidx];
 			$sort_dir = $defdir;
 		}else{
@@ -821,7 +821,7 @@ class Dashboard_Controller extends Base_Controller {
 			$counter++;
 		}
 
-		
+
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),
 			'iTotalRecords'=>$count_all,
@@ -880,9 +880,9 @@ class Dashboard_Controller extends Base_Controller {
 					if($cond[$idx] == 'both'){
 						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/');
 					}else if($cond[$idx] == 'before'){
-						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/');						
+						$q[$field] = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/');
 					}else if($cond[$idx] == 'after'){
-						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/');						
+						$q[$field] = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/');
 					}
 				}else if($rel[$idx] == 'equ'){
 					$q[$field] = Input::get('sSearch_'.$idx);
@@ -930,7 +930,7 @@ class Dashboard_Controller extends Base_Controller {
 			$counter++;
 		}
 
-		
+
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),
 			'iTotalRecords'=>$count_all,
@@ -977,8 +977,8 @@ class Dashboard_Controller extends Base_Controller {
 		$form = new Formly();
 
 		$file = URL::base().'/storage/'.$id.'/'.$doc['docFilename'];
-		
+
 		return View::make('pop.approval')->with('doc',$doc)->with('form',$form)->with('href',$file);
-	}	
+	}
 
 }

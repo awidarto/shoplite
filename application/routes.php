@@ -89,9 +89,11 @@ Route::post('commander/login', function()
     $username = Input::get('username');
     $password = Input::get('password');
 
+
+
     if ( $userdata = Auth::attempt(array('username'=>$username, 'password'=>$password)) )
     {
-        //print_r($userdata);
+        //print_r( Auth::user() );
         // we are now logged in, go to home
         return Redirect::to('dashboard');
 
@@ -102,7 +104,7 @@ Route::post('commander/login', function()
         return Redirect::to('commander/login')
             ->with('login_errors', true);
         // pass any error notification you want
-        // i like to do it this way  
+        // i like to do it this way
     }
 
 });
@@ -128,7 +130,7 @@ Route::post('signin', function()
         return Redirect::to('signin')
             ->with('login_errors', true);
         // pass any error notification you want
-        // i like to do it this way  
+        // i like to do it this way
     }
 
 });
@@ -161,7 +163,7 @@ Route::post('passwd', function()
     {
 
         if(Auth::changepass($newpass)){
-            return Redirect::to('user')->with('notify_success','Password changed.');            
+            return Redirect::to('user')->with('notify_success','Password changed.');
         }
 
     }
@@ -171,7 +173,7 @@ Route::post('passwd', function()
         return Redirect::to('passwd')
             ->with('newpass_errors', true);
         // pass any error notification you want
-        // i like to do it this way  
+        // i like to do it this way
     }
 
 });

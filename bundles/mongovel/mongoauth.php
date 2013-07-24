@@ -10,6 +10,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 	 * @param  int         $id
 	 * @return mixed|null
 	 */
+
 	public function retrieve($id)
 	{
 		//if (filter_var($id, FILTER_VALIDATE_INT) !== false)
@@ -88,7 +89,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 			}
 
 		//}
-	}	
+	}
 
 	/**
 	 * Get the current user of the application.
@@ -126,17 +127,17 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 	public function attendeecheck()
 	{
 		return ! is_null($this->attendee());
-	}	
+	}
 
 	public function shoppercheck()
 	{
 		return ! is_null($this->shopper());
-	}	
+	}
 
 	public function exhibitorcheck()
 	{
 		return ! is_null($this->exhibitor());
-	}	
+	}
 
 	/**
 	 * Attempt to log a user into the application.
@@ -161,7 +162,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 		if ( ! is_null($user) and Hash::check($password, $user[$passfield]))
 		{
 			//$user = $this->array_to_object($user);
-			
+
 			//Log::info('User '.$username->username.' id : '.$username->_id->toString().' Logged In');
 			return $this->login($user['_id'], array_get($arguments, 'remember'));
 		}
@@ -176,7 +177,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 	 * @param  array  $arguments
 	 * @return void
 	 */
-	
+
 	public function attendeeattempt($arguments = array())
 	{
 		$username = Config::get('auth.username');
@@ -196,7 +197,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 			//print_r($user);
 
 			//$user = $this->array_to_object($user);
-			
+
 			//Log::info('User '.$username->username.' id : '.$username->_id->toString().' Logged In');
 			return $this->login($user['_id'], array_get($arguments, 'remember'));
 		}
@@ -227,7 +228,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 			//print_r($user);
 
 			//$user = $this->array_to_object($user);
-			
+
 			//Log::info('User '.$username->username.' id : '.$username->_id->toString().' Logged In');
 			return $this->login($user['_id'], array_get($arguments, 'remember'));
 		}
@@ -259,7 +260,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 			//print_r($user);
 
 			//$user = $this->array_to_object($user);
-			
+
 			//Log::info('User '.$username->username.' id : '.$username->_id->toString().' Logged In');
 			return $this->login($user['_id'], array_get($arguments, 'remember'));
 		}
@@ -283,12 +284,12 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 
 		$user = $this->user();
 
-		$passfield = Config::get('auth.password');		
-		
+		$passfield = Config::get('auth.password');
+
 		if(is_null($user)){
 			return false;
 		}else{
-			return $this->model()->update(array('email'=>$user->email), array('$set'=>array($passfield=>$passwd))); 
+			return $this->model()->update(array('email'=>$user->email), array('$set'=>array($passfield=>$passwd)));
 		}
 
 	}
@@ -364,7 +365,7 @@ class MongoAuth extends \Laravel\Auth\Drivers\Driver {
 		$obj = json_decode(json_encode($array));
 
 		return $obj;
-	} 
+	}
 
 }
 

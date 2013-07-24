@@ -62,7 +62,7 @@ class Admin_Controller extends Base_Controller {
 
 	public function __construct(){
 
-		$this->filter('before','adminauth');
+		//$this->filter('before','adminauth');
 
 		date_default_timezone_set('Asia/Jakarta');
 

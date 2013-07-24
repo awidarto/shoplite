@@ -39,7 +39,7 @@ class Export_Controller extends Base_Controller {
 		$this->crumb = new Breadcrumb();
 
 		date_default_timezone_set('Asia/Jakarta');
-		$this->filter('before','auth');
+		//$this->filter('before','auth');
 
 		$this->crumb->add('import','Export Data');
 	}
@@ -50,6 +50,7 @@ class Export_Controller extends Base_Controller {
 		$form = new Formly();
 
 		return View::make('export.export')
+            ->with('back','export')
 			->with('title','Export Data')
 			->with('form',$form)
 			->with('crumb',$this->crumb);
@@ -132,11 +133,11 @@ class Export_Controller extends Base_Controller {
 				foreach($dataresult as $row){
 					$inrow = array();
 					for($i = 0; $i < count($dataheader); $i++){
-						
+
 						//regfee
 						$regtype = $row['regtype'];
 						$feeregtype = Config::get('eventreg.convetionfee');
-						
+
 
 						if($regtype == 'PD'){
 							if($row['conventionPaymentStatus']!='free'){
@@ -175,7 +176,7 @@ class Export_Controller extends Base_Controller {
 							}else{
 								$row[$dataheader[36]] ='';
 							}
-							
+
 						}
 
 
@@ -186,7 +187,7 @@ class Export_Controller extends Base_Controller {
 						}else{
 							$row[$dataheader[37]] ='No';
 						}
-						
+
 						$row[$dataheader[40]] = strval($row['totalIDR']);
 						$row[$dataheader[41]] = strval($row['totalUSD']);
 
@@ -248,8 +249,8 @@ class Export_Controller extends Base_Controller {
 							$inrow[$i] = '""';
 						}
 
-						
-					}					
+
+					}
 					$result[] = implode(',',$inrow);
 				}
 
@@ -275,7 +276,7 @@ class Export_Controller extends Base_Controller {
 		$collection = 'attendee';
 
 		//$dataresult = $dataset->find(array('createdDate'=>array('$gte'=>$dateFrom,'$lte'=>$dateTo)));
-		
+
 		//all
 		if(isset($_GET['type'])){
 			$type = $_GET['type'];
@@ -291,31 +292,31 @@ class Export_Controller extends Base_Controller {
 			$paymentstatus = $_GET['payment'];
 			$condition  = array('conventionPaymentStatus'=>$paymentstatus);
 			$dataresult = $dataset->find($condition, array(), array(),array());
-			
+
 		}
 
 		if(isset($_GET['golf'])){
 
 			$condition  = array('golf'=>'Yes');
 			$dataresult = $dataset->find($condition, array(), array(),array());
-			
+
 		}
 
 		if(isset($_GET['dinner'])){
 
 			$condition  = array('attenddinner'=>'Yes');
 			$dataresult = $dataset->find($condition, array(), array(),array());
-			
+
 		}
 
 		if(isset($_GET['country'])){
 			$country =$_GET['country'];
 			$condition  = array('country'=>$country);
 			$dataresult = $dataset->find($condition, array(), array(),array());
-			
+
 		}
 
-		
+
 
 		if(isset($dataresult)){
 
@@ -350,7 +351,7 @@ class Export_Controller extends Base_Controller {
 						//regfee
 						$regtype = $row['regtype'];
 						$feeregtype = Config::get('eventreg.convetionfee');
-						
+
 
 						if($regtype == 'PD'){
 							if($row['conventionPaymentStatus']!='free'){
@@ -389,7 +390,7 @@ class Export_Controller extends Base_Controller {
 							}else{
 								$row[$dataheader[36]] ='';
 							}
-							
+
 						}
 
 
@@ -400,11 +401,11 @@ class Export_Controller extends Base_Controller {
 						}else{
 							$row[$dataheader[37]] ='No';
 						}
-						
+
 						$row[$dataheader[40]] = strval($row['totalIDR']);
 						$row[$dataheader[41]] = strval($row['totalUSD']);
-						
-						
+
+
 
 						//PIC
 						$haspic = $row['cache_id'];
@@ -446,7 +447,7 @@ class Export_Controller extends Base_Controller {
 							$row[$dataheader[39]] = '';
 						}
 
-						
+
 
 
 
@@ -460,7 +461,7 @@ class Export_Controller extends Base_Controller {
 					}else{
 						$inrow[$i] = '""';
 					}
-				}					
+				}
 				$result[] = implode(',',$inrow);
 			}
 
@@ -485,7 +486,7 @@ class Export_Controller extends Base_Controller {
 		//$dataresult = $dataset->find(array('createdDate'=>array('$gte'=>$dateFrom,'$lte'=>$dateTo)));
 		$dataresult = $dataset->find(array(), array(), array(),array());
 		$companies = $dataset->distinct('company');
-		
+
 
 		if(isset($dataresult)){
 
@@ -498,7 +499,7 @@ class Export_Controller extends Base_Controller {
 			$header['Expires'] = "0";
 			$header['Pragma'] = "public";
 
-			$dataheader = 
+			$dataheader =
 			array(
 				//new template
 				'NO'=> '',
@@ -525,11 +526,11 @@ class Export_Controller extends Base_Controller {
 			foreach($companies as $row){
 				$inrow = array();
 				for($i = 0; $i < count($dataheader); $i++){
-	
+
 					$row[$dataheader[0]] = 1;
 					$row[$dataheader[1]] = '';
 					$row[$dataheader[2]] = '';
-					
+
 					if(isset($row[$dataheader[$i]])){
 						if(is_float($row[$dataheader[$i]]) || is_double($row[$dataheader[$i]]) || is_long($row[$dataheader[$i]]) || is_integer($row[$dataheader[$i]])){
 							$row[$dataheader[$i]] = (string) $row[$dataheader[$i]];
@@ -540,7 +541,7 @@ class Export_Controller extends Base_Controller {
 					}else{
 						$inrow[$i] = '""';
 					}
-				}					
+				}
 				$result[] = implode(',',$inrow);
 			}
 
@@ -560,7 +561,7 @@ class Export_Controller extends Base_Controller {
 		$formData = new Operationalform();
 
 
-		
+
 		$_id = new MongoId($boothassistantdata_id);
 		$_exhibitorid = new MongoId($exhibitorid);
 
@@ -580,7 +581,7 @@ class Export_Controller extends Base_Controller {
 		$freepasscount = 0;
 		$boothassistantcount = 0;
 		$addboothassistantcount = 0;
-		
+
 		$pass = $booth['freepassslot'];
 
 		if(isset($exhibitor['overridefreepassname'])){
@@ -608,7 +609,7 @@ class Export_Controller extends Base_Controller {
 		}
 
 		//return View::make('print.exhibitorbadgeall')
-		
+
 		//->with('profile',$data)
 		//->with('booth',$booth)
 		//->with('exhibitorid',$exhibitorid)
@@ -623,7 +624,7 @@ class Export_Controller extends Base_Controller {
 		$header['Expires'] = "0";
 		$header['Pragma'] = "public";
 
-		
+
 		$result[] = 'Registration Number :'.$exhibitor['registrationnumber'];
 		$result[] = 'Company :'.$exhibitor['company'];
 		$result[] = 'Hall :'.$exhibitor['hall'];
@@ -633,8 +634,8 @@ class Export_Controller extends Base_Controller {
 		$result[] = '';
 		$result[] = 'EXHIBITOR PASS HOLDERS (FREE)';
 		$result[] = '';
-		
-		
+
+
 
 		for($i=1;$i<=$freepasscount;$i++){
 			$inarray[0] = $i;
@@ -647,7 +648,7 @@ class Export_Controller extends Base_Controller {
 		$result[] = 'FREE ADDITIONAL EXHIBITOR PASS HOLDERS';
 		$result[] = '';
 
-		
+
 		for($i=1;$i<=$boothassistantcount;$i++){
 			$inarray[0] = $i;
 			$inarray[1] = $data['boothassistant'.$i.''];
@@ -659,7 +660,7 @@ class Export_Controller extends Base_Controller {
 		$result[] = 'ADDITIONAL EXHIBITOR PASS (PAYABLE)';
 		$result[] = '';
 
-		
+
 		for($i=1;$i<=$addboothassistantcount;$i++){
 			$inarray[0] = $i;
 			$inarray[1] = $data['addboothname'.$i.''];
@@ -668,12 +669,12 @@ class Export_Controller extends Base_Controller {
 		}
 
 
-		
+
 
 
 		$result = implode("\r\n",$result);
 		return Response::make($result,'200',$header);
-	    
+
 
 	}
 
@@ -682,7 +683,7 @@ class Export_Controller extends Base_Controller {
 
 		$boothassistantdata = new Boothassistant();
 
-		
+
 
 		$filename = 'Boothassistantdata_'.date('Ymd_his',time()).'.csv';
 
@@ -694,7 +695,7 @@ class Export_Controller extends Base_Controller {
 		$header['Pragma'] = "public";
 
 		$dataresult = $boothassistantdata->find(array(),array(),array());
-		
+
 		foreach ($dataresult as $data) {
 
 			$result[] = 'Company :'.$data['companyname'];
@@ -703,7 +704,7 @@ class Export_Controller extends Base_Controller {
 			$result[] = '';
 			$result[] = 'EXHIBITOR PASS HOLDERS (FREE)';
 			$result[] = '';
-			
+
 			for($i=1;$i<=10;$i++){
 				if(isset($data['freepassname'.$i.''])){
 					$inarray[0] = $i;
@@ -717,7 +718,7 @@ class Export_Controller extends Base_Controller {
 			$result[] = 'FREE ADDITIONAL EXHIBITOR PASS HOLDERS';
 			$result[] = '';
 
-			
+
 			for($i=1;$i<=10;$i++){
 				if(isset($data['boothassistant'.$i.''])){
 					$inarray[0] = $i;
@@ -731,7 +732,7 @@ class Export_Controller extends Base_Controller {
 			$result[] = 'ADDITIONAL EXHIBITOR PASS (PAYABLE)';
 			$result[] = '';
 
-			
+
 			for($i=1;$i<=10;$i++){
 				if(isset($data['addboothname'.$i.''])){
 					$inarray[0] = $i;
@@ -744,10 +745,10 @@ class Export_Controller extends Base_Controller {
 			$result[] = '';
 			$result[] = '';
 		}
-		
+
 		$result = implode("\r\n",$result);
 		return Response::make($result,'200',$header);
-	    
+
 
 	}
 
