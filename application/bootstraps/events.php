@@ -43,7 +43,8 @@ Event::listen('commit.checkout',function($shopper,$cart){
         ->with('shippingaddress','')
         ->render();
 
-    Message::to($userdata['email'])
+    //Message::to($userdata['email'])
+    Message::to(Config::get('shoplite.admin_email'))
         ->from(Config::get('shoplite.admin_email'), Config::get('shoplite.admin_name'))
         ->subject(Config::get('site.title'))
         ->body( $body )
