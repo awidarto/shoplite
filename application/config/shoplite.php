@@ -104,7 +104,7 @@ return array(
 	'admin_name'=>'Shopkeeper@PeachtoBlack',
 
 	'banks'=>array(
-		'mandiri'=>'Bank Mandiri',
+		'bca'=>'Bank BCA',
 		'permata'=>'Bank Permata'
 	),
 
