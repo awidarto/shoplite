@@ -375,8 +375,11 @@ class Products_Controller extends Admin_Controller {
 
 			$o = array();
 
+            $nw = array();
+
 			foreach($data['variants'] as $v){
 
+                $nw[] = $v['size'].'_'.$v['color'];
 
 				$v['productId'] = $id;
 
@@ -419,15 +422,41 @@ class Products_Controller extends Admin_Controller {
 
 				}
 
-
-
-
 			}
 
 		}
 
+        print_r($nw);
 
-		return $id;
+        print_r($data['old_var']);
+
+        $tobe_deleted = array_diff($data['old_var'],$nw);
+
+        print_r($tobe_deleted);
+
+        if(!empty($tobe_deleted) && count($tobe_deleted) > 0){
+            foreach($tobe_deleted as $td){
+                if(in_array($td,$data['old_var'])){
+
+                    $vs = explode('_',$td);
+
+                    $d['size'] = $vs[0];
+                    $d['color'] = $vs[1];
+                    $d['productId'] = $id;
+                    $d['status'] = 'available';
+                    $d['cartId'] = '';
+
+                    for($i = 0; $i < $qty;$i++)
+                    {
+                        $inventory->deleteOne($d);
+                    }
+                }
+            }
+        }
+
+        //exit();
+
+        return $id;
 		//return false;
 
 	}

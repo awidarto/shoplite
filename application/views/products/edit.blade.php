@@ -15,9 +15,9 @@
     <div class="span6">
         <fieldset>
             <legend>Product Information</legend>
-                
+
                 {{ $form->text('name','Product Name.req','',array('class'=>'text span8','id'=>'name')) }}
-                
+
                 {{ $form->text('productcode','Product Code / SKU.req','',array('class'=>'text span8','id'=>'productcode')) }}
                 {{ $form->text('permalink','Permalink.req','',array('class'=>'text span8','id'=>'permalink')) }}
                 {{ $form->textarea('description','Description.req','',array('class'=>'text span8','id'=>'description')) }}
@@ -82,7 +82,7 @@
 
         </fieldset>
 
-                
+
         <fieldset>
             <legend>Compound Product</legend>
 
@@ -134,9 +134,9 @@
 
                 {{ Form::label('price','Default Price Set *')}}
                 <div class="row-fluid inputInline">
-                  
+
                     {{$form->select('priceCurrency','',Config::get('shoplite.currency'),null,array('id'=>'priceCurrency'))}}<br />
-                    {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}                  
+                    {{ $form->text('retailPrice','Retail Price','',array('class'=>'text input-medium','id'=>'retailPrice','placeholder'=>'Retail Price')) }}
                     {{ $form->text('salePrice','Sale Price','',array('class'=>'text input-medium','id'=>'salePrice','placeholder'=>'Sale Price')) }}
                     {{ $form->checkbox('onsale','On Sale','Yes',null)}}<br />
                     {{ $form->text('effectiveFrom','From','',array('class'=>'text  input-medium date','id'=>'effectiveFrom','placeholder'=>'From')) }}
@@ -209,11 +209,15 @@
                 </thead>
                 <tbody>
                     @if(isset($formdata['variants']))
-                        <?php 
+                        <?php
                             $classes = array('input-small','input-small','input-small','input-large');
-                            $ro = array(false,false,true,false);                            
+                            $ro = array(false,false,true,false);
                          ?>
                         {{ makerows($formdata['variants'],$classes,$ro) }}
+
+                        @foreach($formdata['variants'] as $ov)
+                            {{ $form->hidden('old_var[]', $ov['size'].'_'.$ov['color']) }}
+                        @endforeach
                     @endif
                 </tbody>
             </table>
@@ -257,8 +261,8 @@
 </div>
 {{$form->close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}   
-{{ HTML::script('js/parser_rules/advanced.js') }}   
+{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
+{{ HTML::script('js/parser_rules/advanced.js') }}
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -273,7 +277,7 @@ $(document).ready(function() {
 
     var editor = new wysihtml5.Editor('bodycopy', { // id of textarea element
         toolbar:      'wysihtml5-toolbar', // id of toolbar element
-        parserRules:  wysihtml5ParserRules // defined in parser rules set 
+        parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
 
     $('#name').keyup(function(){
@@ -283,7 +287,7 @@ $(document).ready(function() {
     });
 
     $('#color_input').colorPicker();
-    
+
     // dynamic tables
     $('#add_btn').click(function(){
         //alert('click');
