@@ -4,14 +4,13 @@
     <title>{{ Config::get('site.title')}}</title>
 
 <!-- TbQDdSY0djkAIKBKAVenw_M6SwY -->
-    <meta name="alexaVerifyID" content="TbQDdSY0djkAIKBKAVenw_M6SwY" />
+    <meta name="alexaVerifyID" content="{{ getparam('alexaid') }}" />
     <meta name="google-site-verification" content="{{ getparam('googlesiteverification') }}" />
     <meta name="keywords" content="{{ getparam('seokeywords')}}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta name="description" content="{{ getparam('seodescriptions') }}">
+    <meta name="author" content="{{ getparam('seoauthor') }}">
 
     {{ HTML::style('bootstrap/css/bootstrap.css') }}
 

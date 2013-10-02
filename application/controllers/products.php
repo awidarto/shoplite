@@ -426,13 +426,13 @@ class Products_Controller extends Admin_Controller {
 
 		}
 
-        print_r($nw);
+        //print_r($nw);
 
-        print_r($data['old_var']);
+        //print_r($data['old_var']);
 
         $tobe_deleted = array_diff($data['old_var'],$nw);
 
-        print_r($tobe_deleted);
+        //print_r($tobe_deleted);
 
         if(!empty($tobe_deleted) && count($tobe_deleted) > 0){
             foreach($tobe_deleted as $td){
