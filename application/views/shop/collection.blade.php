@@ -1,12 +1,11 @@
 @layout('public')
 
 @section('content')
-
 <div class="row">
-	<div class="span4">
+	<div class="span3">
 		<h5 style="margin-left:60px;margin-top:26px;">Showing {{ $showcount }} items of {{ $totalfound }}</h5>
 	</div>
-	<div class="span5" style="text-align:right">
+	<div class="span6" style="text-align:right">
 		 {{ $pagination }}
 	</div>
 	<div class="span3 pull-right">

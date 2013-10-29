@@ -510,3 +510,8 @@ span#soldout-sign{
     border-top: thin solid maroon;
     border-bottom: thin solid maroon;
 }
+
+.pagination li.current a{
+    font-weight: bold;
+    background-color: #eee;
+}

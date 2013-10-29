@@ -307,7 +307,7 @@ class Shop_Controller extends Base_Controller {
 		$featured = array();
 		$mixmatch = array();
 
-		$pagenum = $total / $pagelength;
+		$pagenum = $totalfound / $pagelength;
 
 		$currenturl = URL::to('collections').'/'.$page.'/'.$category.'/'.$search;
 
@@ -318,21 +318,82 @@ class Shop_Controller extends Base_Controller {
 		$nexturl = URL::to('collections').'/'.$nextpage.'/'.$category.'/'.$search;
 
 		$pagination = '<div class="pagination pull-right"><ul>';
+        $pagination .='<li><a href="'.$prevurl.'">Prev</a></li>';
 
-		if($totalfound > $pagelength){
-			$pagination .='<li><a href="'.$prevurl.'">Prev</a></li>';
+            if($pagenum > 11){
 
-			for($p = 1;$p <= $pagenum; $p++){
+                if($page > (round($pagenum) - 7) ){
 
-				$pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+                    $pageurl = URL::to('collections').'/1/'.$category.'/'.$search;
 
-				$pagination .='<li><a href="'.$pageurl.'">'.$p.'</a></li>';
-			}
+                    $pagination .='<li ><a href="'.$pageurl.'">1</a></li>';
 
-			$pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
+                    $pagination .='<li class="unavailable"><a href="">&hellip;</a></li>';
 
-		}
+                    $ps = round($pagenum) - 7;
+                    $pe = round($pagenum);
+                    for($p = $ps;$p <= $pe; $p++){
 
+                        $class = ($page == $p)?'class="current"':'';
+
+                        $pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+                        $pagination .='<li '.$class.' ><a href="'.$pageurl.'">'.$p.'</a></li>';
+                    }
+
+                }else{
+
+                    if($page < 6){
+                        for($p = 1;$p <= 6; $p++){
+
+                            $class = ($page == $p)?'class="current"':'';
+
+                            $pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+                            $pagination .='<li '.$class.' ><a href="'.$pageurl.'">'.$p.'</a></li>';
+                        }
+                    }else{
+                        $ps = $page - 4;
+                        $pe = $page + 1;
+                        for($p = $ps;$p <= $pe; $p++){
+
+                            $class = ($page == $p)?'class="current"':'';
+
+                            $pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+                            $pagination .='<li '.$class.' ><a href="'.$pageurl.'">'.$p.'</a></li>';
+                        }
+
+                    }
+
+                    $pagination .='<li class="unavailable"><a href="">&hellip;</a></li>';
+
+                    $p = round($pagenum);
+
+                    $pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+                    $class = ($page == $p)?'class="current"':'';
+
+                    $pagination .='<li '.$class.' ><a href="'.$pageurl.'">'.$p.'</a></li>';
+
+                }
+
+            }elseif($pagenum <= 10){
+
+                if($totalfound > $pagelength){
+
+                    for($p = 1;$p <= $pagenum; $p++){
+
+                        $pageurl = URL::to('collections').'/'.$p.'/'.$category.'/'.$search;
+
+                        $pagination .='<li><a href="'.$pageurl.'">'.$p.'</a></li>';
+                    }
+
+                }
+
+            }
+
+        $pagination .='<li><a href="'.$nexturl.'">Next</a></li>';
 		$pagination .= '</ul></div>';
 
 		return View::make('shop.collection')
